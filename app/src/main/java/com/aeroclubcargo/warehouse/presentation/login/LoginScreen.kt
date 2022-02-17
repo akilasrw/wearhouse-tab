@@ -3,10 +3,7 @@ package com.aeroclubcargo.warehouse.presentation.login
 import android.os.Handler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,24 +27,26 @@ fun LoginScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.LightGray)
+            .background(color = colorResource(id = R.color.white))
     ) {
+        Column() {
 
-        Image(painter = painterResource(id = R.drawable.splash_background),modifier = Modifier
-            .fillMaxSize(), contentDescription = null, contentScale = ContentScale.FillBounds
+            Text(
+                text = stringResource(R.string.welcome_back),
+                color = colorResource(id = R.color.black),
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            )
+
+            Image(painter = painterResource(id = R.drawable.ic_flight_with_cloud), contentDescription = null,
+            )
+        }
 
 
-        )
 
-        Text(
-            text = stringResource(R.string.skytech_software_solutions_pvt_ltd),
-            color = colorResource(id = R.color.white),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .align(Alignment.BottomCenter)
-        )
+
 
 
 

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WarehouseTab</string>
     <string name="skytech_software_solutions_pvt_ltd">© Skytech software solutions (pvt) Ltd</string>
+    <string name="welcome_back">Welcome Back!</string>
 </resources>
