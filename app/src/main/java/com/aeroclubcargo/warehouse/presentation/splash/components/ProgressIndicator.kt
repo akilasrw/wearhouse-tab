@@ -12,6 +12,6 @@ import com.aeroclubcargo.warehouse.R
 fun ProgressIndicator(){
     CircularProgressIndicator(
         modifier = Modifier.size(60.dp),
-        color = colorResource(id = R.color.teal_700),
+        color = colorResource(id = R.color.light_blue),
        )
 }
