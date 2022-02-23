@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -28,22 +30,11 @@ fun SplashScreen(
     navController: NavController,
 ) {
 
-    var startAnimation by remember { mutableStateOf(false) }
-    val alphaAnim = animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, delayMillis = 100, easing = FastOutLinearInEasing),
-            repeatMode = RepeatMode.Restart
-        )
-    )
-
     LaunchedEffect(key1 = true) {
-        startAnimation = true
         delay(4000)
         navController.popBackStack()
         navController.navigate(Screen.LoginScreen.route)
     }
-
     Box(
         modifier = Modifier
             .background(colorResource(id = R.color.light_blue))
@@ -51,8 +42,19 @@ fun SplashScreen(
         contentAlignment = Alignment.Center
     ) {
 
-        Pulsating(pulseFraction = 1.8f, color = colorResource(id = R.color.light_blue_opacity_l2))
-        Pulsating(pulseFraction = 1.2f, color = colorResource(id = R.color.light_blue_opacity_l1))
+        Pulsating(
+            color = colorResource(id = R.color.light_blue_opacity_l1),
+            scale = scaleInfiniteTransition(targetValue = 1.8f, durationMillis = 1000)
+        )
+        Pulsating(
+            color = colorResource(id = R.color.light_blue_opacity_l2),
+            scale = scaleInfiniteTransition(targetValue = 1.6f, durationMillis = 1000)
+        )
+        Pulsating(
+            color = colorResource(id = R.color.light_blue_opacity_l3),
+            scale = scaleInfiniteTransition(targetValue = 1.4f, durationMillis = 1000)
+        )
+
         MiddleBanner()
         Text(
             text = stringResource(R.string.skytech_software_solutions_pvt_ltd),
@@ -67,92 +69,41 @@ fun SplashScreen(
     }
 }
 
-
 @Composable
-fun Pulsating(pulseFraction: Float = 1.2f, color: Color) {
+fun scaleInfiniteTransition(
+    initialValue: Float = 1f,
+    targetValue: Float,
+    durationMillis: Int,
+): Float {
     val infiniteTransition = rememberInfiniteTransition()
-    val scale1 by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = pulseFraction,
+    val scale: Float by infiniteTransition.animateFloat(
+        initialValue = initialValue,
+        targetValue = targetValue,
         animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = LinearOutSlowInEasing),
+            animation = tween(
+                durationMillis = durationMillis,
+                easing = LinearEasing
+            ),
             repeatMode = RepeatMode.Restart
         )
     )
-    Box(modifier = Modifier.scale(scale1), contentAlignment = Alignment.Center) {
+    return scale
+}
+
+
+@Composable
+fun Pulsating(color: Color, scale: Float) {
+    Box(modifier = Modifier.scale(scale), contentAlignment = Alignment.Center) {
         Surface(
-            color = color, //colorResource(id = R.color.light_blue_opacity_l1),
+            color = color,
             shape = CircleShape,
-            modifier = Modifier.size(250.dp),
+            modifier = Modifier.size(300.dp),
             content = {
 
             }
         )
     }
 }
-
-//@Composable
-//fun Pulsating(pulseFraction: Float = 1.2f) {
-//
-//
-//    val infiniteTransition = rememberInfiniteTransition()
-//
-//    val scale1 by infiniteTransition.animateFloat(
-//        initialValue = 1f,
-//        targetValue = pulseFraction,
-//        animationSpec = infiniteRepeatable(
-//            animation = tween(2000, easing = LinearOutSlowInEasing),
-//            repeatMode = RepeatMode.Restart
-//        )
-//    )
-//    val scale2 by infiniteTransition.animateFloat(
-//        initialValue = 1f,
-//        targetValue = pulseFraction,
-//        animationSpec =  infiniteRepeatable(
-//            animation = tween(2000, easing = LinearOutSlowInEasing),
-//            repeatMode = RepeatMode.Restart,
-//        )
-//    )
-//    val scale3 by infiniteTransition.animateFloat(
-//        initialValue = 1f,
-//        targetValue = pulseFraction,
-//        animationSpec = infiniteRepeatable(
-//            animation = tween(2000, easing = LinearOutSlowInEasing),
-//            repeatMode = RepeatMode.Restart
-//        )
-//    )
-//
-//    Box(modifier = Modifier.scale(scale1),contentAlignment = Alignment.Center) {
-//        Surface(
-//            color = colorResource(id = R.color.light_blue_opacity_l1),
-//            shape = CircleShape,
-//            modifier = Modifier.size(200.dp),
-//            content = {
-//
-//            }
-//        )
-//        Box(modifier = Modifier.scale(scale2),contentAlignment = Alignment.Center) {
-//            Surface(
-//                color = colorResource(id = R.color.light_blue_opacity_l2),
-//                shape = CircleShape,
-//                modifier = Modifier.size(150.dp),
-//                content = {
-//
-//                }
-//            )
-//            Box(modifier = Modifier.scale(scale3),contentAlignment = Alignment.Center) {
-//                Surface(
-//                    color = colorResource(id = R.color.light_blue_opacity_l3),
-//                    shape = CircleShape,
-//                    modifier = Modifier.size(100.dp),
-//                    content = {
-//
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
 
 @Composable
 fun MiddleBanner() {
