@@ -2,5 +2,8 @@
     <string name="app_name">WarehouseTab</string>
     <string name="skytech_software_solutions_pvt_ltd">© 2022 Aero Club Solutions INC. All rights reserved.</string>
     <string name="welcome_back">Welcome Back!</string>
+    <string name="hello">Hello,</string>
+    <string name="enter_credentials_msg">Enter your login details and start journey with us</string>
     <string name="login">Login</string>
+    <string name="sign_in">Sign In</string>
 </resources>
