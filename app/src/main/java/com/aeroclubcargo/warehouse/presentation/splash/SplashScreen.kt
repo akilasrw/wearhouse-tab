@@ -100,6 +100,7 @@ fun Pulsating(color: Color, scale: Float) {
             modifier = Modifier.size(300.dp),
             content = {
 
+
             }
         )
     }
@@ -110,7 +111,7 @@ fun MiddleBanner() {
     val image = painterResource(id = R.drawable.ic_logo_skytech)
     Image(
         painter = image,
-        contentDescription = "Splash Wave",
+        contentDescription = "Splash Wave ",
         contentScale = ContentScale.FillHeight,
         modifier = Modifier
             .height(60.dp)
