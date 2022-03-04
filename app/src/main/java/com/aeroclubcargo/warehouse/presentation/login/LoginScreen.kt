@@ -1,23 +1,23 @@
 package com.aeroclubcargo.warehouse.presentation.login
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,12 +25,12 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.theme.BlueLight
 import com.aeroclubcargo.warehouse.presentation.theme.Gray1
 import com.aeroclubcargo.warehouse.presentation.theme.Gray2
@@ -38,24 +38,41 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
+
+val languages = listOf(
+    "en" to "English",
+    "vi" to "VietNam",
+)
 
 
 @Composable
 fun LoginScreen(
     navController: NavController?,
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
-
+    val currentLanguageIndex = viewModel.language.observeAsState().value ?: 0
+    SetLanguage(currentLanguageIndex)
     Scaffold() {
-        MainUI()
+        MainUI(navController = navController, viewModel = viewModel,index= currentLanguageIndex)
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Preview(device = Devices.AUTOMOTIVE_1024p)
 @Composable
-fun MainUI() {
-    val keyboardController = LocalSoftwareKeyboardController.current
+fun SetLanguage(languageIndex: Int) {
+    val locale = Locale(if (languageIndex == 0) "en" else "vi")
+    val configuration = LocalConfiguration.current
+    configuration.setLocale(locale)
+    val resources = LocalContext.current.resources
+    resources.updateConfiguration(configuration, resources.displayMetrics)
+}
 
+@OptIn(ExperimentalComposeUiApi::class)
+//@Preview(device = Devices.AUTOMOTIVE_1024p)
+@Composable
+fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
     val image = painterResource(id = R.drawable.ic_login_img)
 
     var emailValue by remember { mutableStateOf("") }
@@ -74,13 +91,51 @@ fun MainUI() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-//            .clickable {
-//                keyboardController?.hide()
-//            }
             .background(color = Color.White),
         horizontalAlignment = Alignment.End
     ) {
-        Text(text = "English", modifier = Modifier.padding(8.dp))
+//        DropdownDemo(viewModel = viewModel,index = index)
+        val scope = rememberCoroutineScope()
+        var expanded by remember { mutableStateOf(false) }
+        var selectedIndex by remember { mutableStateOf(index) }
+
+        Box(
+            modifier = Modifier
+                .width(150.dp)
+                .padding(top = 16.dp, end = 8.dp)
+                .wrapContentSize(Alignment.TopEnd)
+        ) {
+            DropDownLabel(languages[selectedIndex].second, onClick = {
+                expanded = true
+            })
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.width(150.dp)
+            ) {
+                languages.forEachIndexed { index, s ->
+                    DropdownMenuItem(
+                        onClick = {
+                            selectedIndex = index
+                            expanded = false
+                            scope.launch {
+                                viewModel.saveLocale(index)
+                            }
+
+                        },
+                    ) {
+                        DropDownLabel(s.second, onClick = {
+                            selectedIndex = index
+                            expanded = false
+                            scope.launch {
+                                viewModel.saveLocale(index)
+                            }
+                        })
+                    }
+                }
+            }
+        }
+
         Spacer(modifier = Modifier.height(20.dp))
         Column(
             modifier = Modifier
@@ -125,12 +180,14 @@ fun MainUI() {
                     OutlinedTextField(
                         value = emailValue,
                         onValueChange = { emailValue = it },
-                        label = { Text(text = "Email") },
+                        label = { Text(text = stringResource(id = R.string.email),
+                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        placeholder = { Text(text = "Email") },
+                        placeholder = { Text(text = stringResource(id = R.string.email),
+                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -169,8 +226,10 @@ fun MainUI() {
                                 )
                             }
                         },
-                        label = { Text("Password") },
-                        placeholder = { Text(text = "Password") },
+                        label = { Text(stringResource(id = R.string.password),
+                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
+                        placeholder = { Text(text = stringResource(id = R.string.password),
+                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
                         singleLine = true,
                         visualTransformation = if (passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
@@ -193,7 +252,7 @@ fun MainUI() {
                                 checkState.value = it
                             })
                             Text(
-                                "Remember me",
+                                stringResource(id = R.string.remember_me),
                                 maxLines = 1,
                                 style = MaterialTheme.typography.body2.copy(color = Gray1)
                             )
@@ -212,7 +271,7 @@ fun MainUI() {
                                 Text(
                                     text = stringResource(id = R.string.sign_in),
                                     fontSize = 20.sp,
-                                    color = BlueLight
+                                    style = MaterialTheme.typography.button.copy(color = BlueLight)
                                 )
                             }
                         }
@@ -228,10 +287,77 @@ fun MainUI() {
                 contentAlignment = Alignment.BottomCenter
             ) {
                 Text(
-                    text = "© 2022 Aero Club Solutions INC. All rights reserved.",
+                    text = stringResource(id = R.string.skytech_software_solutions_pvt_ltd),
                     style = MaterialTheme.typography.caption.copy(color = Gray1),
                 )
             }
         }
     }
 }
+
+
+@Composable
+fun DropdownDemo(viewModel: LoginViewModel,index: Int) {
+    val scope = rememberCoroutineScope()
+    var expanded by remember { mutableStateOf(false) }
+    var selectedIndex by remember { mutableStateOf(index) }
+
+    Box(
+        modifier = Modifier
+            .width(150.dp)
+            .padding(top = 16.dp, end = 8.dp)
+            .wrapContentSize(Alignment.TopEnd)
+    ) {
+        DropDownLabel(languages[selectedIndex].second, onClick = {
+            expanded = true
+        })
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier.width(150.dp)
+        ) {
+            languages.forEachIndexed { index, s ->
+                DropdownMenuItem(
+                    onClick = {
+                        selectedIndex = index
+                        expanded = false
+                        scope.launch {
+                            viewModel.saveLocale(index)
+                        }
+
+                    },
+                ) {
+                    DropDownLabel(s.second, onClick = {
+                        selectedIndex = index
+                        expanded = false
+                        scope.launch {
+                            viewModel.saveLocale(index)
+                        }
+                    })
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun DropDownLabel(labelName: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_baseline_language_24),
+            contentDescription = "language"
+        )
+        Spacer(modifier = Modifier.width(10.dp))
+        Text(
+            labelName, modifier = Modifier
+                .fillMaxWidth()
+        )
+    }
+}
+
+
+

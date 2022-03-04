@@ -19,7 +19,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SkyTechCargoTheme {
-                // A surface container using the 'background' color from the theme
                 Navigation()
             }
         }

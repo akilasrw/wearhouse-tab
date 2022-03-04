@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WarehouseTab</string>
+    <string name="skytech_software_solutions_pvt_ltd">© 2022 Aero Club Solutions INC. All rights reserved.</string>
+    <string name="welcome_back">Chào mừng trở lại!</string>
+    <string name="hello">Xin chào,</string>
+    <string name="enter_credentials_msg">Nhập chi tiết đăng nhập của bạn và bắt đầu hành trình với chúng tôi</string>
+    <string name="login">Đăng nhập</string>
+    <string name="sign_in">Đăng nhập</string>
+    <string name="email">E-mail</string>
+    <string name="password">Mật khẩu</string>
+    <string name="remember_me">Nhớ tôi</string>
+
+</resources>
