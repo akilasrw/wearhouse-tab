@@ -90,6 +90,10 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
         mutableStateOf(true)
     }
 
+    val textSignIn = stringResource(id = R.string.sign_in)
+    val textPassword = stringResource(id = R.string.password)
+    val textEmail = stringResource(id = R.string.email)
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -141,13 +145,13 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                     OutlinedTextField(
                         value = emailValue,
                         onValueChange = { emailValue = it },
-                        label = { Text(text = stringResource(id = R.string.email),
+                        label = { Text(text = textEmail,
                             style = MaterialTheme.typography.body2.copy(color = Gray1)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        placeholder = { Text(text = stringResource(id = R.string.email),
+                        placeholder = { Text(text = textEmail,
                             style = MaterialTheme.typography.body2.copy(color = Gray1)) },
                         singleLine = true,
                         modifier = Modifier
@@ -187,9 +191,9 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                                 )
                             }
                         },
-                        label = { Text(stringResource(id = R.string.password),
+                        label = { Text(textPassword,
                             style = MaterialTheme.typography.body2.copy(color = Gray1)) },
-                        placeholder = { Text(text = stringResource(id = R.string.password),
+                        placeholder = { Text(text = textPassword,
                             style = MaterialTheme.typography.body2.copy(color = Gray1)) },
                         singleLine = true,
                         visualTransformation = if (passwordVisibility.value) VisualTransformation.None
@@ -218,6 +222,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                                 style = MaterialTheme.typography.body2.copy(color = Gray1)
                             )
                         }
+
                         Box(
                             contentAlignment = Alignment.CenterEnd,
                             modifier = Modifier.fillMaxWidth()
@@ -230,7 +235,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                                 shape = RoundedCornerShape(8.dp),
                             ) {
                                 Text(
-                                    text = stringResource(id = R.string.sign_in),
+                                    text = textSignIn,
                                     fontSize = 20.sp,
                                     style = MaterialTheme.typography.button.copy(color = BlueLight)
                                 )
