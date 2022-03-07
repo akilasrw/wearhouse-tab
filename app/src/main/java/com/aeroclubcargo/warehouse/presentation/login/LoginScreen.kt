@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse.presentation.login
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -60,6 +61,7 @@ fun LoginScreen(
 
 @Composable
 fun SetLanguage(languageIndex: Int) {
+    Log.e("LoginScreen","languageIndex $languageIndex")
     val locale = Locale(if (languageIndex == 0) "en" else "vi")
     val configuration = LocalConfiguration.current
     configuration.setLocale(locale)
@@ -94,48 +96,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
             .background(color = Color.White),
         horizontalAlignment = Alignment.End
     ) {
-//        DropdownDemo(viewModel = viewModel,index = index)
-        val scope = rememberCoroutineScope()
-        var expanded by remember { mutableStateOf(false) }
-        var selectedIndex by remember { mutableStateOf(index) }
-
-        Box(
-            modifier = Modifier
-                .width(150.dp)
-                .padding(top = 16.dp, end = 8.dp)
-                .wrapContentSize(Alignment.TopEnd)
-        ) {
-            DropDownLabel(languages[selectedIndex].second, onClick = {
-                expanded = true
-            })
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                modifier = Modifier.width(150.dp)
-            ) {
-                languages.forEachIndexed { index, s ->
-                    DropdownMenuItem(
-                        onClick = {
-                            selectedIndex = index
-                            expanded = false
-                            scope.launch {
-                                viewModel.saveLocale(index)
-                            }
-
-                        },
-                    ) {
-                        DropDownLabel(s.second, onClick = {
-                            selectedIndex = index
-                            expanded = false
-                            scope.launch {
-                                viewModel.saveLocale(index)
-                            }
-                        })
-                    }
-                }
-            }
-        }
-
+        DropdownDemo(viewModel = viewModel,index = index)
         Spacer(modifier = Modifier.height(20.dp))
         Column(
             modifier = Modifier
@@ -266,7 +227,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                                     // TODO
                                 },
                                 border = BorderStroke(0.5.dp, BlueLight),
-                                shape = RoundedCornerShape(8.dp)
+                                shape = RoundedCornerShape(8.dp),
                             ) {
                                 Text(
                                     text = stringResource(id = R.string.sign_in),

@@ -26,7 +26,7 @@ class LoginViewModel @Inject constructor(
         getLocale()
     }
 
-    fun getLocale() {
+    private fun getLocale() {
         getLocaleUseCase().onEach {
             _language.value = it.data
         }.launchIn(viewModelScope)
