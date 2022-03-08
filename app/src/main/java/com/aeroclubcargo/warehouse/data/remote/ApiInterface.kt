@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface ApiInterface {
 
-    @POST("/User/authenticate")
+    @POST("api/User/authenticate")
     suspend fun authenticateUser(@Body authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto
 
 }
