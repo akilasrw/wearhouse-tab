@@ -15,5 +15,6 @@
     <string name="plz_insert_valid_email">Vui lòng điền địa chỉ email chính xác!</string>
     <string name="plz_insert_user_name">Please Insert UserName</string>
     <string name="plz_insert_password">Please Insert Password</string>
+    <string name="u_have_entered_invalid_u_and_p">Bạn đã nhập tên người dùng hoặc mật khẩu không hợp lệ</string>
 
 </resources>

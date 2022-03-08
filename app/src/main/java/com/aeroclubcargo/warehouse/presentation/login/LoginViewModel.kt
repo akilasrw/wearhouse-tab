@@ -68,7 +68,8 @@ class LoginViewModel @Inject constructor(
                         _loginState.postValue(LoginState(isLoginSuccess = true))
                     }
                     is Resource.Error -> {
-                        _loginState.postValue(LoginState(error = result.message))
+                        _loginState.postValue(LoginState(error = result.message ?: context.getString(
+                                                    R.string.u_have_entered_invalid_u_and_p)))
 
                     }
                     is Resource.Loading -> {
