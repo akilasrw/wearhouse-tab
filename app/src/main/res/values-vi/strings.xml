@@ -10,5 +10,10 @@
     <string name="email">E-mail</string>
     <string name="password">Mật khẩu</string>
     <string name="remember_me">Nhớ tôi</string>
+    <string name="login_failed">Đăng nhập thất bại!</string>
+    <string name="ok">VÂNG</string>
+    <string name="plz_insert_valid_email">Vui lòng điền địa chỉ email chính xác!</string>
+    <string name="plz_insert_user_name">Please Insert UserName</string>
+    <string name="plz_insert_password">Please Insert Password</string>
 
 </resources>

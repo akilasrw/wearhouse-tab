@@ -3,6 +3,7 @@ package com.aeroclubcargo.warehouse
 import android.app.Application
 import android.content.Context
 import androidx.compose.ui.platform.LocalContext
+import com.facebook.stetho.Stetho
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
@@ -13,6 +14,7 @@ class WarehouseApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         context = this
+        Stetho.initializeWithDefaults(this)
     }
 
 }

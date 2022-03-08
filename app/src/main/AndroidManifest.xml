@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.aeroclubcargo.warehouse">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".WarehouseApplication"
         android:allowBackup="true"

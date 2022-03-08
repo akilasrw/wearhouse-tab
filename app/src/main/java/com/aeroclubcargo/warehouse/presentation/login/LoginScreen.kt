@@ -32,9 +32,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.presentation.Screen
+import com.aeroclubcargo.warehouse.presentation.components.ProgressIndicatorDialog
+import com.aeroclubcargo.warehouse.presentation.components.SimpleAlertDialog
 import com.aeroclubcargo.warehouse.presentation.theme.BlueLight
 import com.aeroclubcargo.warehouse.presentation.theme.Gray1
 import com.aeroclubcargo.warehouse.presentation.theme.Gray2
+import com.aeroclubcargo.warehouse.utils.isValidEmailAddress
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.delay
@@ -43,7 +46,7 @@ import java.util.*
 
 val languages = listOf(
     "en" to "English",
-    "vi" to "VietNam",
+    "vi" to "Vietnam",
 )
 
 
@@ -55,13 +58,13 @@ fun LoginScreen(
     val currentLanguageIndex = viewModel.language.observeAsState().value ?: 0
     SetLanguage(currentLanguageIndex)
     Scaffold() {
-        MainUI(navController = navController, viewModel = viewModel,index= currentLanguageIndex)
+        MainUI(navController = navController, viewModel = viewModel, index = currentLanguageIndex)
     }
 }
 
 @Composable
 fun SetLanguage(languageIndex: Int) {
-    Log.e("LoginScreen","languageIndex $languageIndex")
+    Log.e("LoginScreen", "languageIndex $languageIndex")
     val locale = Locale(if (languageIndex == 0) "en" else "vi")
     val configuration = LocalConfiguration.current
     configuration.setLocale(locale)
@@ -72,10 +75,15 @@ fun SetLanguage(languageIndex: Int) {
 @OptIn(ExperimentalComposeUiApi::class)
 //@Preview(device = Devices.AUTOMOTIVE_1024p)
 @Composable
-fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int) {
+fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var scope = rememberCoroutineScope()
     val image = painterResource(id = R.drawable.ic_login_img)
+    val textSignIn = stringResource(id = R.string.sign_in)
+    val textPassword = stringResource(id = R.string.password)
+    val textEmail = stringResource(id = R.string.email)
 
     var emailValue by remember { mutableStateOf("") }
     var passwordValue by remember { mutableStateOf("") }
@@ -89,18 +97,23 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
     val checkState = remember {
         mutableStateOf(true)
     }
-
-    val textSignIn = stringResource(id = R.string.sign_in)
-    val textPassword = stringResource(id = R.string.password)
-    val textEmail = stringResource(id = R.string.email)
-
+    val context = LocalContext.current
+    val loginState = viewModel.loginState.observeAsState().value ?: LoginState(isLoading = false)
+    ProgressIndicatorDialog(loginState.isLoading)
+    SimpleAlertDialog(show = !loginState.error.isNullOrEmpty(), onDismiss = {
+            viewModel.onDialogDismiss()
+            focusRequesterEmail.requestFocus()
+        }, message = loginState.error ?: "LoginFailed!")
+    if(loginState.isLoginSuccess){
+       navController?.navigate(Screen.DashboardScreen.route)
+    }
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = Color.White),
         horizontalAlignment = Alignment.End
     ) {
-        DropdownDemo(viewModel = viewModel,index = index)
+        LanguageDropdown(viewModel = viewModel, index = index)
         Spacer(modifier = Modifier.height(20.dp))
         Column(
             modifier = Modifier
@@ -145,14 +158,22 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                     OutlinedTextField(
                         value = emailValue,
                         onValueChange = { emailValue = it },
-                        label = { Text(text = textEmail,
-                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
+                        label = {
+                            Text(
+                                text = textEmail,
+                                style = MaterialTheme.typography.body2.copy(color = Gray1)
+                            )
+                        },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
                         ),
-                        placeholder = { Text(text = textEmail,
-                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
+                        placeholder = {
+                            Text(
+                                text = textEmail,
+                                style = MaterialTheme.typography.body2.copy(color = Gray1)
+                            )
+                        },
                         singleLine = true,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -191,10 +212,18 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                                 )
                             }
                         },
-                        label = { Text(textPassword,
-                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
-                        placeholder = { Text(text = textPassword,
-                            style = MaterialTheme.typography.body2.copy(color = Gray1)) },
+                        label = {
+                            Text(
+                                textPassword,
+                                style = MaterialTheme.typography.body2.copy(color = Gray1)
+                            )
+                        },
+                        placeholder = {
+                            Text(
+                                text = textPassword,
+                                style = MaterialTheme.typography.body2.copy(color = Gray1)
+                            )
+                        },
                         singleLine = true,
                         visualTransformation = if (passwordVisibility.value) VisualTransformation.None
                         else PasswordVisualTransformation(),
@@ -222,14 +251,17 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
                                 style = MaterialTheme.typography.body2.copy(color = Gray1)
                             )
                         }
-
                         Box(
                             contentAlignment = Alignment.CenterEnd,
                             modifier = Modifier.fillMaxWidth()
                         ) {
                             OutlinedButton(
                                 onClick = {
-                                    // TODO
+                                    viewModel.authenticateUser(
+                                        context = context,
+                                        userName = emailValue,
+                                        password = passwordValue
+                                    )
                                 },
                                 border = BorderStroke(0.5.dp, BlueLight),
                                 shape = RoundedCornerShape(8.dp),
@@ -263,7 +295,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel,index : Int)
 
 
 @Composable
-fun DropdownDemo(viewModel: LoginViewModel,index: Int) {
+fun LanguageDropdown(viewModel: LoginViewModel, index: Int) {
     val scope = rememberCoroutineScope()
     var expanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableStateOf(index) }

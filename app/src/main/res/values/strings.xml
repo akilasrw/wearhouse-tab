@@ -10,4 +10,9 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="remember_me">Remember me</string>
+    <string name="login_failed">Login Failed!</string>
+    <string name="ok">OK</string>
+    <string name="plz_insert_valid_email">Please Insert correct Email Address!</string>
+    <string name="plz_insert_user_name">Please Insert UserName</string>
+    <string name="plz_insert_password">Please Insert Password</string>
 </resources>
