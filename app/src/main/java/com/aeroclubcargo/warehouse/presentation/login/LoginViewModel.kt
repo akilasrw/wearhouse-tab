@@ -25,8 +25,7 @@ class LoginViewModel @Inject constructor(
     private var getLocaleUseCase: GetLocaleUseCase,
     private var saveLocaleUseCase: SaveLocaleUseCase,
     private var rememberMeUseCase: RememberMeUseCase,
-    private var loginUseCase: LoginUseCase,
-    savedStateHandle: SavedStateHandle
+    private var loginUseCase: LoginUseCase
 ) : ViewModel() {
 
     private val _language = MutableLiveData(1)
@@ -34,9 +33,6 @@ class LoginViewModel @Inject constructor(
 
     private val _loginState = MutableLiveData(LoginState())
     var loginState: LiveData<LoginState> = _loginState
-
-//    private val _rememberMeState = MutableLiveData(RememberMe(isRememberMe = false))
-//    var rememberMeState: LiveData<RememberMe> = _rememberMeState
 
     private val _rememberMeCheckState = MutableStateFlow(false)
     val rememberMeCheckState = _rememberMeCheckState.asStateFlow()
