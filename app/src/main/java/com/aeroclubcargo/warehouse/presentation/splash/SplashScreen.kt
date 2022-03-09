@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.presentation.Screen
@@ -28,12 +29,13 @@ import kotlinx.coroutines.delay
 @Composable
 fun SplashScreen(
     navController: NavController,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
-
     LaunchedEffect(key1 = true) {
-        delay(4000)
-        navController.popBackStack()
-        navController.navigate(Screen.LoginScreen.route)
+        viewModel.silentLogin(navController = navController)
+//        delay(4000)
+//        navController.popBackStack()
+//        navController.navigate(Screen.LoginScreen.route)
     }
     Box(
         modifier = Modifier

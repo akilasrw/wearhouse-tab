@@ -72,8 +72,10 @@ class LoginViewModel @Inject constructor(
     private fun getRememberMeDetails() {
         rememberMeUseCase().onEach {
             it.let {
-                _emailValue.value = it.userName ?: ""
-                _passwordValue.value = it.password ?: ""
+                if (it.isRememberMe) {
+                    _emailValue.value = it.userName ?: ""
+                    _passwordValue.value = it.password ?: ""
+                }
                 _rememberMeCheckState.value = it.isRememberMe
             }
 
@@ -116,7 +118,7 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         CoroutineScope(IO).launch {
-                                rememberMeUseCase.saveMyCredentials(userName, password,isRememberMe)
+                            rememberMeUseCase.saveMyCredentials(userName, password, isRememberMe)
                             _loginState.postValue(LoginState(isLoginSuccess = true))
                         }
                     }
