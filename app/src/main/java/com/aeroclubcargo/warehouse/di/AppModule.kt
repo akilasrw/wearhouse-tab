@@ -21,6 +21,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
+
+    @Provides
+    @Singleton
+    fun getDataStorePreferenceRepository(@ApplicationContext appContext: Context): DataStorePreferenceRepository {
+        return DataStorePreferenceRepository(context = appContext)
+    }
+
     @Provides
     @Singleton
     fun provideCargoApi(): ApiInterface {
@@ -33,15 +40,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCargoRepository(apiInterface: ApiInterface): Repository {
-        return RepositoryImpl(apiInterface)
+    fun provideCargoRepository(apiInterface: ApiInterface,dataStorePreferenceRepository: DataStorePreferenceRepository): Repository {
+        return RepositoryImpl(apiInterface,dataStorePreferenceRepository)
     }
 
-    @Provides
-    @Singleton
-    fun getDataStorePreferenceRepository(@ApplicationContext appContext: Context): DataStorePreferenceRepository {
-        return DataStorePreferenceRepository(context = appContext)
-    }
+
 
 
 }

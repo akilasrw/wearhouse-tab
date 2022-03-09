@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.domain.model.RememberMe
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.ProgressIndicatorDialog
 import com.aeroclubcargo.warehouse.presentation.components.SimpleAlertDialog
@@ -78,14 +79,14 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var scope = rememberCoroutineScope()
     val image = painterResource(id = R.drawable.ic_login_img)
     val textSignIn = stringResource(id = R.string.sign_in)
     val textPassword = stringResource(id = R.string.password)
     val textEmail = stringResource(id = R.string.email)
 
-    var emailValue by remember { mutableStateOf("") }
-    var passwordValue by remember { mutableStateOf("") }
+    val rememberMeCheckState = viewModel.rememberMeCheckState.collectAsState()
+    val passwordValue = viewModel.passwordValue.collectAsState()
+    val emailValue = viewModel.emailValue.collectAsState()
 
     val passwordVisibility = remember { mutableStateOf(false) }
 
@@ -93,11 +94,10 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
     val focusRequesterPassword = remember { FocusRequester() }
 
     val scrollState = rememberScrollState()
-    val checkState = remember {
-        mutableStateOf(true)
-    }
+
     val context = LocalContext.current
     val loginState = viewModel.loginState.observeAsState().value ?: LoginState(isLoading = false)
+
     ProgressIndicatorDialog(loginState.isLoading)
     SimpleAlertDialog(show = !loginState.error.isNullOrEmpty(), onDismiss = {
             viewModel.onDialogDismiss()
@@ -155,8 +155,8 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     OutlinedTextField(
-                        value = emailValue,
-                        onValueChange = { emailValue = it },
+                        value = emailValue.value,
+                        onValueChange = viewModel::onEmailChange,
                         label = {
                             Text(
                                 text = textEmail,
@@ -192,11 +192,11 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                     )
                     Spacer(modifier = Modifier.padding(5.dp))
                     OutlinedTextField(
-                        value = passwordValue,
+                        value = passwordValue.value,
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             unfocusedBorderColor = Gray2
                         ),
-                        onValueChange = { passwordValue = it },
+                        onValueChange = viewModel::onPasswordChange,
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Done
@@ -241,9 +241,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                             modifier = Modifier.width(intrinsicSize = IntrinsicSize.Max),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Checkbox(checked = checkState.value, onCheckedChange = {
-                                checkState.value = it
-                            })
+                            Checkbox(checked = rememberMeCheckState.value, onCheckedChange =  viewModel::onRememberCheckState)
                             Text(
                                 stringResource(id = R.string.remember_me),
                                 maxLines = 1,
@@ -258,8 +256,9 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                                 onClick = {
                                     viewModel.authenticateUser(
                                         context = context,
-                                        userName = emailValue,
-                                        password = passwordValue
+                                        userName = emailValue.value,
+                                        password = passwordValue.value,
+                                        isRememberMe = rememberMeCheckState.value
                                     )
                                 },
                                 border = BorderStroke(0.5.dp, BlueLight),
