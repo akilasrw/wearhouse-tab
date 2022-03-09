@@ -1,4 +1,4 @@
-package com.aeroclubcargo.warehouse.presentation.theme
+package com.aeroclubcargo.warehouse.theme
 
 import androidx.compose.ui.graphics.Color
 

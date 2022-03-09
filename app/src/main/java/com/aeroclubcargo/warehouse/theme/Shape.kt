@@ -1,4 +1,4 @@
-package com.aeroclubcargo.warehouse.presentation.theme
+package com.aeroclubcargo.warehouse.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

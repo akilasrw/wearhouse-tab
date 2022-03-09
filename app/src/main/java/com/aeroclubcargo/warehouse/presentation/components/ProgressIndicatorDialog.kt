@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.aeroclubcargo.warehouse.presentation.theme.White
+import com.aeroclubcargo.warehouse.theme.White
 
 @Composable
 fun ProgressIndicatorDialog(isLoading: Boolean) {

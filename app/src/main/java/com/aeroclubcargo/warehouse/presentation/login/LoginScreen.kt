@@ -34,10 +34,9 @@ import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.ProgressIndicatorDialog
 import com.aeroclubcargo.warehouse.presentation.components.SimpleAlertDialog
-import com.aeroclubcargo.warehouse.presentation.theme.BlueLight
-import com.aeroclubcargo.warehouse.presentation.theme.Gray1
-import com.aeroclubcargo.warehouse.presentation.theme.Gray2
-import com.aeroclubcargo.warehouse.utils.isValidEmailAddress
+import com.aeroclubcargo.warehouse.theme.BlueLight
+import com.aeroclubcargo.warehouse.theme.Gray1
+import com.aeroclubcargo.warehouse.theme.Gray2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.delay
