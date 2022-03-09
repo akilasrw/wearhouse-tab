@@ -1,7 +1,7 @@
 package com.aeroclubcargo.warehouse.data.repository
 
 import com.aeroclubcargo.warehouse.data.local.DataStorePreferenceRepository
-import com.aeroclubcargo.warehouse.data.local.dto.RememberMeDto
+import com.aeroclubcargo.warehouse.data.local.dto.CredentialDto
 import com.aeroclubcargo.warehouse.data.remote.ApiInterface
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
@@ -18,11 +18,11 @@ class RepositoryImpl @Inject constructor(
        return apiInterface.authenticateUser(authenticateRequestDto = authenticateRequestDto)
     }
 
-    override suspend fun saveRememberMeCredential(rememberMeDto: RememberMeDto) {
-        datastore.saveCredential(rememberMeDto = rememberMeDto)
+    override suspend fun saveCredential(credentialDto: CredentialDto) {
+        datastore.saveCredential(credentialDto = credentialDto)
     }
 
-    override suspend fun getRememberMeCredential(): Flow<RememberMeDto?> {
+    override suspend fun getCredential(): Flow<CredentialDto?> {
         return datastore.getCredential
     }
 

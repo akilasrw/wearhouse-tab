@@ -1,6 +1,6 @@
 package com.aeroclubcargo.warehouse.domain.use_case.login
 
-import com.aeroclubcargo.warehouse.data.local.dto.RememberMeDto
+import com.aeroclubcargo.warehouse.data.local.dto.CredentialDto
 import com.aeroclubcargo.warehouse.data.local.dto.toRememberMe
 import com.aeroclubcargo.warehouse.domain.model.RememberMe
 import com.aeroclubcargo.warehouse.domain.repository.Repository
@@ -13,7 +13,7 @@ class RememberMeUseCase @Inject constructor(var repository: Repository) {
 
     operator fun invoke(): Flow<RememberMe> = flow {
         try {
-            val credentials = repository.getRememberMeCredential()
+            val credentials = repository.getCredential()
             credentials.collect {
                 emit(value = it?.toRememberMe() ?: RememberMe(isRememberMe = false))
             }
@@ -22,17 +22,14 @@ class RememberMeUseCase @Inject constructor(var repository: Repository) {
         }
     }
 
-    suspend fun saveRememberMeCredentials(userName: String, password: String) {
-        repository.saveRememberMeCredential(
-            rememberMeDto = RememberMeDto(
+    suspend fun saveMyCredentials(userName: String, password: String, isRememberMe:Boolean) {
+        repository.saveCredential(
+            credentialDto = CredentialDto(
                 userName = userName,
                 password = password,
+                isRememberMe = isRememberMe
             )
         )
-    }
-
-    suspend fun clearUserDataOnRememberMe(){
-        repository.clearCredential()
     }
 
 }

@@ -116,11 +116,7 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         CoroutineScope(IO).launch {
-                            if (isRememberMe) {
-                                rememberMeUseCase.saveRememberMeCredentials(userName, password)
-                            } else {
-                                rememberMeUseCase.clearUserDataOnRememberMe()
-                            }
+                                rememberMeUseCase.saveMyCredentials(userName, password,isRememberMe)
                             _loginState.postValue(LoginState(isLoginSuccess = true))
                         }
                     }

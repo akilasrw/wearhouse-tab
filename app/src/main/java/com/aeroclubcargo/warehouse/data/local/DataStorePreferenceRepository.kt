@@ -8,7 +8,7 @@ import androidx.datastore.preferences.core.remove
 import androidx.datastore.preferences.createDataStore
 import com.aeroclubcargo.warehouse.common.Constants.PREF_LANGUAGE
 import com.aeroclubcargo.warehouse.common.Constants.PREF_REMEMBER_ME
-import com.aeroclubcargo.warehouse.data.local.dto.RememberMeDto
+import com.aeroclubcargo.warehouse.data.local.dto.CredentialDto
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,8 +29,8 @@ class DataStorePreferenceRepository(context: Context) {
             preferences[PREF_LANGUAGE] ?: defaultLanguage
         }
 
-    suspend fun saveCredential(rememberMeDto: RememberMeDto) {
-        val json = Gson().toJson(rememberMeDto)
+    suspend fun saveCredential(credentialDto: CredentialDto) {
+        val json = Gson().toJson(credentialDto)
         dataStore.edit { preferences ->
             preferences[PREF_REMEMBER_ME] = json
         }
@@ -42,9 +42,9 @@ class DataStorePreferenceRepository(context: Context) {
         }
     }
 
-    val getCredential : Flow<RememberMeDto?> = dataStore.data.map {
+    val getCredential : Flow<CredentialDto?> = dataStore.data.map {
         preferences ->
-        Gson().fromJson(preferences[PREF_REMEMBER_ME],RememberMeDto::class.java)
+        Gson().fromJson(preferences[PREF_REMEMBER_ME],CredentialDto::class.java)
     }
 
 
