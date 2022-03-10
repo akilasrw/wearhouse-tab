@@ -1,37 +1,40 @@
 package com.aeroclubcargo.warehouse.presentation.dashboard
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.dashboard.components.GetTopBar
 
 @Composable
-fun DashboardScreen (navController: NavController){
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
+fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel = hiltViewModel()) {
 
-        Text(
-            text = stringResource(R.string.skytech_software_solutions_pvt_ltd),
-            color = colorResource(id = R.color.light_text_color),
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-                .align(Alignment.BottomCenter)
+   val userModel =  viewModel.userValue.collectAsState()
+
+    Scaffold(topBar = {
+        GetTopBar(
+            userName = "${userModel.value?.firstName} ${userModel.value?.lastName}",
+            profileUrl = "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cHJvZmlsZXxlbnwwfHwwfHw%3D&w=1000&q=80",
         )
+    }) {
+        GetDashboardMainUI()
+    }
+}
+
+
+//@Preview(device = Devices.AUTOMOTIVE_1024p)
+@Composable
+fun GetDashboardMainUI() {
+    Column(modifier = Modifier.fillMaxSize()) {
+        Row(modifier = Modifier.fillMaxHeight()) {
+
+        }
+
     }
 }

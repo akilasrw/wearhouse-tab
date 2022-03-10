@@ -10,6 +10,7 @@ object Constants {
 //    const val LANGUAGE_KEY = "language_key"
     val PREF_LANGUAGE = preferencesKey<Int>("language")
     val PREF_REMEMBER_ME = preferencesKey<String>("rememberMeDto")
+    val PREF_LOGIN_USER = preferencesKey<String>("loginUser")
 
 //    enum class Language(name: String) {
 //        English("English"),

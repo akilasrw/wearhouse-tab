@@ -7,8 +7,11 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.remove
 import androidx.datastore.preferences.createDataStore
 import com.aeroclubcargo.warehouse.common.Constants.PREF_LANGUAGE
+import com.aeroclubcargo.warehouse.common.Constants.PREF_LOGIN_USER
 import com.aeroclubcargo.warehouse.common.Constants.PREF_REMEMBER_ME
 import com.aeroclubcargo.warehouse.data.local.dto.CredentialDto
+import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
+import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -45,6 +48,18 @@ class DataStorePreferenceRepository(context: Context) {
     val getCredential : Flow<CredentialDto?> = dataStore.data.map {
         preferences ->
         Gson().fromJson(preferences[PREF_REMEMBER_ME],CredentialDto::class.java)
+    }
+
+    suspend fun saveAuthenticatedLoggedInUser(authenticateRequestDto: AuthenticateResponseDto){
+        val json = Gson().toJson(authenticateRequestDto)
+        dataStore.edit { preferences ->
+            preferences[PREF_LOGIN_USER] = json
+        }
+    }
+
+    var authenticatedLoggedInUser : Flow<AuthenticateResponseDto?> = dataStore.data.map {
+            preferences ->
+        Gson().fromJson(preferences[PREF_LOGIN_USER],AuthenticateResponseDto::class.java)
     }
 
 

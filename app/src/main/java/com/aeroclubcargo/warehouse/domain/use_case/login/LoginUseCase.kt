@@ -4,6 +4,7 @@ import com.aeroclubcargo.warehouse.common.Resource
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.toAuthenticateResponse
 import com.aeroclubcargo.warehouse.domain.model.AuthenticateResponse
+import com.aeroclubcargo.warehouse.domain.model.toAuthenticateResponseDto
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,6 +13,7 @@ import java.io.IOException
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(private var repository: Repository) {
+
     operator fun invoke(username: String, password: String): Flow<Resource<AuthenticateResponse>> =
         flow {
             try {
@@ -26,11 +28,20 @@ class LoginUseCase @Inject constructor(private var repository: Repository) {
                         password = password
                     )
                 )
-                emit(Resource.Success<AuthenticateResponse>(data = loginResponse.toAuthenticateResponse()))
+                if (loginResponse.jwtToken != null) {
+                    emit(Resource.Success<AuthenticateResponse>(data = loginResponse.toAuthenticateResponse()))
+                } else {
+                    emit(
+                        Resource.Error<AuthenticateResponse>(
+                            message = "User not secured!"
+                        )
+                    )
+                }
             } catch (e: HttpException) {
+                val error = e.response()?.errorBody()?.string()
                 emit(
                     Resource.Error<AuthenticateResponse>(
-                        message = e.localizedMessage ?: "API connection failed!"
+                        message = error ?: (e.localizedMessage ?: "API connection failed!")
                     )
                 )
             } catch (e: IOException) {
@@ -41,4 +52,8 @@ class LoginUseCase @Inject constructor(private var repository: Repository) {
                 )
             }
         }
+
+    suspend fun saveLoggedInUser(authenticateResponse: AuthenticateResponse) {
+        repository.saveLoggedInUser(authenticateResponse.toAuthenticateResponseDto())
+    }
 }

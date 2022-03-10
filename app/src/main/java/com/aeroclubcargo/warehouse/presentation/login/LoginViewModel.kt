@@ -2,7 +2,10 @@ package com.aeroclubcargo.warehouse.presentation.login
 
 import android.content.Context
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Resource
 import com.aeroclubcargo.warehouse.domain.use_case.locale.GetLocaleUseCase
@@ -114,6 +117,7 @@ class LoginViewModel @Inject constructor(
                 when (result) {
                     is Resource.Success -> {
                         CoroutineScope(IO).launch {
+                            loginUseCase.saveLoggedInUser(result.data!!)
                             rememberMeUseCase.saveMyCredentials(userName, password, isRememberMe)
                             _loginState.postValue(LoginState(isLoginSuccess = true))
                         }

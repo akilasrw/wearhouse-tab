@@ -7,9 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface Repository {
 
-     suspend fun authenticateUser(authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto
+    suspend fun authenticateUser(authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto
 
-     suspend fun saveCredential(credentialDto: CredentialDto)
-     suspend fun getCredential(): Flow<CredentialDto?>
-     suspend fun clearCredential()
+    suspend fun saveCredential(credentialDto: CredentialDto)
+    suspend fun getCredential(): Flow<CredentialDto?>
+    suspend fun clearCredential()
+
+    suspend fun saveLoggedInUser(authenticateRequestDto: AuthenticateResponseDto)
+    suspend fun getLoggedInUser():Flow<AuthenticateResponseDto?>
 }

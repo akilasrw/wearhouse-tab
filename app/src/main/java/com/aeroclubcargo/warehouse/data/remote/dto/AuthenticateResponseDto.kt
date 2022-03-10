@@ -7,11 +7,10 @@ data class AuthenticateResponseDto(
     var firstName: String,
     var lastName : String,
     var username : String,
-    var jwtToken : String,
+    var jwtToken : String?,
 )
 
 fun AuthenticateResponseDto.toAuthenticateResponse() : AuthenticateResponse{
-    return AuthenticateResponse(
-        id, jwtToken
+    return AuthenticateResponse(id, firstName, lastName, username, jwtToken
     )
 }
