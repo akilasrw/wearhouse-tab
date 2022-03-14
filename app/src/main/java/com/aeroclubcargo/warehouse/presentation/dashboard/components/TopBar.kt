@@ -10,21 +10,19 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.theme.BlueLight
 
 //@Preview(showBackground = true)
 @Composable
-fun GetTopBar(userName: String, profileUrl: String) {
+fun GetTopBar(userName: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -50,7 +48,6 @@ fun GetTopBar(userName: String, profileUrl: String) {
         ) {
             ProfileView(
                 name = userName,
-                profileUrl = profileUrl,
                 onClick = {
                     // TODO
                 }
@@ -94,7 +91,6 @@ fun GetTopBar(userName: String, profileUrl: String) {
 @Composable
 fun ProfileView(
     name: String,
-    profileUrl: String,
     onClick: () -> Unit
 ) {
     Surface(
@@ -108,17 +104,23 @@ fun ProfileView(
         Row(
             modifier = Modifier.wrapContentWidth()
         ) {
-            AsyncImage(
-                model = profileUrl,
-                contentDescription = "profile image",
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(R.drawable.ic_outline_account_circle_24),
-                modifier = Modifier
-                    .padding(4.dp)
-                    .clip(CircleShape)
-                    .width(30.dp)
-                    .height(30.dp)
+            Icon(
+                painter = painterResource(R.drawable.ic_outline_account_circle_24),
+                contentDescription = "Account",
+                modifier = Modifier.size(40.dp).padding(4.dp),
+                tint = BlueLight
             )
+//            AsyncImage(
+//                model = painterResource(R.drawable.ic_outline_account_circle_24),
+//                contentDescription = "profile image",
+//                contentScale = ContentScale.Crop,
+//                placeholder = painterResource(R.drawable.ic_outline_account_circle_24),
+//                modifier = Modifier
+//                    .padding(4.dp)
+//                    .clip(CircleShape)
+//                    .width(30.dp)
+//                    .height(30.dp)
+//            )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
                 text = name,
