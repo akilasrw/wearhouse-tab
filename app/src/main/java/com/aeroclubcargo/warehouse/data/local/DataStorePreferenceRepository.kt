@@ -62,5 +62,11 @@ class DataStorePreferenceRepository(context: Context) {
         Gson().fromJson(preferences[PREF_LOGIN_USER],AuthenticateResponseDto::class.java)
     }
 
+    suspend fun removeLoginUserDetails(){
+        dataStore.edit { preferences ->
+            preferences.remove(PREF_LOGIN_USER)
+        }
+    }
+
 
 }

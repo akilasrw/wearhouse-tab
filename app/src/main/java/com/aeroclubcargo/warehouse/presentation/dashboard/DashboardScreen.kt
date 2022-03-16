@@ -35,7 +35,7 @@ fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel 
     val userModel = viewModel.userValue.collectAsState()
 
     Scaffold(topBar = {
-        GetTopBar(userName = "${userModel.value?.firstName} ${userModel.value?.lastName}")
+        GetTopBar(userName = "${userModel.value?.firstName} ${userModel.value?.lastName}", navController = navController)
     }) {
         GetDashboardMainUI()
     }

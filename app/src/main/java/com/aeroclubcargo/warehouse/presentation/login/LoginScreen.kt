@@ -102,7 +102,7 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
     SimpleAlertDialog(show = !loginState.error.isNullOrEmpty(), onDismiss = {
             viewModel.onDialogDismiss()
             focusRequesterEmail.requestFocus()
-        }, message = loginState.error ?: "LoginFailed!")
+        }, message = loginState.error ?: "LoginFailed!", title = stringResource(R.string.login_failed))
     if(loginState.isLoginSuccess){
        navController?.navigate(Screen.DashboardScreen.route)
     }

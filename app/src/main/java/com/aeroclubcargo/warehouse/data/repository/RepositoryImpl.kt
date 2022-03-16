@@ -30,6 +30,10 @@ class RepositoryImpl @Inject constructor(
         return datastore.clearCredential()
     }
 
+    override suspend fun removeLoginUserDetails() {
+        return datastore.removeLoginUserDetails()
+    }
+
     override suspend fun saveLoggedInUser(authenticateRequestDto: AuthenticateResponseDto) {
         return datastore.saveAuthenticatedLoggedInUser(authenticateRequestDto = authenticateRequestDto)
     }

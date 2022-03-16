@@ -18,4 +18,5 @@
     <string name="u_have_entered_invalid_u_and_p">You have entered an invalid username or password</string>
     <string name="hello_david">Hello David,</string>
     <string name="have_a_nice_day">Have a Nice Day to Work!</string>
+    <string name="cancel">Cancel</string>
 </resources>

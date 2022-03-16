@@ -12,6 +12,7 @@ interface Repository {
     suspend fun saveCredential(credentialDto: CredentialDto)
     suspend fun getCredential(): Flow<CredentialDto?>
     suspend fun clearCredential()
+    suspend fun removeLoginUserDetails()
 
     suspend fun saveLoggedInUser(authenticateRequestDto: AuthenticateResponseDto)
     suspend fun getLoggedInUser():Flow<AuthenticateResponseDto?>

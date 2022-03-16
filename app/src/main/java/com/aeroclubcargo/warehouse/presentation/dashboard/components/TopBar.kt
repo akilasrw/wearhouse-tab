@@ -7,7 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,12 +17,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.dashboard.DashBoardViewModel
 import com.aeroclubcargo.warehouse.theme.BlueLight
 
-//@Preview(showBackground = true)
 @Composable
-fun GetTopBar(userName: String) {
+fun GetTopBar(navController: NavController, userName: String,viewModel: DashBoardViewModel = hiltViewModel()) {
+
+    var expanded by remember { mutableStateOf(false) }
+    var showSignOutDialog by remember { mutableStateOf(false) }
+
+    ShowSignOutDialog(show = showSignOutDialog, onDismiss = {
+        showSignOutDialog = false
+    }, onSignOut = {
+        viewModel.logoutUser(navController = navController)
+    })
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -49,9 +60,34 @@ fun GetTopBar(userName: String) {
             ProfileView(
                 name = userName,
                 onClick = {
-                    // TODO
+                    expanded = true
                 }
             )
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(onClick = {
+                    /* Handle refresh! */
+                    expanded = false
+
+                }) {
+                    Text("Profile")
+                }
+                DropdownMenuItem(onClick = {
+                    /* Handle settings! */
+                    expanded = false
+                }) {
+                    Text("Settings")
+                }
+                Divider()
+                DropdownMenuItem(onClick = {
+                    expanded = false
+                    showSignOutDialog = true
+                }) {
+                    Text("Sign out")
+                }
+            }
             Spacer(modifier = Modifier.width(10.dp))
             IconButton(onClick = { /*TODO*/ }) {
                 BadgedBox(badge = {
@@ -89,6 +125,42 @@ fun GetTopBar(userName: String) {
 }
 
 @Composable
+fun ShowSignOutDialog(show: Boolean, onDismiss: () -> Unit,onSignOut:()-> Unit) {
+    if (show) {
+        AlertDialog(
+            onDismissRequest = {
+
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    onDismiss()
+                })
+                {
+                    Text(
+                        text = stringResource(R.string.cancel),
+                        style = MaterialTheme.typography.button
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    onDismiss()
+                    onSignOut()
+                })
+                {
+                    Text(
+                        text = stringResource(R.string.ok),
+                        style = MaterialTheme.typography.button
+                    )
+                }
+            },
+            title = { Text(text = "Sign out?") },
+            text = { Text(text = "Are you sure want to sign out?") }
+        )
+    }
+}
+
+@Composable
 fun ProfileView(
     name: String,
     onClick: () -> Unit
@@ -107,7 +179,9 @@ fun ProfileView(
             Icon(
                 painter = painterResource(R.drawable.ic_outline_account_circle_24),
                 contentDescription = "Account",
-                modifier = Modifier.size(40.dp).padding(4.dp),
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(4.dp),
                 tint = BlueLight
             )
 //            AsyncImage(
@@ -134,4 +208,6 @@ fun ProfileView(
             )
         }
     }
+
+
 }
