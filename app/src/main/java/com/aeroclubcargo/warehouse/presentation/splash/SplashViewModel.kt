@@ -13,29 +13,25 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel @Inject constructor(var loginUseCase: LoginUseCase,var rememberMeUseCase: RememberMeUseCase) : ViewModel() {
+class SplashViewModel @Inject constructor(var loginUseCase: LoginUseCase) : ViewModel() {
 
     fun silentLogin(navController: NavController) {
-        rememberMeUseCase().onEach {
-            if(!it.userName.isNullOrEmpty() && !it.password.isNullOrEmpty()){
-               loginUseCase.invoke(username = it.userName!!, password = it.password!!).onEach {
+               loginUseCase.silentLogin().onEach {
                        result ->
                    when(result){
                        is Resource.Success -> {
                            navController.popBackStack()
                            navController.navigate(Screen.DashboardScreen.route)
                        }
-                       else -> {
+                       is Resource.Error -> {
                            navController.popBackStack()
                            navController.navigate(Screen.LoginScreen.route)
                        }
+                       else -> {
+
+                       }
                    }
                }.launchIn(viewModelScope)
-            }else{
-                navController.popBackStack()
-                navController.navigate(Screen.LoginScreen.route)
-            }
-        }.launchIn(viewModelScope)
     }
 
 }

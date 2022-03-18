@@ -31,7 +31,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
-import com.aeroclubcargo.warehouse.domain.model.RememberMe
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.ProgressIndicatorDialog
 import com.aeroclubcargo.warehouse.presentation.components.SimpleAlertDialog
@@ -40,6 +39,7 @@ import com.aeroclubcargo.warehouse.theme.Gray1
 import com.aeroclubcargo.warehouse.theme.Gray2
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Default
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -100,11 +100,15 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
 
     ProgressIndicatorDialog(loginState.isLoading)
     SimpleAlertDialog(show = !loginState.error.isNullOrEmpty(), onDismiss = {
-            viewModel.onDialogDismiss()
-            focusRequesterEmail.requestFocus()
-        }, message = loginState.error ?: "LoginFailed!", title = stringResource(R.string.login_failed))
-    if(loginState.isLoginSuccess){
-       navController?.navigate(Screen.DashboardScreen.route)
+        viewModel.onDialogDismiss()
+        focusRequesterEmail.requestFocus()
+    }, message = loginState.error ?: "LoginFailed!", title = stringResource(R.string.login_failed))
+    viewModel.loginState.observeForever {
+        CoroutineScope(Main).launch {
+            delay(1000)
+            if (it.isLoginSuccess)
+                navController?.navigate(Screen.DashboardScreen.route)
+        }
     }
     Column(
         modifier = Modifier
@@ -241,7 +245,10 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                             modifier = Modifier.width(intrinsicSize = IntrinsicSize.Max),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Checkbox(checked = rememberMeCheckState.value, onCheckedChange =  viewModel::onRememberCheckState)
+                            Checkbox(
+                                checked = rememberMeCheckState.value,
+                                onCheckedChange = viewModel::onRememberCheckState
+                            )
                             Text(
                                 stringResource(id = R.string.remember_me),
                                 maxLines = 1,
