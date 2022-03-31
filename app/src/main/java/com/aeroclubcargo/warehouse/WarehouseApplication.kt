@@ -19,4 +19,5 @@ class WarehouseApplication : Application(){
 
     }
 
+
 }

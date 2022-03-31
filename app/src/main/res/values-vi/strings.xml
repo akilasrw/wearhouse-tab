@@ -19,5 +19,8 @@
     <string name="hello_david">Hello David,</string>
     <string name="have_a_nice_day">Have a Nice Day to Work!</string>
     <string name="cancel">Cancel</string>
+    <string name="verify_booking">Verify Booking</string>
+    <string name="accept_cargo">Accepted Cargo</string>
+    <string name="recent_accepted_cargo_booking">Recent Accepted Cargo Bookings</string>
 
 </resources>

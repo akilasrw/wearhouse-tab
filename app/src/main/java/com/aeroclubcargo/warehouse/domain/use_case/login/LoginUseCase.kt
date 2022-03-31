@@ -57,6 +57,7 @@ class LoginUseCase @Inject constructor(private var repository: Repository) {
         }
 
     suspend fun saveLoggedInUser(authenticateResponse: AuthenticateResponse) {
+        authenticateResponse.jwtToken?.let { repository.saveJwtToken(it) }
         repository.saveLoggedInUser(authenticateResponse.toAuthenticateResponseDto())
     }
 

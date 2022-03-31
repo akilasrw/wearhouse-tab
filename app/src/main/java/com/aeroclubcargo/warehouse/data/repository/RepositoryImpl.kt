@@ -7,6 +7,7 @@ import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -16,6 +17,14 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun authenticateUser(authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto {
        return apiInterface.authenticateUser(authenticateRequestDto = authenticateRequestDto)
+    }
+
+    override suspend fun refreshToken(refreshToken:String): AuthenticateResponseDto {
+        return apiInterface.refreshToken("$refreshToken")
+    }
+
+    override suspend fun apiGetSectorsList(): String {
+        return apiInterface.apiGetSectors()
     }
 
     override suspend fun saveCredential(credentialDto: CredentialDto) {
@@ -36,6 +45,14 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun saveLoggedInUser(authenticateRequestDto: AuthenticateResponseDto) {
         return datastore.saveAuthenticatedLoggedInUser(authenticateRequestDto = authenticateRequestDto)
+    }
+
+    override suspend fun saveJwtToken(jwtToken: String) {
+        return datastore.saveJwtToken(jwtToken)
+    }
+
+    override suspend fun getJwtToken(): Flow<String> {
+        return datastore.getJwtToken
     }
 
     override suspend fun getLoggedInUser(): Flow<AuthenticateResponseDto?> {

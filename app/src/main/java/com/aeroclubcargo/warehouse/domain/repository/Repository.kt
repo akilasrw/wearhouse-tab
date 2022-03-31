@@ -5,15 +5,7 @@ import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import kotlinx.coroutines.flow.Flow
 
-interface Repository {
+interface Repository : Remote,Local{
 
-    suspend fun authenticateUser(authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto
-
-    suspend fun saveCredential(credentialDto: CredentialDto)
-    suspend fun getCredential(): Flow<CredentialDto?>
-    suspend fun clearCredential()
-    suspend fun removeLoginUserDetails()
-
-    suspend fun saveLoggedInUser(authenticateRequestDto: AuthenticateResponseDto)
-    suspend fun getLoggedInUser():Flow<AuthenticateResponseDto?>
 }
+

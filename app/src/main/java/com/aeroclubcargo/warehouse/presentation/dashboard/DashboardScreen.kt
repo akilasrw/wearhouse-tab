@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,14 +38,14 @@ fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel 
     Scaffold(topBar = {
         GetTopBar(userName = "${userModel.value?.firstName} ${userModel.value?.lastName}", navController = navController)
     }) {
-        GetDashboardMainUI()
+        GetDashboardMainUI(viewModel = viewModel)
     }
 }
 
 
 //@Preview(device = Devices.AUTOMOTIVE_1024p)
 @Composable
-fun GetDashboardMainUI() {
+fun GetDashboardMainUI(viewModel: DashBoardViewModel) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -53,22 +54,22 @@ fun GetDashboardMainUI() {
         Spacer(modifier = Modifier.width(16.dp))
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
-            GetTileButton(id = R.drawable.ic_scan, text = "Verify Booking", onClick = {
-
+            GetTileButton(id = R.drawable.ic_scan, text = stringResource(R.string.verify_booking), onClick = {
+                viewModel.getSectors()
             })
             Spacer(modifier = Modifier.width(8.dp))
-            GetTileButton(id = R.drawable.ic_accepted, text = "Accepted Cargo", onClick = {
+            GetTileButton(id = R.drawable.ic_accepted, text = stringResource(R.string.accept_cargo), onClick = {
 
             })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
                 id = R.drawable.ic_document,
-                text = "Special Package Handling",
+                text = stringResource(R.string.special_package_handling),
                 onClick = {
 
                 })
             Spacer(modifier = Modifier.width(8.dp))
-            GetTileButton(id = R.drawable.ic_flight_schedule, text = "Flight Schedule", onClick = {
+            GetTileButton(id = R.drawable.ic_flight_schedule, text = stringResource(R.string.flight_schedule), onClick = {
 
             })
             Spacer(modifier = Modifier.width(16.dp))
@@ -90,11 +91,11 @@ fun RecentCargoBookingPanel() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Recent Accepted Cargo Bookings",
+                text = stringResource(R.string.recent_accepted_cargo_booking),
                 style = MaterialTheme.typography.subtitle2.copy(color = Color.Black)
             )
             TextButton(onClick = { /*TODO*/ }) {
-                Text("View All", style = MaterialTheme.typography.button)
+                Text(stringResource(R.string.view_all), style = MaterialTheme.typography.button)
             }
         }
         Card(

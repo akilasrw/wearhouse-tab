@@ -19,4 +19,10 @@
     <string name="hello_david">Hello David,</string>
     <string name="have_a_nice_day">Have a Nice Day to Work!</string>
     <string name="cancel">Cancel</string>
+    <string name="verify_booking">Verify Booking</string>
+    <string name="accept_cargo">Accepted Cargo</string>
+    <string name="special_package_handling">Special Package Handling</string>
+    <string name="flight_schedule">Flight Schedule</string>
+    <string name="recent_accepted_cargo_booking">Recent Accepted Cargo Bookings</string>
+    <string name="view_all">View All</string>
 </resources>
