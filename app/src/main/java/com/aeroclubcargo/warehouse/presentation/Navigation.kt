@@ -1,6 +1,8 @@
 package com.aeroclubcargo.warehouse.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHost
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -10,9 +12,9 @@ import com.aeroclubcargo.warehouse.presentation.splash.SplashScreen
 
 
 @Composable
-fun Navigation(){
+fun navigation() {
     val navController = rememberNavController()
-    NavHost(
+   NavHost(
         navController = navController,
         startDestination = Screen.SplashScreen.route
     ) {
@@ -32,5 +34,4 @@ fun Navigation(){
             DashboardScreen(navController)
         }
     }
-
 }

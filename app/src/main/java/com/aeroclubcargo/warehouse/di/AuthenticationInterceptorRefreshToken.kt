@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.common.navigator.GlobalNavigator
 import com.aeroclubcargo.warehouse.data.local.DataStorePreferenceRepository
 import com.aeroclubcargo.warehouse.data.remote.TokenRefreshAPI
 import com.aeroclubcargo.warehouse.presentation.Screen
@@ -48,9 +49,11 @@ class AuthenticationInterceptorRefreshToken @Inject constructor(
                     }
                     return when {
                         responseNewTokenLoginModel == null -> {
-
-                            // TODO sign out application
-                            Log.e("AUTH ERROR", "responseNewTokenLoginModel")
+                            runBlocking {
+                                dataStorePreferenceRepository.clearCredential()
+                                dataStorePreferenceRepository.removeLoginUserDetails()
+                            }
+                            GlobalNavigator.logout()
                             initialResponse
                         }
                         else -> {
