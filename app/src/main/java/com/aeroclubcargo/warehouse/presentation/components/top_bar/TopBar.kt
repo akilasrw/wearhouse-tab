@@ -1,10 +1,11 @@
-package com.aeroclubcargo.warehouse.presentation.dashboard.components
+package com.aeroclubcargo.warehouse.presentation.components.top_bar
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.*
@@ -20,14 +21,17 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
-import com.aeroclubcargo.warehouse.presentation.dashboard.DashBoardViewModel
 import com.aeroclubcargo.warehouse.theme.BlueLight
 
 @Composable
-fun GetTopBar(navController: NavController, userName: String,viewModel: DashBoardViewModel = hiltViewModel()) {
-
+fun GetTopBar(
+    isDashBoard: Boolean = false,
+    navController: NavController,
+    viewModel: TopBarViewModel = hiltViewModel()
+) {
     var expanded by remember { mutableStateOf(false) }
     var showSignOutDialog by remember { mutableStateOf(false) }
+    val userModel = viewModel.userValue.collectAsState()
 
     ShowSignOutDialog(show = showSignOutDialog, onDismiss = {
         showSignOutDialog = false
@@ -40,25 +44,41 @@ fun GetTopBar(navController: NavController, userName: String,viewModel: DashBoar
             .padding(16.dp)
             .height(50.dp)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(0.7f)
-        ) {
-            Text(
-                text = stringResource(R.string.hello_david),
-                style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.SemiBold)
-            )
-            Text(
-                text = stringResource(R.string.have_a_nice_day),
-                style = MaterialTheme.typography.subtitle1
-            )
+        if (isDashBoard) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+            ) {
+                Text(
+                    text = stringResource(R.string.hello_david),
+                    style = MaterialTheme.typography.h5.copy(fontWeight = FontWeight.SemiBold)
+                )
+                Text(
+                    text = stringResource(R.string.have_a_nice_day),
+                    style = MaterialTheme.typography.subtitle1
+                )
+            }
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.7f)
+            ) {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(
+                        Icons.Outlined.ArrowBack,
+                        contentDescription = "back button",
+                        modifier = Modifier.size(30.dp),
+                        tint = MaterialTheme.colors.primary
+                    )
+                }
+            }
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth(), horizontalArrangement = Arrangement.End
         ) {
             ProfileView(
-                name = userName,
+                name = "${userModel.value?.firstName ?: ""} ${userModel.value?.lastName ?: ""}",
                 onClick = {
                     expanded = true
                 }
@@ -118,14 +138,12 @@ fun GetTopBar(navController: NavController, userName: String,viewModel: DashBoar
                     tint = MaterialTheme.colors.primary
                 )
             }
-
         }
-
     }
 }
 
 @Composable
-fun ShowSignOutDialog(show: Boolean, onDismiss: () -> Unit,onSignOut:()-> Unit) {
+fun ShowSignOutDialog(show: Boolean, onDismiss: () -> Unit, onSignOut: () -> Unit) {
     if (show) {
         AlertDialog(
             onDismissRequest = {

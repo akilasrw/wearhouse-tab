@@ -25,27 +25,24 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.domain.model.Booking
-import com.aeroclubcargo.warehouse.presentation.dashboard.components.GetTopBar
+import com.aeroclubcargo.warehouse.presentation.Screen
+import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.hintLightGray
 
 @Composable
 fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel = hiltViewModel()) {
-
-    val userModel = viewModel.userValue.collectAsState()
-
     Scaffold(topBar = {
-        GetTopBar(userName = "${userModel.value?.firstName} ${userModel.value?.lastName}", navController = navController)
+        GetTopBar( navController = navController, isDashBoard = true)
     }) {
-        GetDashboardMainUI(viewModel = viewModel)
+        GetDashboardMainUI(viewModel = viewModel, navController = navController)
     }
 }
 
 
-//@Preview(device = Devices.AUTOMOTIVE_1024p)
 @Composable
-fun GetDashboardMainUI(viewModel: DashBoardViewModel) {
+fun GetDashboardMainUI(viewModel: DashBoardViewModel,navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -55,11 +52,11 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel) {
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
             GetTileButton(id = R.drawable.ic_scan, text = stringResource(R.string.verify_booking), onClick = {
-                viewModel.getSectors()
+
             })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(id = R.drawable.ic_accepted, text = stringResource(R.string.accept_cargo), onClick = {
-
+                navController.navigate(Screen.ScanCargoScreen.route)
             })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(

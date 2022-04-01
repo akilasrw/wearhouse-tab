@@ -21,41 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashBoardViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
 
-    private val _userValue = MutableStateFlow<AuthenticateResponse?>(null)
-    val userValue: StateFlow<AuthenticateResponse?> = _userValue.asStateFlow()
 
-    init {
-        getLoggedInUser()
-    }
-
-    private fun getLoggedInUser() {
-        CoroutineScope(IO).launch {
-            val user = repository.getLoggedInUser()
-            user.collect {
-                _userValue.value = it?.toAuthenticateResponse()
-            }
-        }
-    }
-
-    fun logoutUser(navController: NavController){
-        CoroutineScope(IO).launch {
-            repository.clearCredential()
-            repository.removeLoginUserDetails()
-        }
-        navController.popBackStack()
-        navController.navigate(Screen.LoginScreen.route)
-    }
-    //Test
-    fun getSectors() {
-        viewModelScope.launch {
-            try {
-                val user = repository.apiGetSectorsList().first()
-//                user!!.refreshToken?.let { repository.refreshToken(refreshToken = it) }
-            }catch (e:Exception){
-                println(e.localizedMessage)
-            }
-        }
-    }
 
 
 }
