@@ -13,6 +13,7 @@ import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -33,6 +34,7 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
+import com.aeroclubcargo.warehouse.theme.Gray3
 import com.aeroclubcargo.warehouse.utils.QrCodeAnalyzer
 
 
@@ -80,7 +82,7 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                 modifier = Modifier
                     .width(600.dp)
                     .height(260.dp)
-                    .background(color = Color.Red)
+                    .border(width = 30.dp, color = Gray3)
             ) {
                 if (hasCameraPermission) {
                     AndroidView(factory = { context ->
