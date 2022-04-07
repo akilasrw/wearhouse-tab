@@ -10,6 +10,7 @@ import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
 import com.aeroclubcargo.warehouse.presentation.login.LoginScreen
 import com.aeroclubcargo.warehouse.presentation.scan_cargo.ScanCargoScreen
 import com.aeroclubcargo.warehouse.presentation.splash.SplashScreen
+import com.aeroclubcargo.warehouse.presentation.verify_booking.VerifyBookingScreen
 
 
 @Composable
@@ -38,6 +39,11 @@ fun navigation() {
            route = Screen.ScanCargoScreen.route
        ) {
            ScanCargoScreen(navController)
+       }
+       composable(
+           route = Screen.VerifyBookingScreen.route
+       ) {
+           VerifyBookingScreen(navController)
        }
     }
 }

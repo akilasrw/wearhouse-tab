@@ -52,7 +52,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel,navController: NavControlle
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
             GetTileButton(id = R.drawable.ic_scan, text = stringResource(R.string.verify_booking), onClick = {
-
+                navController.navigate(Screen.VerifyBookingScreen.route)
             })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(id = R.drawable.ic_accepted, text = stringResource(R.string.accept_cargo), onClick = {
