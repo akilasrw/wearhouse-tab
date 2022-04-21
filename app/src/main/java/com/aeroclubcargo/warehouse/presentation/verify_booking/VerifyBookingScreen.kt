@@ -15,7 +15,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.Navigator
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight2
 import com.aeroclubcargo.warehouse.theme.hintLightGray
@@ -70,16 +72,33 @@ fun VerifyBookingScreen(
                     .fillMaxHeight(fraction = 0.3f)
                     .fillMaxWidth(), horizontalArrangement = Arrangement.End
             ) {
-                Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(backgroundColor = hintLightGray)) {
-                    Text(text = "Cancel", style = MaterialTheme.typography.button.copy(color = Color.White))
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = hintLightGray)
+                ) {
+                    Text(
+                        text = "Cancel",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
-                Button(onClick = { /*TODO*/ },colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
-                    Text(text = "Update",style = MaterialTheme.typography.button.copy(color = Color.White))
+                Button(onClick = {
+                    navController.navigate(Screen.UpdateBookingScreen.route)
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
+                    Text(
+                        text = "Update",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
-                Button(onClick = { /*TODO*/ },colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
-                    Text(text = "Accept",style = MaterialTheme.typography.button.copy(color = Color.White))
+                Button(
+                    onClick = { /*TODO*/ },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)
+                ) {
+                    Text(
+                        text = "Accept",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
                 }
             }
         }
