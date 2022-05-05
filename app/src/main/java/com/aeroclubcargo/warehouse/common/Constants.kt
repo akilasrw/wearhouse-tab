@@ -1,10 +1,12 @@
 package com.aeroclubcargo.warehouse.common
 
 import androidx.datastore.preferences.core.preferencesKey
+import com.aeroclubcargo.warehouse.BuildConfig
 
 object Constants {
 
-    const val BASE_URL = "https://aeroclub-skytechcargo-app-dev.azurewebsites.net/"
+//    const val BASE_URL = "https://aeroclub-skytechcargo-app-dev.azurewebsites.net/"
+    const val BASE_URL = BuildConfig.API_BASE_URL
 
 
 //    const val LANGUAGE_KEY = "language_key"
@@ -17,5 +19,18 @@ object Constants {
 //        English("English"),
 //        Vietnam("Vietnam"),
 //    }
+
+    enum class BookingStatus
+    {
+        None ,
+        Pending,
+        Accepted,
+        Loading ,
+        Invoiced,
+        Dispatched ,
+        Exported
+    }
+
+
 
 }

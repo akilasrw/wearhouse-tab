@@ -12,7 +12,6 @@ import androidx.compose.material.*
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
-import com.aeroclubcargo.warehouse.domain.model.Booking
+import com.aeroclubcargo.warehouse.domain.model.getStatusString
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight
@@ -34,7 +33,7 @@ import com.aeroclubcargo.warehouse.theme.hintLightGray
 @Composable
 fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel = hiltViewModel()) {
     Scaffold(topBar = {
-        GetTopBar( navController = navController, isDashBoard = true)
+        GetTopBar(navController = navController, isDashBoard = true)
     }) {
         GetDashboardMainUI(viewModel = viewModel, navController = navController)
     }
@@ -42,7 +41,7 @@ fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel 
 
 
 @Composable
-fun GetDashboardMainUI(viewModel: DashBoardViewModel,navController: NavController) {
+fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,13 +50,19 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel,navController: NavControlle
         Spacer(modifier = Modifier.width(16.dp))
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
-            GetTileButton(id = R.drawable.ic_scan, text = stringResource(R.string.verify_booking), onClick = {
-                navController.navigate(Screen.VerifyBookingScreen.route)
-            })
+            GetTileButton(
+                id = R.drawable.ic_scan,
+                text = stringResource(R.string.verify_booking),
+                onClick = {
+                    navController.navigate(Screen.VerifyBookingScreen.route)
+                })
             Spacer(modifier = Modifier.width(8.dp))
-            GetTileButton(id = R.drawable.ic_accepted, text = stringResource(R.string.accept_cargo), onClick = {
-                navController.navigate(Screen.ScanCargoScreen.route)
-            })
+            GetTileButton(
+                id = R.drawable.ic_accepted,
+                text = stringResource(R.string.accept_cargo),
+                onClick = {
+                    navController.navigate(Screen.ScanCargoScreen.route)
+                })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
                 id = R.drawable.ic_document,
@@ -66,18 +71,21 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel,navController: NavControlle
 
                 })
             Spacer(modifier = Modifier.width(8.dp))
-            GetTileButton(id = R.drawable.ic_flight_schedule, text = stringResource(R.string.flight_schedule), onClick = {
+            GetTileButton(
+                id = R.drawable.ic_flight_schedule,
+                text = stringResource(R.string.flight_schedule),
+                onClick = {
 
-            })
+                })
             Spacer(modifier = Modifier.width(16.dp))
         }
         Spacer(modifier = Modifier.height(16.dp))
-        RecentCargoBookingPanel()
+        RecentCargoBookingPanel(viewModel = viewModel)
     }
 }
 
 @Composable
-fun RecentCargoBookingPanel() {
+fun RecentCargoBookingPanel(viewModel: DashBoardViewModel) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
             .fillMaxSize()
@@ -100,23 +108,24 @@ fun RecentCargoBookingPanel() {
                 .padding(top = 8.dp)
                 .fillMaxWidth(), backgroundColor = Color.White
         ) {
-            TableScreen()
+            TableScreen(viewModel = viewModel)
         }
     }
 }
 
 @Composable
-fun TableScreen() {
-    val tableData = (1..10).mapIndexed { index, item ->
-        index to Booking(
-            flightNo = "FL 300",
-            serialNo = "CA1547214562",
-            status = "Active",
-            dimensions = "5' x 10'",
-            dateAndTime = "2/24/2022 13:15 PM",
-            weight = "20 Kg"
-        )
-    }
+fun TableScreen(viewModel: DashBoardViewModel) {
+
+//    val tableData = (1..10).mapIndexed { index, item ->
+//        index to Booking(
+//            flightNo = "FL 300",
+//            serialNo = "CA1547214562",
+//            status = "Active",
+//            dimensions = "5' x 10'",
+//            dateAndTime = "2/24/2022 13:15 PM",
+//            weight = "20 Kg"
+//        )
+//    }
     val column1Weight = .15f
     val column2Weight = .1f
     val column3Weight = .1f
@@ -131,27 +140,35 @@ fun TableScreen() {
     ) {
         // header
         item {
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start) {
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
                 TableCell(text = "Serial No.", weight = column1Weight, style = headerStyle)
                 TableCell(text = "Flight No.", weight = column2Weight, style = headerStyle)
-                TableCell(text = "Dimensions", weight = column3Weight, style = headerStyle)
+//                TableCell(text = "Dimensions", weight = column3Weight, style = headerStyle)
                 TableCell(text = "Weight", weight = column4Weight, style = headerStyle)
                 TableCell(text = "Status", weight = column5Weight, style = headerStyle)
                 TableCell(text = "Date and Time", weight = column6Weight, style = headerStyle)
             }
         }
         // data
-        items(tableData) {
-            val (id, booking) = it
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
-                TableCell(text = booking.serialNo, weight = column1Weight)
-                TableCell(text = booking.flightNo, weight = column2Weight)
-                TableCell(text = booking.dimensions, weight = column3Weight)
-                TableCell(text = booking.weight, weight = column4Weight)
-                TableStatusButton(text = booking.status, weight = column5Weight)
-                TableCell(text = booking.dateAndTime, weight = column6Weight)
+        if (viewModel.cargoList.value != null)
+            items(viewModel.cargoList.value!!) {booking->
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TableCell(text = booking.bookingNumber, weight = column1Weight)
+                    TableCell(text = booking.flightNumber, weight = column2Weight)
+//                    TableCell(text = "N/A", weight = column3Weight)
+                    TableCell(text = (booking.totalWeight).toString(), weight = column4Weight)
+                    TableStatusButton(text = booking.getStatusString(), weight = column5Weight)
+                    TableCell(text = booking.bookingDate, weight = column6Weight)
+                }
             }
-        }
     }
 }
 
@@ -191,7 +208,7 @@ fun RowScope.TableStatusButton(
             Modifier
                 .padding(8.dp),
             textAlign = TextAlign.Center,
-            style = style.copy(color= Green)
+            style = style.copy(color = Green)
         )
     }
 

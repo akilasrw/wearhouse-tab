@@ -5,6 +5,8 @@ import com.aeroclubcargo.warehouse.data.local.dto.CredentialDto
 import com.aeroclubcargo.warehouse.data.remote.ApiInterface
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
+import com.aeroclubcargo.warehouse.domain.model.CargoBooking
+import com.aeroclubcargo.warehouse.domain.model.Pagination
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -25,6 +27,10 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun apiGetSectorsList(): String {
         return apiInterface.apiGetSectors()
+    }
+
+    override suspend fun getCargoBooking(pageSize: Int, pageIndex: Int): Pagination<CargoBooking> {
+        return apiInterface.getCargoBooking(pageIndex = pageIndex, pageSize = pageSize)
     }
 
     override suspend fun saveCredential(credentialDto: CredentialDto) {

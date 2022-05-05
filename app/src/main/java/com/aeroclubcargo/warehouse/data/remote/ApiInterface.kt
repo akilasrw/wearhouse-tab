@@ -2,6 +2,8 @@ package com.aeroclubcargo.warehouse.data.remote
 
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
+import com.aeroclubcargo.warehouse.domain.model.CargoBooking
+import com.aeroclubcargo.warehouse.domain.model.Pagination
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -17,5 +19,9 @@ interface ApiInterface {
 
      @GET("api/v1/Airport/getSelectList")
     suspend fun apiGetSectors(): String
+
+    @GET("api/v1/CargoBooking/GetFilteredList")
+    suspend fun getCargoBooking(@Query("PageSize") pageSize: Int ,@Query("PageIndex") pageIndex : Int) :Pagination<CargoBooking>
+
 
 }
