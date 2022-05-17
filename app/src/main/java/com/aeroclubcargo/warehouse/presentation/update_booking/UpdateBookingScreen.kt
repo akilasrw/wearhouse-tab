@@ -9,13 +9,21 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -110,13 +118,19 @@ fun DetailTable() {
     val pdOptions = listOf("Custom", "Custom 2", "Custom 3", "Custom 4", "Custom 5")
     var pdSelectedOptionText by remember { mutableStateOf(ctOptions[0]) }
 
+    var length by rememberSaveable { mutableStateOf("0") }
+    var width by rememberSaveable { mutableStateOf("0") }
+    var height by rememberSaveable { mutableStateOf("0") }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
             .wrapContentHeight()
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 8.dp)) {
             ExposedDropdownMenuBox(
                 expanded = ctExpanded,
                 onExpandedChange = {
@@ -170,7 +184,7 @@ fun DetailTable() {
                     readOnly = true,
                     value = pdSelectedOptionText,
                     onValueChange = { },
-                    label = { Text("Custom") },
+                    label = { Text("Package Dimensions (L x W x H)") },
                     trailingIcon = {
                         ExposedDropdownMenuDefaults.TrailingIcon(
                             expanded = pdExpanded
@@ -197,10 +211,38 @@ fun DetailTable() {
                 }
             }
         }
+        Row(modifier = Modifier.fillMaxWidth()) {
+            TextField(
+                value = length,
+                onValueChange = {
+                    length = it
+                },
+                label = { Text("Length") }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            TextField(
+                value = width,
+                onValueChange = {
+                    width = it
+                },
+                label = { Text("Width") }
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            TextField(
+                value = height,
+                onValueChange = {
+                    height = it
+                },
+                label = { Text("Height") }
+            )
+        }
     }
 }
 
 
+    fun onLengthChange(password: String) {
+
+    }
 @Composable
 fun GetTileWidget(hint: String, value: String) {
     Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(all = 16.dp)) {

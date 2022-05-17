@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse.presentation.dashboard
 
+import android.util.TimeUtils
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,6 +30,7 @@ import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.hintLightGray
+import java.sql.Time
 
 @Composable
 fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel = hiltViewModel()) {
@@ -54,7 +56,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_scan,
                 text = stringResource(R.string.verify_booking),
                 onClick = {
-                    navController.navigate(Screen.VerifyBookingScreen.route)
+//                    navController.navigate(Screen.VerifyBookingScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
@@ -166,7 +168,7 @@ fun TableScreen(viewModel: DashBoardViewModel) {
 //                    TableCell(text = "N/A", weight = column3Weight)
                     TableCell(text = (booking.totalWeight).toString(), weight = column4Weight)
                     TableStatusButton(text = booking.getStatusString(), weight = column5Weight)
-                    TableCell(text = booking.bookingDate, weight = column6Weight)
+                    TableCell(text =  booking.bookingDate.split("T")[0], weight = column6Weight)
                 }
             }
     }

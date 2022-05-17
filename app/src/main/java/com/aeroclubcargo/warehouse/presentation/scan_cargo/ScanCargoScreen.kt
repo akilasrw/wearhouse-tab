@@ -14,12 +14,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,7 +31,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
+import com.aeroclubcargo.warehouse.theme.BlueLight2
 import com.aeroclubcargo.warehouse.theme.Gray3
 import com.aeroclubcargo.warehouse.utils.QrCodeAnalyzer
 
@@ -43,6 +43,17 @@ import com.aeroclubcargo.warehouse.utils.QrCodeAnalyzer
 fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel = hiltViewModel()) {
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
+    }, floatingActionButton = {
+        FloatingActionButton(onClick = {
+            navController.navigate(Screen.VerifyBookingScreen.route)
+        }, backgroundColor = BlueLight2) {
+            Icon(
+                Icons.Filled.Done,
+                contentDescription = "done",
+                modifier = Modifier.size(ButtonDefaults.IconSize),
+                tint = Color.White
+            )
+        }
     }) {
         var code by remember {
             mutableStateOf("")

@@ -7,6 +7,7 @@ object Constants {
 
 //    const val BASE_URL = "https://aeroclub-skytechcargo-app-dev.azurewebsites.net/"
     const val BASE_URL = BuildConfig.API_BASE_URL
+    const val API_VERSION = BuildConfig.API_VERSION
 
 
 //    const val LANGUAGE_KEY = "language_key"

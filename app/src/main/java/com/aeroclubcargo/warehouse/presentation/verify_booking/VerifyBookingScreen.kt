@@ -73,7 +73,9 @@ fun VerifyBookingScreen(
                     .fillMaxWidth(), horizontalArrangement = Arrangement.End
             ) {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate(Screen.DashboardScreen.route)
+                    },
                     colors = ButtonDefaults.buttonColors(backgroundColor = hintLightGray)
                 ) {
                     Text(
