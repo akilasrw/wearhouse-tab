@@ -12,6 +12,7 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -24,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,6 +33,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight2
@@ -96,38 +99,41 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                     .border(width = 30.dp, color = Gray3)
             ) {
                 if (hasCameraPermission) {
-                    AndroidView(factory = { context ->
-                        val previewView = PreviewView(context)
-                        val preview = androidx.camera.core.Preview.Builder().build()
-                        val selector = CameraSelector.Builder()
-                            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                            .build()
-                        preview.setSurfaceProvider(previewView.surfaceProvider)
-                        val imageAnalysis = ImageAnalysis.Builder()
-                            .setTargetResolution(
-                                Size(previewView.width, previewView.height)
-                            ).setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                            .build()
-                        imageAnalysis.setAnalyzer(
-                            ContextCompat.getMainExecutor(context),
-                            QrCodeAnalyzer { result ->
-                                code = result
-                            }
-                        )
-                        try {
-                            cameraProvider.get()
-                                .bindToLifecycle(
-                                    lifeCycleOwner,
-                                    selector,
-                                    preview,
-                                    imageAnalysis
-                                )
-                        } catch (e: Exception) {
+                    Image(painter = painterResource(id = R.drawable.ic_qr_code)
+                        , contentDescription = " QR Icon" )
 
-                        }
-                        previewView
-                    })
-                    Text(text = code, fontSize = 20.sp)
+//                    AndroidView(factory = { context ->
+//                        val previewView = PreviewView(context)
+//                        val preview = androidx.camera.core.Preview.Builder().build()
+//                        val selector = CameraSelector.Builder()
+//                            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+//                            .build()
+//                        preview.setSurfaceProvider(previewView.surfaceProvider)
+//                        val imageAnalysis = ImageAnalysis.Builder()
+//                            .setTargetResolution(
+//                                Size(previewView.width, previewView.height)
+//                            ).setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+//                            .build()
+//                        imageAnalysis.setAnalyzer(
+//                            ContextCompat.getMainExecutor(context),
+//                            QrCodeAnalyzer { result ->
+//                                code = result
+//                            }
+//                        )
+//                        try {
+//                            cameraProvider.get()
+//                                .bindToLifecycle(
+//                                    lifeCycleOwner,
+//                                    selector,
+//                                    preview,
+//                                    imageAnalysis
+//                                )
+//                        } catch (e: Exception) {
+//
+//                        }
+//                        previewView
+//                    })
+//                    Text(text = code, fontSize = 20.sp)
                 } else {
                     Text(text = "Please Enable Permission")
                 }

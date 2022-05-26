@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
 
@@ -52,16 +53,16 @@ fun UpdateBookingScreen(
                 modifier = Modifier.wrapContentHeight()
             ) {
                 item {
-                    GetTileWidget(hint = "Flight Number", value = "UL 730")
+                    GetTileWidget(hint = "Flight Number", value = "AC-101")
                 }
                 item {
-                    GetTileWidget(hint = "Flight Date & Time", value = "UL 730")
+                    GetTileWidget(hint = "Flight Date & Time", value = "2022-05-24 3:15 PM")
                 }
                 item {
-                    GetTileWidget(hint = "Booking Reference", value = "UL 730")
+                    GetTileWidget(hint = "Booking Reference", value = "B2022050001")
                 }
                 item {
-                    GetTileWidget(hint = "AWB Number", value = "UL 730")
+                    GetTileWidget(hint = "AWB Number", value = "2324334730")
                 }
                 item {
                     GetTileWidgetWithIcon(hint = "View Cargo Manifest")
@@ -91,7 +92,9 @@ fun UpdateBookingScreen(
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate(Screen.DashboardScreen.route)
+                    },
                     colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)
                 ) {
                     Text(
@@ -111,16 +114,16 @@ fun UpdateBookingScreen(
 @Composable
 fun DetailTable() {
     var ctExpanded by remember { mutableStateOf(false) }
-    val ctOptions = listOf("Genaral", "Genaral 2", "Genaral 3", "Genaral 4", "Genaral 5")
+    val ctOptions = listOf("5,5,5", "4,4,4",)
     var ctSelectedOptionText by remember { mutableStateOf(ctOptions[0]) }
 
     var pdExpanded by remember { mutableStateOf(false) }
     val pdOptions = listOf("Custom", "Custom 2", "Custom 3", "Custom 4", "Custom 5")
     var pdSelectedOptionText by remember { mutableStateOf(ctOptions[0]) }
 
-    var length by rememberSaveable { mutableStateOf("0") }
-    var width by rememberSaveable { mutableStateOf("0") }
-    var height by rememberSaveable { mutableStateOf("0") }
+    var length by rememberSaveable { mutableStateOf("5") }
+    var width by rememberSaveable { mutableStateOf("5") }
+    var height by rememberSaveable { mutableStateOf("10") }
 
     Column(
         modifier = Modifier

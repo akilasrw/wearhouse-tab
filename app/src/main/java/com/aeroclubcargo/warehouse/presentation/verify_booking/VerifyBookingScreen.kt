@@ -43,25 +43,25 @@ fun VerifyBookingScreen(
                 modifier = Modifier.fillMaxHeight(fraction = 0.7f)
             ) {
                 item {
-                    GetTileWidget(hint = "Flight Number", value = "UL 730")
+                    GetTileWidget(hint = "Flight Number", value = "AC-101")
                 }
                 item {
-                    GetTileWidget(hint = "Flight Date & Time", value = "UL 730")
+                    GetTileWidget(hint = "Flight Date & Time", value = "2022-05-24 3:15 PM")
                 }
                 item {
-                    GetTileWidget(hint = "Booking Reference", value = "UL 730")
+                    GetTileWidget(hint = "Booking Reference", value = "B2022050001")
                 }
                 item {
-                    GetTileWidget(hint = "Cargo Type", value = "UL 730")
+                    GetTileWidget(hint = "Cargo Type", value = "General")
                 }
                 item {
-                    GetTileWidget(hint = "Package Dimensions (L x W x H)", value = "UL 730")
+                    GetTileWidget(hint = "Package Dimensions (L x W x H)", value = "15 12 20")
                 }
                 item {
-                    GetTileWidget(hint = "Package Weight (Kg)", value = "UL 730")
+                    GetTileWidget(hint = "Package Weight (Kg)", value = "5")
                 }
                 item {
-                    GetTileWidget(hint = "AWB Number", value = "UL 730")
+                    GetTileWidget(hint = "AWB Number", value = "2324334730")
                 }
                 item {
                     GetTileWidgetWithIcon(hint = "View Cargo Manifest")
@@ -94,7 +94,7 @@ fun VerifyBookingScreen(
                 }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {  navController.navigate(Screen.DashboardScreen.route) },
                     colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)
                 ) {
                     Text(

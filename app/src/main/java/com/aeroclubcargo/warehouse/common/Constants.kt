@@ -29,4 +29,14 @@ object Constants {
     const val Dispatched = 50
     const val Exported = 60
 
+//    @IntDef(None, Pending, Accepted,Loading,Invoiced,Dispatched,Exported)
+//    @Retention(AnnotationRetention.SOURCE)
+//    public enum PackageItemCategory
+//    {
+//        None = 0,
+//        General = 1,
+//        Animal = 2,
+//        Artwork = 3,
+//        Dgr = 4
+//    }
 }
