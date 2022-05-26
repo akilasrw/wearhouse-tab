@@ -23,7 +23,7 @@ class DashBoardViewModel @Inject constructor(private var repository: Repository)
     fun getCargoBookingList(pageIndex: Int, pageSize: Int) {
         viewModelScope.launch {
             var paginateResponse =
-                repository!!.getCargoBooking(pageSize = pageSize, pageIndex = pageIndex)
+                repository.getCargoBooking(pageSize = pageSize, pageIndex = pageIndex)
             cargoList.postValue(paginateResponse.data)
         }
     }

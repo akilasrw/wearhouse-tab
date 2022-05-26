@@ -116,7 +116,6 @@ fun RecentCargoBookingPanel(viewModel: DashBoardViewModel) {
     }
 }
 
-@Preview
 @Composable
 fun TableScreen(viewModel: DashBoardViewModel) {
 
