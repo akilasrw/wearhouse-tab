@@ -5,6 +5,7 @@ import com.aeroclubcargo.warehouse.common.Constants
 data class CargoBooking(
     val bookingDate: String,
     val bookingNumber: String,
+    @Constants.BookingStatus
     val bookingStatus: Int= 0,
     val destinationAirportCode: String,
     val destinationAirportId: String,
@@ -17,29 +18,27 @@ data class CargoBooking(
 
 fun CargoBooking.getStatusString(): String {
     when (bookingStatus) {
-        Constants.BookingStatus.None.ordinal -> {
+        Constants.None -> {
             return "None";
         }
-        Constants.BookingStatus.Pending.ordinal -> {
+        Constants.Pending -> {
             return "Pending";
         }
-        Constants.BookingStatus.Accepted.ordinal -> {
+        Constants.Accepted -> {
             return "Accepted";
         }
-        Constants.BookingStatus.Loading.ordinal -> {
+        Constants.Loading -> {
             return "Loading";
         }
-        Constants.BookingStatus.Invoiced.ordinal -> {
+        Constants.Invoiced -> {
             return "Invoiced";
-
         }
-        Constants.BookingStatus.Dispatched.ordinal -> {
+        Constants.Dispatched -> {
             return "Dispatched";
         }
-        Constants.BookingStatus.Exported.ordinal -> {
+        Constants.Exported -> {
             return "Exported";
         }
-
     }
     return ""
 }
