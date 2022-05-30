@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.Navigator
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight2
@@ -28,6 +30,9 @@ fun VerifyBookingScreen(
     navController: NavController,
     viewModel: VerifyBookingViewModel = hiltViewModel()
 ) {
+    LaunchedEffect(key1 = true) {
+        viewModel.getPackageDetails()
+    }
     val numbers = (0..2).toList()
     Scaffold(topBar = {
         GetTopBar(navController = navController)
@@ -38,30 +43,33 @@ fun VerifyBookingScreen(
                 .padding(all = 16.dp)
                 .background(color = Color.White)
         ) {
+
             LazyVerticalGrid(
                 cells = GridCells.Fixed(3),
                 modifier = Modifier.fillMaxHeight(fraction = 0.7f)
             ) {
                 item {
-                    GetTileWidget(hint = "Flight Number", value = "AC-101")
+                    GetTileWidget(hint = "Flight Number", value = viewModel.packageDetail.value?.flightNumber ?: "N/A")
                 }
                 item {
-                    GetTileWidget(hint = "Flight Date & Time", value = "2022-05-24 3:15 PM")
+                    GetTileWidget(hint = "Flight Date & Time", value = viewModel.packageDetail.value?.flightDate?.split("T")
+                        ?.get(0)
+                        ?: "N/A")
                 }
                 item {
-                    GetTileWidget(hint = "Booking Reference", value = "B2022050001")
+                    GetTileWidget(hint = "Booking Reference", value = viewModel.packageDetail.value?.bookingRefNumber ?: "N/A")
                 }
                 item {
-                    GetTileWidget(hint = "Cargo Type", value = "General")
+                    GetTileWidget(hint = "Cargo Type", value =  Constants.getCargoType(viewModel.packageDetail.value?.cargoPositionType))
                 }
                 item {
-                    GetTileWidget(hint = "Package Dimensions (L x W x H)", value = "15 12 20")
+                    GetTileWidget(hint = "Package Dimensions (L x W x H)", value = "${viewModel.packageDetail.value?.length} ${viewModel.packageDetail.value?.width} ${viewModel.packageDetail.value?.height} (${viewModel.packageDetail.value?.volumeUnit})")
                 }
                 item {
-                    GetTileWidget(hint = "Package Weight (Kg)", value = "5")
+                    GetTileWidget(hint = "Package Weight (Kg)", value = "${viewModel.packageDetail.value?.weight} (${viewModel.packageDetail.value?.weightUnit})")
                 }
                 item {
-                    GetTileWidget(hint = "AWB Number", value = "2324334730")
+                    GetTileWidget(hint = "AWB Number", value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A")
                 }
                 item {
                     GetTileWidgetWithIcon(hint = "View Cargo Manifest")

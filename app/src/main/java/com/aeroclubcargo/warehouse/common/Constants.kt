@@ -29,14 +29,34 @@ object Constants {
     const val Dispatched = 50
     const val Exported = 60
 
-//    @IntDef(None, Pending, Accepted,Loading,Invoiced,Dispatched,Exported)
-//    @Retention(AnnotationRetention.SOURCE)
-//    public enum PackageItemCategory
-//    {
-//        None = 0,
-//        General = 1,
-//        Animal = 2,
-//        Artwork = 3,
-//        Dgr = 4
-//    }
+    enum class CargoPositionType {
+        None,
+        OnFloor,
+        OnSeat,
+        UnderSeat,
+        Overhead
+    }
+
+    fun getCargoType (type: Int?): String {
+        if(type == null){
+            return ""
+        }
+        when(CargoPositionType.values()[type]){
+            CargoPositionType.None -> {
+                return "None"
+            }
+            CargoPositionType.OnFloor -> {
+                return "On Floor"
+            }
+            CargoPositionType.OnSeat -> {
+                return "On Seat"
+            }
+            CargoPositionType.UnderSeat -> {
+                return "UnderSeat"
+            }
+            CargoPositionType.Overhead -> {
+                return "Overhead"
+            }
+        }
+    }
 }

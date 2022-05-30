@@ -3,7 +3,7 @@ package com.aeroclubcargo.warehouse.presentation.dashboard
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.aeroclubcargo.warehouse.domain.model.CargoBooking
+import com.aeroclubcargo.warehouse.domain.model.PackageListItem
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -13,7 +13,7 @@ import javax.inject.Inject
 class DashBoardViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
 
 
-    var cargoList: MutableLiveData<List<CargoBooking>?> = MutableLiveData()
+    var cargoList: MutableLiveData<List<PackageListItem>?> = MutableLiveData()
 
 
     init {

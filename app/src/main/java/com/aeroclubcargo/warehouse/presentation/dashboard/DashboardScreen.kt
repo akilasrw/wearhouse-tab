@@ -1,6 +1,5 @@
 package com.aeroclubcargo.warehouse.presentation.dashboard
 
-import android.util.TimeUtils
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -20,7 +19,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -31,7 +29,6 @@ import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.hintLightGray
-import java.sql.Time
 
 @Composable
 fun DashboardScreen(navController: NavController, viewModel: DashBoardViewModel = hiltViewModel()) {
@@ -148,7 +145,7 @@ fun TableScreen(viewModel: DashBoardViewModel) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
-                TableCell(text = "Serial No.", weight = column1Weight, style = headerStyle)
+                TableCell(text = "Package No.", weight = column1Weight, style = headerStyle)
                 TableCell(text = "Flight No.", weight = column2Weight, style = headerStyle)
 //                TableCell(text = "Dimensions", weight = column3Weight, style = headerStyle)
                 TableCell(text = "Weight", weight = column4Weight, style = headerStyle)
@@ -164,10 +161,10 @@ fun TableScreen(viewModel: DashBoardViewModel) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    TableCell(text = booking.bookingNumber, weight = column1Weight)
+                    TableCell(text = booking.packageRefNumber, weight = column1Weight)
                     TableCell(text = booking.flightNumber, weight = column2Weight)
 //                    TableCell(text = "N/A", weight = column3Weight)
-                    TableCell(text = (booking.totalWeight).toString(), weight = column4Weight)
+                    TableCell(text = (booking.weight).toString(), weight = column4Weight)
                     TableStatusButton(text = booking.getStatusString(), weight = column5Weight)
                     TableCell(text =  booking.bookingDate.split("T")[0], weight = column6Weight)
                 }

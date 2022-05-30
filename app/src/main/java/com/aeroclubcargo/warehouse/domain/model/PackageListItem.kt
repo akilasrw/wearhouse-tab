@@ -2,21 +2,21 @@ package com.aeroclubcargo.warehouse.domain.model
 
 import com.aeroclubcargo.warehouse.common.Constants
 
-data class CargoBooking(
+data class PackageListItem(
+
+    val id: String,
+    val packageRefNumber: String,
+    val flightNumber: String,
     val bookingDate: String,
-    val bookingNumber: String,
     @Constants.BookingStatus
     val bookingStatus: Int= 0,
-    val destinationAirportCode: String,
-    val destinationAirportId: String,
-    val flightDate: String,
-    val flightNumber: String,
-    val id: String,
-    val numberOfBoxes: Int,
-    val totalWeight: Int
+    val height: Double,
+    val width: Double,
+    val length: Double,
+    val weight: Double,
 )
 
-fun CargoBooking.getStatusString(): String {
+fun PackageListItem.getStatusString(): String {
     when (bookingStatus) {
         Constants.None -> {
             return "None";
