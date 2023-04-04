@@ -16,7 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.Navigator
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.presentation.Screen
@@ -30,10 +29,11 @@ fun VerifyBookingScreen(
     navController: NavController,
     viewModel: VerifyBookingViewModel = hiltViewModel()
 ) {
+
     LaunchedEffect(key1 = true) {
         viewModel.getPackageDetails()
+//        viewModel.stateFlow
     }
-    val numbers = (0..2).toList()
     Scaffold(topBar = {
         GetTopBar(navController = navController)
     }) {
@@ -49,27 +49,48 @@ fun VerifyBookingScreen(
                 modifier = Modifier.fillMaxHeight(fraction = 0.7f)
             ) {
                 item {
-                    GetTileWidget(hint = "Flight Number", value = viewModel.packageDetail.value?.flightNumber ?: "N/A")
+                    GetTileWidget(
+                        hint = "Flight Number",
+                        value = viewModel.packageDetail.value?.flightNumber ?: "N/A"
+                    )
                 }
                 item {
-                    GetTileWidget(hint = "Flight Date & Time", value = viewModel.packageDetail.value?.flightDate?.split("T")
-                        ?.get(0)
-                        ?: "N/A")
+                    GetTileWidget(
+                        hint = "Flight Date & Time",
+                        value = viewModel.packageDetail.value?.flightDate?.split("T")
+                            ?.get(0)
+                            ?: "N/A"
+                    )
                 }
                 item {
-                    GetTileWidget(hint = "Booking Reference", value = viewModel.packageDetail.value?.bookingRefNumber ?: "N/A")
+                    GetTileWidget(
+                        hint = "Booking Reference",
+                        value = viewModel.packageDetail.value?.bookingRefNumber ?: "N/A"
+                    )
                 }
                 item {
-                    GetTileWidget(hint = "Cargo Type", value =  Constants.getCargoType(viewModel.packageDetail.value?.cargoPositionType))
+                    GetTileWidget(
+                        hint = "Cargo Type",
+                        value = Constants.getCargoType(viewModel.packageDetail.value?.cargoPositionType)
+                    )
                 }
                 item {
-                    GetTileWidget(hint = "Package Dimensions (L x W x H)", value = "${viewModel.packageDetail.value?.length} ${viewModel.packageDetail.value?.width} ${viewModel.packageDetail.value?.height} (${viewModel.packageDetail.value?.volumeUnit})")
+                    GetTileWidget(
+                        hint = "Package Dimensions (L x W x H)",
+                        value = "${viewModel.packageDetail.value?.length} ${viewModel.packageDetail.value?.width} ${viewModel.packageDetail.value?.height} (${viewModel.packageDetail.value?.volumeUnit})"
+                    )
                 }
                 item {
-                    GetTileWidget(hint = "Package Weight (Kg)", value = "${viewModel.packageDetail.value?.weight} (${viewModel.packageDetail.value?.weightUnit})")
+                    GetTileWidget(
+                        hint = "Package Weight (Kg)",
+                        value = "${viewModel.packageDetail.value?.weight} (${viewModel.packageDetail.value?.weightUnit})"
+                    )
                 }
                 item {
-                    GetTileWidget(hint = "AWB Number", value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A")
+                    GetTileWidget(
+                        hint = "AWB Number",
+                        value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A"
+                    )
                 }
                 item {
                     GetTileWidgetWithIcon(hint = "View Cargo Manifest")
@@ -92,17 +113,21 @@ fun VerifyBookingScreen(
                     )
                 }
                 Spacer(modifier = Modifier.width(16.dp))
-                Button(onClick = {
-                    navController.navigate(Screen.UpdateBookingScreen.route)
-                }, colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
-                    Text(
-                        text = "Update",
-                        style = MaterialTheme.typography.button.copy(color = Color.White)
-                    )
-                }
+//                Button(onClick = {
+//                    navController.navigate(Screen.UpdateBookingScreen.route)
+//                }, colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
+//                    Text(
+//                        text = "Update",
+//                        style = MaterialTheme.typography.button.copy(color = Color.White)
+//                    )
+//                }
                 Spacer(modifier = Modifier.width(16.dp))
                 Button(
-                    onClick = {  navController.navigate(Screen.DashboardScreen.route) },
+                    onClick = {
+                        // TODO accept cargo api
+                        viewModel.acceptCargo()
+//                        navController.navigate(Screen.DashboardScreen.route)
+                    },
                     colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)
                 ) {
                     Text(

@@ -263,8 +263,8 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                                 onClick = {
                                     viewModel.authenticateUser(
                                         context = context,
-                                        userName = emailValue.value,
-                                        password = passwordValue.value,
+                                        userName = emailValue.value.trim(),
+                                        password = passwordValue.value.trim(),
                                         isRememberMe = rememberMeCheckState.value
                                     )
                                 },

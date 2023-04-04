@@ -4,8 +4,8 @@ import com.aeroclubcargo.warehouse.domain.model.AuthenticateResponse
 
 data class AuthenticateResponseDto(
     var id:String,
-    var firstName: String,
-    var lastName : String,
+    var firstName: String?,
+    var lastName : String?,
     var username : String,
     var jwtToken : String?,
     var refreshToken:String?

@@ -29,6 +29,13 @@ object Constants {
     const val Dispatched = 50
     const val Exported = 60
 
+   enum class AircraftConfigType
+    {
+        None,
+        P2C ,
+        Freighter ,
+    }
+
     enum class CargoPositionType {
         None,
         OnFloor,

@@ -20,7 +20,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
-        buildConfigField("String", "API_BASE_URL", "\"https://aeroclub-skytechcargo-app-dev-002-qa.azurewebsites.net/\"")
+        buildConfigField("String", "API_BASE_URL", "\"https://aeroclub-skytechcargo-app-dev-002.azurewebsites.net/\"")
         buildConfigField("String", "API_VERSION", "\"v1\"")
     }
 

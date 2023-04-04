@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity(),GlobalNavigationHandler {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SkyTechCargoTheme {
                navigation()

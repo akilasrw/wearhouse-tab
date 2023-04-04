@@ -3,13 +3,11 @@ package com.aeroclubcargo.warehouse.data.remote
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
+import com.aeroclubcargo.warehouse.domain.model.BookingStatusUpdateRequest
 import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.PackageListItem
 import com.aeroclubcargo.warehouse.domain.model.Pagination
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiInterface {
 
@@ -33,6 +31,13 @@ interface ApiInterface {
     suspend fun getPackageDetails(
         @Query("PackageRefNumber") packageRefNumber: String
     ): PackageDetails
+
+    @POST("api/${Constants.API_VERSION}/CargoBooking")
+    suspend fun acceptCargoBooking(@Body bookingStatus: BookingStatusUpdateRequest): Boolean
+
+
+    @POST("api/${Constants.API_VERSION}/CargoBooking")
+    suspend fun updateULDCargoBooking(@Body bookingStatus: BookingStatusUpdateRequest): Boolean
 
 
 }
