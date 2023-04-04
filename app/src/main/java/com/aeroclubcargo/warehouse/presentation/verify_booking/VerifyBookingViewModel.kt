@@ -25,7 +25,7 @@ class VerifyBookingViewModel @Inject constructor(
     var packageDetail: MutableLiveData<PackageDetails?> = MutableLiveData()
     fun getPackageDetails() {
         viewModelScope.launch {
-            val response = repository.getPackageDetails(packageRefNumber = "P2022080001")
+            val response = repository.getPackageDetails(packageRefNumber = "P2022060030")
             packageDetail.postValue(response)
         }
     }
