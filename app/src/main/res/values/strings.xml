@@ -25,4 +25,8 @@
     <string name="flight_schedule">Flight Schedule</string>
     <string name="recent_accepted_cargo_booking">Recent Accepted Cargo Bookings</string>
     <string name="view_all">View All</string>
+    <string name="pallet_assignment">Pallet Assignment</string>
+    <string name="booking_assignment">Booking Assignment</string>
+    <string name="uld_master">ULD Master</string>
+    <string name="cutt_off_time">Cut Off Time</string>
 </resources>

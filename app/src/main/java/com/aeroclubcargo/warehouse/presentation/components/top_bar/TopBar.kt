@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse.presentation.components.top_bar
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -41,12 +42,13 @@ fun GetTopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
-            .height(50.dp)
+            .height(60.dp)
+            .background(Color.White)
     ) {
         if (isDashBoard) {
             Column(
                 modifier = Modifier
+                    .padding(8.dp)
                     .fillMaxWidth(0.7f)
             ) {
                 Text(
@@ -61,6 +63,7 @@ fun GetTopBar(
         } else {
             Column(
                 modifier = Modifier
+                    .padding(8.dp)
                     .fillMaxWidth(0.7f)
             ) {
                 IconButton(onClick = { navController.popBackStack() }) {
@@ -75,6 +78,7 @@ fun GetTopBar(
         }
         Row(
             modifier = Modifier
+                .padding(8.dp)
                 .fillMaxWidth(), horizontalArrangement = Arrangement.End
         ) {
             ProfileView(

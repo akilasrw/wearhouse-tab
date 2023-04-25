@@ -45,10 +45,9 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(12.dp)
     ) {
-        Spacer(modifier = Modifier.width(16.dp))
-        Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
+        Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
             GetTileButton(
                 id = R.drawable.ic_scan,
@@ -68,12 +67,44 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_document,
                 text = stringResource(R.string.special_package_handling),
                 onClick = {
-
+                    // TODO
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
                 id = R.drawable.ic_flight_schedule,
                 text = stringResource(R.string.flight_schedule),
+                onClick = {
+                    // TODO
+                })
+            Spacer(modifier = Modifier.width(16.dp))
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
+            Spacer(modifier = Modifier.width(16.dp))
+            GetTileButton(
+                id = R.drawable.ic_scan, // TODO replace icon
+                text = stringResource(R.string.cutt_off_time),
+                onClick = {
+                    // TODO
+                })
+            Spacer(modifier = Modifier.width(8.dp))
+            GetTileButton(
+                id = R.drawable.ic_accepted, // TODO replace icon
+                text = stringResource(R.string.uld_master),
+                onClick = {
+                    // TODO
+                })
+            Spacer(modifier = Modifier.width(8.dp))
+            GetTileButton(
+                id = R.drawable.ic_document, // TODO replace icon
+                text = stringResource(R.string.booking_assignment),
+                onClick = {
+                    // TODO
+                })
+            Spacer(modifier = Modifier.width(8.dp))
+            GetTileButton(
+                id = R.drawable.ic_flight_schedule, // TODO replace icon
+                text = stringResource(R.string.pallet_assignment),
                 onClick = {
 
                 })
@@ -219,8 +250,7 @@ fun GetTileButton(@DrawableRes id: Int, text: String, onClick: () -> Unit) {
     ElevatedButton(
         modifier = Modifier
             .wrapContentWidth()
-            .defaultMinSize(minWidth = 200.dp, minHeight = 160.dp)
-            .background(color = Color.White),
+            .defaultMinSize(minWidth = 220.dp, minHeight = 100.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
@@ -235,14 +265,14 @@ fun GetTileButton(@DrawableRes id: Int, text: String, onClick: () -> Unit) {
                 painter = painterResource(id),
                 contentDescription = "text",
                 modifier = Modifier
-                    .size(60.dp)
-                    .padding(4.dp),
+                    .size(50.dp)
+                    .padding(3.dp),
                 tint = BlueLight
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = text,
-                style = MaterialTheme.typography.subtitle1.copy(color = MaterialTheme.colors.primary)
+                style = MaterialTheme.typography.subtitle2.copy(color = MaterialTheme.colors.primary)
             )
         }
     }
