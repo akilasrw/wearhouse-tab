@@ -82,28 +82,28 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
             GetTileButton(
-                id = R.drawable.ic_scan, // TODO replace icon
+                id = R.drawable.ic_cut_off_time, // TODO replace icon
                 text = stringResource(R.string.cutt_off_time),
                 onClick = {
                     // TODO
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_accepted, // TODO replace icon
+                id = R.drawable.ic_uld_master, // TODO replace icon
                 text = stringResource(R.string.uld_master),
                 onClick = {
                     // TODO
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_document, // TODO replace icon
+                id = R.drawable.ic_booking_assignment, // TODO replace icon
                 text = stringResource(R.string.booking_assignment),
                 onClick = {
                     // TODO
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_flight_schedule, // TODO replace icon
+                id = R.drawable.ic_pallet_assignment, // TODO replace icon
                 text = stringResource(R.string.pallet_assignment),
                 onClick = {
 
