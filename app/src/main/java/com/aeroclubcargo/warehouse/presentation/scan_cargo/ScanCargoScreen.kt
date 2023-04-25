@@ -85,22 +85,25 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
         LaunchedEffect(key1 = true) {
             launcher.launch(Manifest.permission.CAMERA)
         }
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.White), contentAlignment = Alignment.Center
-        ) {
-
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(25.dp)) {
+            Text(text = "Verify Booking")
+            Spacer(modifier = Modifier.height(8.dp))
             Box(
                 modifier = Modifier
-                    .width(600.dp)
-                    .height(260.dp)
-                    .border(width = 30.dp, color = Gray3)
+                    .fillMaxSize()
+                    .background(color = Color.White), contentAlignment = Alignment.Center
             ) {
-                if (hasCameraPermission) {
-                    Image(painter = painterResource(id = R.drawable.ic_qr_code)
-                        , contentDescription = " QR Icon" )
+                Box(
+                    modifier = Modifier
+                        .width(600.dp)
+                        .height(260.dp)
+                        .border(width = 30.dp, color = Gray3)
+                ) {
+                    if (hasCameraPermission) {
+                        Image(painter = painterResource(id = R.drawable.ic_qr_code)
+                            , contentDescription = " QR Icon" )
 
 //                    AndroidView(factory = { context ->
 //                        val previewView = PreviewView(context)
@@ -134,11 +137,13 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
 //                        previewView
 //                    })
 //                    Text(text = code, fontSize = 20.sp)
-                } else {
-                    Text(text = "Please Enable Permission")
+                    } else {
+                        Text(text = "Please Enable Permission")
+                    }
                 }
-            }
 
+            }
         }
+
     }
 }
