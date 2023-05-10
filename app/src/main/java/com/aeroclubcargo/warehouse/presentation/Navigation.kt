@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.aeroclubcargo.warehouse.presentation.cutoff_time.CutOffTimeScreen
 import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
 import com.aeroclubcargo.warehouse.presentation.login.LoginScreen
 import com.aeroclubcargo.warehouse.presentation.scan_cargo.ScanCargoScreen
@@ -48,6 +49,11 @@ fun navigation() {
             route = Screen.UpdateBookingScreen.route
         ) {
             UpdateBookingScreen(navController)
+        }
+        composable(
+            route = Screen.CutOffTimeScreen.route
+        ) {
+            CutOffTimeScreen(navController)
         }
     }
 }

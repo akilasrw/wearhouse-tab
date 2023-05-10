@@ -85,7 +85,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_cut_off_time, // TODO replace icon
                 text = stringResource(R.string.cutt_off_time),
                 onClick = {
-                    // TODO
+                    navController.navigate(Screen.CutOffTimeScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
