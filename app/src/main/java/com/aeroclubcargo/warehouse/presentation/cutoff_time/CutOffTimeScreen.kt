@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,7 +29,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
+import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.Gray1
 import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.hintLightGray
@@ -205,11 +208,17 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                     TableCell(text = (booking.airCraftType), weight = column7Weight)
                     TableCell(text = (booking.totalBookWeight.toString()), weight = column8Weight)
                     TableCell(text = (booking.totalBookVolume.toString()), weight = column9Weight)
-//                    TableCell(text = "", weight = column10Weight)
                     IconButton(
                         onClick = { /* Handle button click here */ }
                     ) {
-                        Icon(Icons.Default.Info, contentDescription = "Add")
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit_icon),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
                     }
 
                 }
