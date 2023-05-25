@@ -38,6 +38,11 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
 
     }
 
+    fun updateCutOffTime(hours:Int, minutes:Int,cutOffTimeModel: CutOffTimeModel){
+        // TODO
+        print("TIME NEED TO UPDATE HERE $hours,$minutes")
+    }
+
 
 
     val _isLoading = MutableStateFlow(false)

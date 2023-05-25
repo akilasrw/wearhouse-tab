@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse.presentation.cutoff_time
 
+import android.app.TimePickerDialog
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -33,10 +34,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
 import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.*
 
 @Composable
 fun CutOffTimeScreen(navController: NavController, viewModel: CutOffTimeViewModel = hiltViewModel()) {
@@ -141,11 +144,6 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
                     ),
                     keyboardActions = KeyboardActions(
                         onNext = {
-//                            CoroutineScope(Dispatchers.Default).launch {
-//                                keyboardController?.hide()
-//                                delay(400)
-//                                focusRequesterPassword.requestFocus()
-//                            }
                         }
                     )
                 )
@@ -190,6 +188,18 @@ val column10Weight = .09f
 
 @Composable
 fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
+    val mContext = LocalContext.current
+    // Declaring and initializing a calendar
+    val mCalendar = Calendar.getInstance()
+    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
+    val mMinute = mCalendar[Calendar.MINUTE]
+
+    // Value for storing time as a string
+    val mTime = remember { mutableStateOf("") }
+
+
+
+
     val todoListState = viewModel.todoListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
     LazyColumn(
@@ -218,6 +228,14 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
         }
         // data
         items(todoListState.value) {booking->
+            // Creating a TimePicker dialod
+            val mTimePickerDialog = TimePickerDialog(
+                mContext,
+                {_, mHour : Int, mMinute: Int ->
+                    mTime.value = "$mHour:$mMinute"
+                    viewModel.updateCutOffTime(hours = mHour, minutes = mMinute, cutOffTimeModel = booking)
+                }, mHour, mMinute, false
+            )
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
@@ -234,7 +252,7 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 TableCell(text = (booking.totalBookedVolume.toString()), weight = column9Weight)
                 IconButton(
                     onClick = {
-//                            showDialog = true
+                        mTimePickerDialog.show()
                     }
                 ) {
                     Icon(
