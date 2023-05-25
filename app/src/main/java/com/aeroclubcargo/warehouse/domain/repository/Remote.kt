@@ -3,6 +3,7 @@ package com.aeroclubcargo.warehouse.domain.repository
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
+import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
 import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.PackageListItem
 import com.aeroclubcargo.warehouse.domain.model.Pagination
@@ -19,4 +20,11 @@ interface Remote {
         id: String,
         @Body @Constants.BookingStatus bookingStatus: Int
     ): Boolean
+    suspend fun cargoBookingSummaryList(
+        FlightNumber: String,
+        FlightDate: String,
+        PageIndex: Int,
+        PageSize: Int,
+    ): Pagination<CutOffTimeModel>
+
 }

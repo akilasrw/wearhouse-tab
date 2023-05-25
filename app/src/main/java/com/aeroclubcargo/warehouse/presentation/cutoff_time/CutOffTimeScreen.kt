@@ -8,12 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -31,19 +26,22 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
-import com.aeroclubcargo.warehouse.theme.BlueLight
-import com.aeroclubcargo.warehouse.theme.Gray1
-import com.aeroclubcargo.warehouse.theme.Gray2
-import com.aeroclubcargo.warehouse.theme.hintLightGray
+import com.aeroclubcargo.warehouse.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 @Composable
 fun CutOffTimeScreen(navController: NavController, viewModel: CutOffTimeViewModel = hiltViewModel()) {
     Scaffold(topBar = {
-        GetTopBar(navController = navController, isDashBoard = true)
+        GetTopBar(navController = navController, isDashBoard = false)
     }) {
         GetCutOffTimeList(viewModel = viewModel, navController = navController)
     }
@@ -58,6 +56,7 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
     val frFlightDate = remember { FocusRequester() }
 
     val flightValue = viewModel.flightNameValue.collectAsState()
+    val isLoading  = viewModel.isLoading.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -71,8 +70,11 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
                 .background(color = Color.White)
         ) {
             Row(modifier = Modifier
-                .height(80.dp)
-                .padding(4.dp)){
+                .height(60.dp)
+                .align(alignment = Alignment.Start)
+                .padding(2.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ){
                 OutlinedTextField(
                     value = flightValue.value,
                     onValueChange = viewModel::onFlightNameChange,
@@ -146,9 +148,24 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
                         }
                     )
                 )
+                Spacer(modifier = Modifier.width(10.dp))
+                Button(
+                    modifier = Modifier.wrapContentSize(align = Alignment.Center),
+                    onClick = { /*** TODO **/ },
+                ) {
+                    Text(text = "Find", style = TextStyle(color = Color.White))
+                }
             }
-            CutOffTimeTable(viewModel= viewModel)
-
+            if (isLoading.value) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                CutOffTimeTable(viewModel= viewModel)
+            }
         }
     }
 }
@@ -165,6 +182,25 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
     val column8Weight = .125f
     val column9Weight = .125f
     val column10Weight = .09f
+
+//    var showDialog by remember { mutableStateOf(false) }
+//    if(showDialog){
+//        TimePickerDialog(
+//            onConfirm = {
+//
+//            },
+//            onCancel = {
+//                showDialog = false
+//            },
+//            title = "Please select time",
+//            toggle = {
+//
+//            },
+//            content = {
+//                Text(text = "TEAS")
+//            },
+//        )
+//    }
 
     val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
     LazyColumn(
@@ -186,11 +222,16 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 TableCell(text = "Origin", weight = column5Weight, style = headerStyle)
                 TableCell(text = "Dest", weight = column6Weight, style = headerStyle)
                 TableCell(text = "Aircraft Type", weight = column7Weight, style = headerStyle)
-                TableCell(text = "Tot. Weight(KG)", weight = column8Weight, style = headerStyle)
-                TableCell(text = "Tot. Volume(m3)", weight = column9Weight, style = headerStyle)
+                TableCell(text = "Tot.Weight(KG)", weight = column8Weight, style = headerStyle)
+                TableCell(text = "Tot.Volume(m3)", weight = column9Weight, style = headerStyle)
                 TableCell(text = "Actions", weight = column10Weight, style = headerStyle)
             }
         }
+
+         val _uiState = MutableStateFlow(viewModel.cutOffTimeList.value)
+        val uiState: StateFlow<List<CutOffTimeModel>?> = _uiState.asStateFlow()
+
+
         // data
         if (viewModel.cutOffTimeList.value != null)
             items(viewModel.cutOffTimeList.value!!) {booking->
@@ -199,17 +240,19 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    TableCell(text = booking.flightNo, weight = column1Weight)
-                    TableCell(text = booking.departureDate, weight = column2Weight)
-                    TableCell(text = booking.departureTime, weight = column3Weight)
-                    TableCell(text = booking.cutOffTime, weight = column4Weight)
-                    TableCell(text = (booking.origin), weight = column5Weight)
-                    TableCell(text = (booking.dest), weight = column6Weight)
-                    TableCell(text = (booking.airCraftType), weight = column7Weight)
-                    TableCell(text = (booking.totalBookWeight.toString()), weight = column8Weight)
-                    TableCell(text = (booking.totalBookVolume.toString()), weight = column9Weight)
+                    TableCell(text = "${booking.flightNumber}", weight = column1Weight)
+                    TableCell(text = "${booking.scheduledDepartureDateTime}", weight = column2Weight)
+                    TableCell(text = "${booking.scheduledDepartureDateTime}", weight = column3Weight)
+                    TableCell(text = "${booking.cutoffTimeMin}", weight = column4Weight)
+                    TableCell(text = "${booking.originAirportCode}", weight = column5Weight)
+                    TableCell(text = "${booking.destinationAirportCode}", weight = column6Weight)
+                    TableCell(text = booking.aircraftRegNo ?:"N/A", weight = column7Weight)
+                    TableCell(text = (booking.totalBookedWeight.toString()), weight = column8Weight)
+                    TableCell(text = (booking.totalBookedVolume.toString()), weight = column9Weight)
                     IconButton(
-                        onClick = { /* Handle button click here */ }
+                        onClick = {
+//                            showDialog = true
+                        }
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_edit_icon),

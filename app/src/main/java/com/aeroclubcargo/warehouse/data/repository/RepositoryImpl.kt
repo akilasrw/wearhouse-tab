@@ -6,10 +6,7 @@ import com.aeroclubcargo.warehouse.data.local.dto.CredentialDto
 import com.aeroclubcargo.warehouse.data.remote.ApiInterface
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
-import com.aeroclubcargo.warehouse.domain.model.BookingStatusUpdateRequest
-import com.aeroclubcargo.warehouse.domain.model.PackageDetails
-import com.aeroclubcargo.warehouse.domain.model.PackageListItem
-import com.aeroclubcargo.warehouse.domain.model.Pagination
+import com.aeroclubcargo.warehouse.domain.model.*
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -61,6 +58,15 @@ class RepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun cargoBookingSummaryList(
+        FlightNumber: String,
+        FlightDate: String,
+        PageIndex: Int,
+        PageSize: Int
+    ): Pagination<CutOffTimeModel> {
+        return apiInterface.cargoBookingSummaryList(FlightNumber, FlightDate, PageIndex, PageSize)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }
@@ -92,6 +98,7 @@ class RepositoryImpl @Inject constructor(
     override suspend fun getLoggedInUser(): Flow<AuthenticateResponseDto?> {
         return datastore.authenticatedLoggedInUser
     }
+
 
 
 }
