@@ -26,17 +26,28 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
 
     fun onFlightNameChange(flightName: String){
         _flightNameValue.value = flightName
+
     }
+
+
+    private val _dateValue = MutableStateFlow("")
+    val flightDateValue = _dateValue.asStateFlow()
+
+    fun onFlightDateChange(date: String){
+        _dateValue.value = date
+
+    }
+
+
+
     val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
 
-    var cutOffTimeList: MutableLiveData<List<CutOffTimeModel>?> = MutableLiveData()
+    private var todoList = mutableStateListOf<CutOffTimeModel>()
+    private val _todoListFlow = MutableStateFlow(todoList)
 
-//    private var todoList = mutableStateListOf()
-//    private val _todoListFlow = MutableStateFlow(todoList)
-
-//    val todoListFlow: StateFlow<List<CutOffTimeModel>> get() = _todoListFlow
+    val todoListFlow: StateFlow<List<CutOffTimeModel>> get() = _todoListFlow
 
     init {
         getScheduleList()
@@ -52,11 +63,12 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
             setLoading(true)
             delay(timeMillis = 1000)
             try{
-                val paginatedList = repository.cargoBookingSummaryList(FlightNumber = "", FlightDate = "",1,11)
+                val paginatedList = repository.cargoBookingSummaryList(FlightNumber = flightNameValue.value, FlightDate = flightDateValue.value,1,11)
                 if(paginatedList.data!= null){
-                    cutOffTimeList.postValue(paginatedList.data)
+                    todoList.clear()
+//                    cutOffTimeList.postValue(paginatedList.data)
 //                    todoList = mutableStateListOf<CutOffTimeModel>(paginatedList.data!!)
-//                    todoList.addAll(paginatedList.data!!)
+                    todoList.addAll(paginatedList.data!!)
 //                    _todoListFlow.value = mutableStateListOf(paginatedList.data)
                 }
                 setLoading(false)

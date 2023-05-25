@@ -56,6 +56,7 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
     val frFlightDate = remember { FocusRequester() }
 
     val flightValue = viewModel.flightNameValue.collectAsState()
+    val dateValue = viewModel.flightDateValue.collectAsState()
     val isLoading  = viewModel.isLoading.collectAsState()
 
     Column(modifier = Modifier
@@ -113,8 +114,8 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 OutlinedTextField(
-                    value = flightValue.value,
-                    onValueChange = viewModel::onFlightNameChange,
+                    value = dateValue.value,
+                    onValueChange = viewModel::onFlightDateChange,
                     label = {
                         Text(
                             text = "Departure Date",
@@ -151,7 +152,12 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
                     modifier = Modifier.wrapContentSize(align = Alignment.Center),
-                    onClick = { /*** TODO **/ },
+                    onClick = {
+                        viewModel.getScheduleList()
+                        keyboardController?.hide()
+                        frFlightName.freeFocus()
+                        frFlightDate.freeFocus()
+                              },
                 ) {
                     Text(text = "Find", style = TextStyle(color = Color.White))
                 }
@@ -170,38 +176,21 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
     }
 }
 
+
+val column1Weight = .1f
+val column2Weight = .12f
+val column3Weight = .12f
+val column4Weight = .1f
+val column5Weight = .1f
+val column6Weight = .1f
+val column7Weight = .1f
+val column8Weight = .125f
+val column9Weight = .125f
+val column10Weight = .09f
+
 @Composable
 fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
-    val column1Weight = .1f
-    val column2Weight = .1f
-    val column3Weight = .1f
-    val column4Weight = .1f
-    val column5Weight = .1f
-    val column6Weight = .1f
-    val column7Weight = .1f
-    val column8Weight = .125f
-    val column9Weight = .125f
-    val column10Weight = .09f
-
-//    var showDialog by remember { mutableStateOf(false) }
-//    if(showDialog){
-//        TimePickerDialog(
-//            onConfirm = {
-//
-//            },
-//            onCancel = {
-//                showDialog = false
-//            },
-//            title = "Please select time",
-//            toggle = {
-//
-//            },
-//            content = {
-//                Text(text = "TEAS")
-//            },
-//        )
-//    }
-
+    val todoListState = viewModel.todoListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
     LazyColumn(
         Modifier
@@ -227,45 +216,39 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 TableCell(text = "Actions", weight = column10Weight, style = headerStyle)
             }
         }
-
-         val _uiState = MutableStateFlow(viewModel.cutOffTimeList.value)
-        val uiState: StateFlow<List<CutOffTimeModel>?> = _uiState.asStateFlow()
-
-
         // data
-        if (viewModel.cutOffTimeList.value != null)
-            items(viewModel.cutOffTimeList.value!!) {booking->
-                Row(
-                    Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    TableCell(text = "${booking.flightNumber}", weight = column1Weight)
-                    TableCell(text = "${booking.scheduledDepartureDateTime}", weight = column2Weight)
-                    TableCell(text = "${booking.scheduledDepartureDateTime}", weight = column3Weight)
-                    TableCell(text = "${booking.cutoffTimeMin}", weight = column4Weight)
-                    TableCell(text = "${booking.originAirportCode}", weight = column5Weight)
-                    TableCell(text = "${booking.destinationAirportCode}", weight = column6Weight)
-                    TableCell(text = booking.aircraftRegNo ?:"N/A", weight = column7Weight)
-                    TableCell(text = (booking.totalBookedWeight.toString()), weight = column8Weight)
-                    TableCell(text = (booking.totalBookedVolume.toString()), weight = column9Weight)
-                    IconButton(
-                        onClick = {
+        items(todoListState.value) {booking->
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                TableCell(text = "${booking.flightNumber}", weight = column1Weight)
+                TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.first()}", weight = column2Weight)
+                TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.last()}", weight = column3Weight)
+                TableCell(text = "${booking.cutoffTimeMin ?: "-"}", weight = column4Weight)
+                TableCell(text = "${booking.originAirportCode}", weight = column5Weight)
+                TableCell(text = "${booking.destinationAirportCode}", weight = column6Weight)
+                TableCell(text = booking.aircraftRegNo ?:"-", weight = column7Weight)
+                TableCell(text = (booking.totalBookedWeight.toString()), weight = column8Weight)
+                TableCell(text = (booking.totalBookedVolume.toString()), weight = column9Weight)
+                IconButton(
+                    onClick = {
 //                            showDialog = true
-                        }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_edit_icon),
-                            contentDescription = "edit",
-                            modifier = Modifier
-                                .size(24.dp)
-                                .padding(3.dp),
-                            tint = BlueLight
-                        )
                     }
-
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_edit_icon),
+                        contentDescription = "edit",
+                        modifier = Modifier
+                            .size(24.dp)
+                            .padding(3.dp),
+                        tint = BlueLight
+                    )
                 }
+
             }
+        }
     }
 }
 
