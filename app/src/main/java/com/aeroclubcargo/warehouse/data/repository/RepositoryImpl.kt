@@ -67,6 +67,10 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.cargoBookingSummaryList(FlightNumber, FlightDate, PageIndex, PageSize)
     }
 
+    override suspend fun updateCutOffTIme(id: String, body: CutOffTimeRequest): Boolean {
+        return apiInterface.updateCutOffTIme(id = id, body = body)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }

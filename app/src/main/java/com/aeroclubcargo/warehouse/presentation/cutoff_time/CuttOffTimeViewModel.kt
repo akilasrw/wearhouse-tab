@@ -2,12 +2,10 @@ package com.aeroclubcargo.warehouse.presentation.cutoff_time
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
-import com.aeroclubcargo.warehouse.domain.model.PackageListItem
+import com.aeroclubcargo.warehouse.domain.model.CutOffTimeRequest
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -15,8 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
+import kotlin.Exception
 
 @HiltViewModel
 class CutOffTimeViewModel @Inject constructor(private var repository: Repository) : ViewModel() {
@@ -41,6 +39,19 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
     fun updateCutOffTime(hours:Int, minutes:Int,cutOffTimeModel: CutOffTimeModel){
         // TODO
         print("TIME NEED TO UPDATE HERE $hours,$minutes")
+        viewModelScope.launch {
+            setLoading(true)
+            try {
+                var totalTimeInMinutes  = minutes + hours* 60
+                repository.updateCutOffTIme(cutOffTimeModel.id, CutOffTimeRequest(id = cutOffTimeModel.id,
+                    flightId = cutOffTimeModel.id,
+                    cutOffTimeMin = totalTimeInMinutes))
+            }catch (e:Exception){
+                e.localizedMessage?.let { Log.e("CutOffTimeViewModel", it) }
+            }finally {
+                setLoading(false)
+            }
+        }
     }
 
 

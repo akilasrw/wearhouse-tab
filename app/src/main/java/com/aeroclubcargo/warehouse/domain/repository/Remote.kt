@@ -3,11 +3,9 @@ package com.aeroclubcargo.warehouse.domain.repository
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
-import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
-import com.aeroclubcargo.warehouse.domain.model.PackageDetails
-import com.aeroclubcargo.warehouse.domain.model.PackageListItem
-import com.aeroclubcargo.warehouse.domain.model.Pagination
+import com.aeroclubcargo.warehouse.domain.model.*
 import retrofit2.http.Body
+import retrofit2.http.Path
 
 interface Remote {
     suspend fun authenticateUser(authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto
@@ -26,5 +24,7 @@ interface Remote {
         PageIndex: Int,
         PageSize: Int,
     ): Pagination<CutOffTimeModel>
+
+    suspend fun updateCutOffTIme(id: String,body: CutOffTimeRequest): Boolean
 
 }

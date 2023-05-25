@@ -44,5 +44,8 @@ interface ApiInterface {
         @Query("PageSize") PageSize: Int,
     ): Pagination<CutOffTimeModel>
 
+    @PUT("api/${Constants.API_VERSION}/FlightSchedule/UpdateCuttOffTime/{id}")
+    suspend fun updateCutOffTIme(@Path("id") id: String,@Body body: CutOffTimeRequest): Boolean
+
 
 }
