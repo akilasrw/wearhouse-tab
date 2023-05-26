@@ -33,7 +33,6 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
 
     fun onFlightDateChange(date: String){
         _dateValue.value = date
-
     }
 
     fun updateCutOffTime(hours:Int, minutes:Int,cutOffTimeModel: CutOffTimeModel){

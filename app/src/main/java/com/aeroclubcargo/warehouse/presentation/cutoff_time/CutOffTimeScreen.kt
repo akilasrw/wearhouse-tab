@@ -1,8 +1,11 @@
 package com.aeroclubcargo.warehouse.presentation.cutoff_time
 
+import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.widget.DatePicker
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -34,6 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalContext
 import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,6 +58,7 @@ fun CutOffTimeScreen(navController: NavController, viewModel: CutOffTimeViewMode
 @Composable
 fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavController) {
     val keyboardController = LocalSoftwareKeyboardController.current
+    val mContext = LocalContext.current
 
     val frFlightName = remember { FocusRequester() }
     val frFlightDate = remember { FocusRequester() }
@@ -61,6 +66,13 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
     val flightValue = viewModel.flightNameValue.collectAsState()
     val dateValue = viewModel.flightDateValue.collectAsState()
     val isLoading  = viewModel.isLoading.collectAsState()
+    var calendar = Calendar.getInstance()
+    val datePickerDialog = DatePickerDialog(
+        mContext,
+        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
+           viewModel.onFlightDateChange("$year-${1+month}-$dayOfMonth")
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+    )
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -135,17 +147,18 @@ fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavControll
                             style = MaterialTheme.typography.body2.copy(color = Gray1)
                         )
                     },
+                    enabled = false,
                     singleLine = true,
                     modifier = Modifier
                         .width(200.dp)
+                        .clickable(onClick = {
+                            datePickerDialog.show()
+                        })
                         .focusRequester(focusRequester = frFlightDate),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
                         unfocusedBorderColor = Gray2
                     ),
-                    keyboardActions = KeyboardActions(
-                        onNext = {
-                        }
-                    )
+
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
@@ -189,10 +202,6 @@ val column10Weight = .09f
 @Composable
 fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
     val mContext = LocalContext.current
-    // Declaring and initializing a calendar
-    val mCalendar = Calendar.getInstance()
-    val mHour = mCalendar[Calendar.HOUR_OF_DAY]
-    val mMinute = mCalendar[Calendar.MINUTE]
 
     // Value for storing time as a string
     val mTime = remember { mutableStateOf("") }
@@ -234,7 +243,7 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 {_, mHour : Int, mMinute: Int ->
                     mTime.value = "$mHour:$mMinute"
                     viewModel.updateCutOffTime(hours = mHour, minutes = mMinute, cutOffTimeModel = booking)
-                }, mHour, mMinute, false
+                }, 0, 0, false
             )
             Row(
                 Modifier.fillMaxWidth(),

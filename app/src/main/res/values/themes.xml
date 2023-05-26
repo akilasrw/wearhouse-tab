@@ -4,4 +4,8 @@
     <style name="Theme.WarehouseTab" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/light_blue</item>
     </style>
+    <style name="ThemeOverlay.MyApp.Dialog" parent="@style/Theme.WarehouseTab">
+<!--        <item name="android:colorSecondary">@color/light_blue</item>-->
+        <item name="android:colorPrimary">@color/red</item> <!-- button text color -->
+    </style>
 </resources>
