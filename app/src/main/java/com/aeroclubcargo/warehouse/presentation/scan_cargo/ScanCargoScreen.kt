@@ -16,12 +16,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -58,33 +60,11 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
             )
         }
     }) {
-        var code by remember {
-            mutableStateOf("")
-        }
 
-        val lifeCycleOwner = LocalLifecycleOwner.current
-        val context = LocalContext.current
-        val cameraProvider = remember {
-            ProcessCameraProvider.getInstance(context)
-        }
+        var tabIndex by remember { mutableStateOf(0) }
 
-        var hasCameraPermission by remember {
-            mutableStateOf(
-                ContextCompat.checkSelfPermission(
-                    context, Manifest.permission.CAMERA
-                ) == PackageManager.PERMISSION_GRANTED
-            )
-        }
-        var launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission(),
-            onResult = { granted ->
-                hasCameraPermission = granted
-            }
-        )
+        val tabs = listOf("Scan QR code", "Enter AWB number")
 
-        LaunchedEffect(key1 = true) {
-            launcher.launch(Manifest.permission.CAMERA)
-        }
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(25.dp)) {
@@ -95,15 +75,120 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                     .fillMaxSize()
                     .background(color = Color.White), contentAlignment = Alignment.Center
             ) {
-                Box(
-                    modifier = Modifier
-                        .width(600.dp)
-                        .height(260.dp)
-                        .border(width = 30.dp, color = Gray3)
-                ) {
-                    if (hasCameraPermission) {
-                        Image(painter = painterResource(id = R.drawable.ic_qr_code)
-                            , contentDescription = " QR Icon" )
+
+                Column(modifier = Modifier.fillMaxSize()) {
+//                    TabRow(selectedTabIndex = tabIndex) {
+//                        tabs.forEachIndexed { index, title ->
+//                            Tab(text = { Text(title) },
+//                                selected = tabIndex == index,
+//                                onClick = { tabIndex = index }
+//                            )
+//                        }
+//                    }
+
+                    TabRow(selectedTabIndex = tabIndex,
+                        backgroundColor = Color(0xff1E76DA),
+                        modifier = Modifier
+                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                            .fillMaxWidth(fraction = 0.7f)
+                            .align(alignment = Alignment.CenterHorizontally)
+                            .padding(start = 0.5.dp, end = 0.5.dp)
+                            .clip(RoundedCornerShape(50))
+                            ,
+                        indicator = { tabPositions: List<TabPosition> ->
+                            Box {}
+                        }
+                    ) {
+                        tabs.forEachIndexed { index, text ->
+                            val selected = tabIndex == index
+                            Tab(
+                                modifier = if (selected) Modifier
+                                    .clip(RoundedCornerShape(90))
+                                    .padding(0.5.dp)
+                                    .background(
+                                        Color.White
+                                    )
+                                else Modifier
+                                    .clip(RoundedCornerShape(90))
+                                    .padding(0.5.dp)
+                                    .background(
+                                        Color(
+                                            0xff1E76DA
+                                        )
+                                    ),
+                                selected = selected,
+                                onClick = { tabIndex = index },
+                                text = { Text(text = text, color = Color(0xff6FAAEE)) }
+                            )
+                        }
+                    }
+                    when (tabIndex) {
+                        0 -> BarCodeScanView()
+                        1 -> EnterManualScreenView()
+                    }
+                }
+            }
+            }
+
+    }
+
+}
+
+@Composable
+fun EnterManualScreenView(){
+    Text(text = "TEst")
+}
+
+@Composable
+fun BarCodeScanView(){
+    var code by remember {
+        mutableStateOf("")
+    }
+
+    val lifeCycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val cameraProvider = remember {
+        ProcessCameraProvider.getInstance(context)
+    }
+
+    var hasCameraPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context, Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+    var launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            hasCameraPermission = granted
+        }
+    )
+
+    LaunchedEffect(key1 = true) {
+        launcher.launch(Manifest.permission.CAMERA)
+    }
+
+//    Column(modifier = Modifier
+//        .fillMaxSize()
+//        .padding(25.dp)) {
+//        Text(text = "Verify Booking")
+//        Spacer(modifier = Modifier.height(8.dp))
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(color = Color.White), contentAlignment = Alignment.Center
+//        ) {
+            Box(
+                modifier = Modifier
+                    .width(600.dp)
+                    .height(260.dp)
+                    .fillMaxSize()
+                    .border(width = 30.dp, color = Gray3)
+            ) {
+                if (hasCameraPermission) {
+                    Image(painter = painterResource(id = R.drawable.ic_qr_code)
+                        , contentDescription = " QR Icon" )
 
 //                    AndroidView(factory = { context ->
 //                        val previewView = PreviewView(context)
@@ -137,13 +222,11 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
 //                        previewView
 //                    })
 //                    Text(text = code, fontSize = 20.sp)
-                    } else {
-                        Text(text = "Please Enable Permission")
-                    }
+                } else {
+                    Text(text = "Please Enable Permission")
                 }
+//            }
 
-            }
-        }
-
+//        }
     }
 }
