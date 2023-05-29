@@ -3,29 +3,31 @@ package com.aeroclubcargo.warehouse.presentation.verify_booking
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
-import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
-import com.aeroclubcargo.warehouse.theme.BlueLight2
-import com.aeroclubcargo.warehouse.theme.hintLightGray
+import com.aeroclubcargo.warehouse.presentation.cutoff_time.*
+import com.aeroclubcargo.warehouse.theme.*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -54,7 +56,7 @@ fun VerifyBookingScreen(
 
                 LazyVerticalGrid(
                     cells = GridCells.Fixed(4),
-                    modifier = Modifier.fillMaxHeight(fraction = 0.7f),
+                    modifier = Modifier.wrapContentSize(),
                     contentPadding = PaddingValues(horizontal =8.dp, vertical = 8.dp)
                 ) {
                     item {
@@ -129,14 +131,114 @@ fun VerifyBookingScreen(
 //                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
 //                    }
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-
-
+                PackageTable(navController = navController,viewModel = viewModel)
             }
         }
         
 
     }
+}
+
+val column1Weight = .2f
+val column2Weight = .2f
+val column3Weight = .2f
+val column4Weight = .2f
+val column5Weight = .2f
+@Composable
+fun PackageTable(navController: NavController,
+                 viewModel: VerifyBookingViewModel) {
+    val headerStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
+    val mContext = LocalContext.current
+    var todoListState = listOf<String>("A","B","C")
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // header
+        item {
+            Row(
+                Modifier.fillMaxWidth().background(color= Gray5),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                TableCell(text = "Booking Reference", weight = column1Weight, style = headerStyle)
+                TableCell(text = "Cargo Type", weight = column2Weight, style = headerStyle)
+                TableCell(text = "Package Weight(kg)", weight = column3Weight, style = headerStyle)
+                TableCell(text = "Package Dimensions(LxWxH)", weight = column4Weight, style = headerStyle)
+                TableCell(text = "Action", weight = column5Weight, style = headerStyle)
+            }
+        }
+        // data
+        items(todoListState) {booking->
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                TableCell(text = "DG334523", weight = column1Weight)
+                TableCell(text = "Dangours Good", weight = column2Weight)
+                TableCell(text = "asda", weight = column3Weight)
+                TableCell(text = "ada", weight = column4Weight)
+                Row(modifier = Modifier
+                    .align(alignment = Alignment.CenterVertically).weight(column5Weight),
+                    horizontalArrangement = Arrangement.Start) {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit_icon),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(5.dp))
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_accepted),
+                            contentDescription = "done",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(5.dp))
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_baseline_delete_outline_24),
+                            contentDescription = "delete",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(5.dp))
+                }
+
+
+
+            }
+        }
+    }
+}
+
+@Composable
+fun RowScope.TableCell(
+    text: String,
+    weight: Float,
+    style: TextStyle = MaterialTheme.typography.body2
+) {
+    Text(
+        text = text,
+        Modifier
+            .weight(weight)
+            .padding(8.dp),
+        style = style,
+        textAlign = TextAlign.Start
+    )
 }
 
 @Composable
