@@ -18,6 +18,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.theme.Gray1
 import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray3
@@ -28,7 +30,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
 @Composable
-fun EnterManualScreenView(  viewModel: ScanCargoViewModel){
+fun EnterManualScreenView(viewModel: ScanCargoViewModel, navController: NavController,){
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val awbNumber = remember { mutableStateOf("") }
@@ -91,6 +93,7 @@ fun EnterManualScreenView(  viewModel: ScanCargoViewModel){
                                onClick = {
                                    viewModel.findAWBNumber()
                                    keyboardController?.hide()
+                                   navController.navigate(Screen.VerifyBookingScreen.route)
                                },
                            ) {
                                Text(text = "Find", style = TextStyle(color = Color.White))

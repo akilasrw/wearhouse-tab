@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
@@ -32,11 +33,10 @@ fun VerifyBookingScreen(
     navController: NavController,
     viewModel: VerifyBookingViewModel = hiltViewModel()
 ) {
-
-    LaunchedEffect(key1 = true) {
-        viewModel.getPackageDetails()
-//        viewModel.stateFlow
-    }
+//    LaunchedEffect(key1 = true) {
+////        viewModel.getPackageDetails()
+////        viewModel.stateFlow
+//    }
     Scaffold(topBar = {
         GetTopBar(navController = navController)
     }) {
@@ -53,19 +53,19 @@ fun VerifyBookingScreen(
             ) {
 
                 LazyVerticalGrid(
-                    cells = GridCells.Fixed(3),
+                    cells = GridCells.Fixed(4),
                     modifier = Modifier.fillMaxHeight(fraction = 0.7f),
                     contentPadding = PaddingValues(horizontal =8.dp, vertical = 8.dp)
                 ) {
                     item {
                         GetTileWidget(
-                            hint = "Flight Number",
+                            hint = "Booking ID",
                             value = viewModel.packageDetail.value?.flightNumber ?: "N/A"
                         )
                     }
                     item {
                         GetTileWidget(
-                            hint = "Flight Date & Time",
+                            hint = "AWB number",
                             value = viewModel.packageDetail.value?.flightDate?.split("T")
                                 ?.get(0)
                                 ?: "N/A"
@@ -73,79 +73,65 @@ fun VerifyBookingScreen(
                     }
                     item {
                         GetTileWidget(
-                            hint = "Booking Reference",
+                            hint = "Flight Number",
                             value = viewModel.packageDetail.value?.bookingRefNumber ?: "N/A"
                         )
                     }
                     item {
                         GetTileWidget(
-                            hint = "Cargo Type",
+                            hint = "Aircraft Type",
                             value = Constants.getCargoType(viewModel.packageDetail.value?.cargoPositionType)
                         )
                     }
                     item {
                         GetTileWidget(
-                            hint = "Package Dimensions (L x W x H)",
+                            hint = "From to",
                             value = "${viewModel.packageDetail.value?.length} ${viewModel.packageDetail.value?.width} ${viewModel.packageDetail.value?.height} (${viewModel.packageDetail.value?.volumeUnit})"
                         )
                     }
                     item {
                         GetTileWidget(
-                            hint = "Package Weight (Kg)",
+                            hint = "Flight Date & Time",
                             value = "${viewModel.packageDetail.value?.weight} (${viewModel.packageDetail.value?.weightUnit})"
                         )
                     }
                     item {
                         GetTileWidget(
-                            hint = "AWB Number",
+                            hint = "Cut Off Time",
                             value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A"
                         )
                     }
                     item {
-                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxHeight(fraction = 0.3f)
-                        .fillMaxWidth(), horizontalArrangement = Arrangement.End
-                ) {
-                    Button(
-                        onClick = {
-                            navController.navigate(Screen.DashboardScreen.route)
-                        },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = hintLightGray)
-                    ) {
-                        Text(
-                            text = "Cancel",
-                            style = MaterialTheme.typography.button.copy(color = Color.White)
+                        GetTileWidget(
+                            hint = "Booking Date",
+                            value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A"
                         )
                     }
-                    Spacer(modifier = Modifier.width(16.dp))
-//                Button(onClick = {
-//                    navController.navigate(Screen.UpdateBookingScreen.route)
-//                }, colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
-//                    Text(
-//                        text = "Update",
-//                        style = MaterialTheme.typography.button.copy(color = Color.White)
-//                    )
-//                }
-                    Spacer(modifier = Modifier.width(16.dp))
-                    Button(
-                        onClick = {
-                            // TODO accept cargo api
-                            viewModel.acceptCargo()
-//                        navController.navigate(Screen.DashboardScreen.route)
-                        },
-                        colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)
-                    ) {
-                        Text(
-                            text = "Accept",
-                            style = MaterialTheme.typography.button.copy(color = Color.White)
+                    item {
+                        GetTileWidget(
+                            hint = "No.Rec. Pcs",
+                            value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A"
                         )
                     }
-                    Spacer(modifier = Modifier.width(16.dp))
+                    item {
+                        GetTileWidget(
+                            hint = "Total Rec. Weight(Kg)",
+                            value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A"
+                        )
+                    }
+                    item {
+                        GetTileWidget(
+                            hint = "Total Rec. Volume(m3)",
+                            value = viewModel.packageDetail.value?.awbTrackingNumber ?: "N/A"
+                        )
+                    }
+//                    item {
+//                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
+//                    }
                 }
+                Spacer(modifier = Modifier.height(10.dp))
+
+
             }
         }
         
@@ -164,9 +150,9 @@ fun GetTileWidget(hint: String, value: String) {
         color = MaterialTheme.colors.onSurface
     ){
         Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(all = 16.dp)) {
-            Text(text = hint, style = MaterialTheme.typography.body2.copy(color = hintLightGray))
+            Text(text = hint, style = MaterialTheme.typography.body2.copy(color = hintLightGray, fontSize = 10.sp))
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = value, style = MaterialTheme.typography.body2)
+            Text(text = value, style = MaterialTheme.typography.body2.copy(fontSize = 10.sp))
         }
     }
 
@@ -183,7 +169,7 @@ fun GetTileWidgetWithIcon(hint: String) {
         color = MaterialTheme.colors.onSurface
     ) {
         Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(all = 16.dp)) {
-            Text(text = hint, style = MaterialTheme.typography.body2.copy(color = hintLightGray))
+            Text(text = hint, style = MaterialTheme.typography.body2.copy(color = hintLightGray, fontSize = 10.sp))
             Spacer(modifier = Modifier.height(10.dp))
             Image(
                 painter = painterResource(R.drawable.ic_pdf_icon),

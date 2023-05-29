@@ -30,9 +30,10 @@ class ScanCargoViewModel @Inject constructor(private var repository: Repository)
 
     fun findAWBNumber(){
         viewModelScope.launch {
-            setLoading(true)
-            delay(1200000)
-            setLoading(false)
+            // TODO implement API
+//            setLoading(true)
+//
+//            setLoading(false)
         }
     }
 

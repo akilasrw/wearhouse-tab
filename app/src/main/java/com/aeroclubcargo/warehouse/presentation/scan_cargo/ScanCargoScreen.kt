@@ -123,7 +123,7 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                     )
                     when (tabIndex) {
                         0 -> BarCodeScanView(viewModel= viewModel)
-                        1 -> EnterManualScreenView(viewModel= viewModel)
+                        1 -> EnterManualScreenView(viewModel= viewModel,navController= navController)
                     }
                 }
             }
