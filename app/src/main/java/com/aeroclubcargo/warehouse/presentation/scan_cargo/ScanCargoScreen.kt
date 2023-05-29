@@ -40,6 +40,7 @@ import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight2
 import com.aeroclubcargo.warehouse.theme.Gray3
+import com.aeroclubcargo.warehouse.theme.Gray4
 import com.aeroclubcargo.warehouse.utils.QrCodeAnalyzer
 
 
@@ -49,21 +50,22 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }, floatingActionButton = {
-        FloatingActionButton(onClick = {
-            navController.navigate(Screen.VerifyBookingScreen.route)
-        }, backgroundColor = BlueLight2) {
-            Icon(
-                Icons.Filled.Done,
-                contentDescription = "done",
-                modifier = Modifier.size(ButtonDefaults.IconSize),
-                tint = Color.White
-            )
-        }
+//        FloatingActionButton(onClick = {
+//            navController.navigate(Screen.VerifyBookingScreen.route)
+//        }, backgroundColor = BlueLight2) {
+//            Icon(
+//                Icons.Filled.Done,
+//                contentDescription = "done",
+//                modifier = Modifier.size(ButtonDefaults.IconSize),
+//                tint = Color.White
+//            )
+//        }
     }) {
 
         var tabIndex by remember { mutableStateOf(0) }
 
         val tabs = listOf("Scan QR code", "Enter AWB number")
+
 
         Column(modifier = Modifier
             .fillMaxSize()
@@ -75,17 +77,7 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                     .fillMaxSize()
                     .background(color = Color.White), contentAlignment = Alignment.Center
             ) {
-
-                Column(modifier = Modifier.fillMaxSize()) {
-//                    TabRow(selectedTabIndex = tabIndex) {
-//                        tabs.forEachIndexed { index, title ->
-//                            Tab(text = { Text(title) },
-//                                selected = tabIndex == index,
-//                                onClick = { tabIndex = index }
-//                            )
-//                        }
-//                    }
-
+                Column(modifier = Modifier.fillMaxSize().padding(top = 20.dp)) {
                     TabRow(selectedTabIndex = tabIndex,
                         backgroundColor = Color(0xff1E76DA),
                         modifier = Modifier
@@ -93,8 +85,7 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                             .fillMaxWidth(fraction = 0.7f)
                             .align(alignment = Alignment.CenterHorizontally)
                             .padding(start = 0.5.dp, end = 0.5.dp)
-                            .clip(RoundedCornerShape(50))
-                            ,
+                            .clip(RoundedCornerShape(50)),
                         indicator = { tabPositions: List<TabPosition> ->
                             Box {}
                         }
@@ -122,9 +113,17 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
                             )
                         }
                     }
+                    Divider(
+                        color = Gray4,
+                        thickness = 2.dp,
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
+                            .padding(top = 20.dp,
+                                start = 8.dp,
+                                end = 8.dp)
+                    )
                     when (tabIndex) {
-                        0 -> BarCodeScanView()
-                        1 -> EnterManualScreenView()
+                        0 -> BarCodeScanView(viewModel= viewModel)
+                        1 -> EnterManualScreenView(viewModel= viewModel)
                     }
                 }
             }
@@ -134,99 +133,5 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
 
 }
 
-@Composable
-fun EnterManualScreenView(){
-    Text(text = "TEst")
-}
 
-@Composable
-fun BarCodeScanView(){
-    var code by remember {
-        mutableStateOf("")
-    }
 
-    val lifeCycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-    val cameraProvider = remember {
-        ProcessCameraProvider.getInstance(context)
-    }
-
-    var hasCameraPermission by remember {
-        mutableStateOf(
-            ContextCompat.checkSelfPermission(
-                context, Manifest.permission.CAMERA
-            ) == PackageManager.PERMISSION_GRANTED
-        )
-    }
-    var launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { granted ->
-            hasCameraPermission = granted
-        }
-    )
-
-    LaunchedEffect(key1 = true) {
-        launcher.launch(Manifest.permission.CAMERA)
-    }
-
-//    Column(modifier = Modifier
-//        .fillMaxSize()
-//        .padding(25.dp)) {
-//        Text(text = "Verify Booking")
-//        Spacer(modifier = Modifier.height(8.dp))
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .background(color = Color.White), contentAlignment = Alignment.Center
-//        ) {
-            Box(
-                modifier = Modifier
-                    .width(600.dp)
-                    .height(260.dp)
-                    .fillMaxSize()
-                    .border(width = 30.dp, color = Gray3)
-            ) {
-                if (hasCameraPermission) {
-                    Image(painter = painterResource(id = R.drawable.ic_qr_code)
-                        , contentDescription = " QR Icon" )
-
-//                    AndroidView(factory = { context ->
-//                        val previewView = PreviewView(context)
-//                        val preview = androidx.camera.core.Preview.Builder().build()
-//                        val selector = CameraSelector.Builder()
-//                            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-//                            .build()
-//                        preview.setSurfaceProvider(previewView.surfaceProvider)
-//                        val imageAnalysis = ImageAnalysis.Builder()
-//                            .setTargetResolution(
-//                                Size(previewView.width, previewView.height)
-//                            ).setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-//                            .build()
-//                        imageAnalysis.setAnalyzer(
-//                            ContextCompat.getMainExecutor(context),
-//                            QrCodeAnalyzer { result ->
-//                                code = result
-//                            }
-//                        )
-//                        try {
-//                            cameraProvider.get()
-//                                .bindToLifecycle(
-//                                    lifeCycleOwner,
-//                                    selector,
-//                                    preview,
-//                                    imageAnalysis
-//                                )
-//                        } catch (e: Exception) {
-//
-//                        }
-//                        previewView
-//                    })
-//                    Text(text = code, fontSize = 20.sp)
-                } else {
-                    Text(text = "Please Enable Permission")
-                }
-//            }
-
-//        }
-    }
-}
