@@ -17,7 +17,7 @@ object Constants {
     val PREF_LOGIN_USER = preferencesKey<String>("loginUser")
     val PREF_JWT_TOKEN = preferencesKey<String>("jwtToken")
 
-    @IntDef(None, Pending, Accepted,Loading,Invoiced,Dispatched,Exported)
+    @IntDef(None, Pending, Accepted, Loading, Invoiced, Dispatched, Exported)
     @Retention(AnnotationRetention.SOURCE)
     annotation class BookingStatus
 
@@ -29,11 +29,36 @@ object Constants {
     const val Dispatched = 50
     const val Exported = 60
 
-   enum class AircraftConfigType
-    {
+
+    enum class PackageItemStatus {
         None,
-        P2C ,
-        Freighter ,
+        Booked,
+        Accepted,
+        Dispatched
+    }
+
+    enum class AircraftConfigType {
+        None,
+        P2C,
+        Freighter,
+    }
+
+    enum class PackageItemCategory {
+        None,
+        General,
+        Animal,
+        Artwork,
+        Dgr
+    }
+
+    fun getPackageItemCategory(packageType : Int) : String{
+        return when(PackageItemCategory.values()[packageType]){
+            PackageItemCategory.None -> "None"
+            PackageItemCategory.General -> "General"
+            PackageItemCategory.Animal -> "Animal"
+            PackageItemCategory.Artwork -> "Artwork"
+            PackageItemCategory.Dgr -> "Dangerous Goods"
+        }
     }
 
     enum class CargoPositionType {
@@ -44,11 +69,11 @@ object Constants {
         Overhead
     }
 
-    fun getCargoType (type: Int?): String {
-        if(type == null){
+    fun getCargoType(type: Int?): String {
+        if (type == null) {
             return ""
         }
-        when(CargoPositionType.values()[type]){
+        when (CargoPositionType.values()[type]) {
             CargoPositionType.None -> {
                 return "None"
             }

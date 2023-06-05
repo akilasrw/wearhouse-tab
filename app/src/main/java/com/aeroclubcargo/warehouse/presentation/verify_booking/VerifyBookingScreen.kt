@@ -25,8 +25,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
+import com.aeroclubcargo.warehouse.common.Constants.getPackageItemCategory
+import com.aeroclubcargo.warehouse.domain.model.PackageLineItem
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
+import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -38,10 +41,9 @@ fun VerifyBookingScreen(
     navController: NavController,
     viewModel: VerifyBookingViewModel = hiltViewModel()
 ) {
-//    LaunchedEffect(key1 = true) {
-//        viewModel.getPackageDetails()
-////        viewModel.stateFlow
-//    }
+    LaunchedEffect(key1 = true) {
+        viewModel.getPackageDetails()
+    }
 
     val updatPackageSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
@@ -75,74 +77,69 @@ fun VerifyBookingScreen(
                             item {
                                 GetTileWidget(
                                     hint = "Booking ID",
-                                    value = viewModel.packageDetail.value?.flightNumber ?: "N/A"
+                                    value = viewModel.packageDetail.value?.bookingNumber ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "AWB number",
-                                    value = viewModel.packageDetail.value?.flightDate?.split("T")
-                                        ?.get(0)
-                                        ?: "N/A"
+                                    value = viewModel.packageDetail.value?.awbNumber ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Flight Number",
-                                    value = viewModel.packageDetail.value?.bookingRefNumber ?: "N/A"
+                                    value = viewModel.packageDetail.value?.flightNumber ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Aircraft Type",
-                                    value = Constants.getCargoType(viewModel.packageDetail.value?.cargoPositionType)
+                                    value = viewModel.packageDetail.value?.aircraftSubTypeName ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "From to",
-                                    value = "${viewModel.packageDetail.value?.length} ${viewModel.packageDetail.value?.width} ${viewModel.packageDetail.value?.height} (${viewModel.packageDetail.value?.volumeUnit})"
+                                    value = "${viewModel.packageDetail.value?.origin} ${viewModel.packageDetail.value?.destination}"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Flight Date & Time",
-                                    value = "${viewModel.packageDetail.value?.weight} (${viewModel.packageDetail.value?.weightUnit})"
+                                    value = viewModel.packageDetail.value?.scheduledDepartureDateTime?.toDateTimeDisplayFormat(outputFormat = "MMM d, yyyy HH:mm a") ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Cut Off Time",
-                                    value = viewModel.packageDetail.value?.awbTrackingNumber
+                                    value = viewModel.packageDetail.value?.cutoffTimeMin?.toString()
                                         ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Booking Date",
-                                    value = viewModel.packageDetail.value?.awbTrackingNumber
+                                    value =  viewModel.packageDetail.value?.scheduledDepartureDateTime?.toDateTimeDisplayFormat(outputFormat = "yyyy/MM/dd")
                                         ?: "N/A"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "No.Rec. Pcs",
-                                    value = viewModel.packageDetail.value?.awbTrackingNumber
-                                        ?: "N/A"
+                                    value = "${viewModel.packageDetail.value?.numberOfRecBoxes}"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Total Rec. Weight(Kg)",
-                                    value = viewModel.packageDetail.value?.awbTrackingNumber
-                                        ?: "N/A"
+                                    value = "${viewModel.packageDetail.value?.totalRecWeight}"
                                 )
                             }
                             item {
                                 GetTileWidget(
                                     hint = "Total Rec. Volume(m3)",
-                                    value = viewModel.packageDetail.value?.awbTrackingNumber
-                                        ?: "N/A"
+                                    value = "${viewModel.packageDetail.value?.totalRecVolume}"
                                 )
                             }
 //                    item {
@@ -152,7 +149,8 @@ fun VerifyBookingScreen(
                         PackageTable(
                             navController = navController,
                             viewModel = viewModel,
-                            modalSheetState = updatPackageSheetState
+                            modalSheetState = updatPackageSheetState,
+                            packages = viewModel.packageDetail.value?.packageItems ?: listOf()
                         )
                     }
                 }
@@ -173,11 +171,11 @@ val column5Weight = .2f
 @Composable
 fun PackageTable(
     navController: NavController,
-    viewModel: VerifyBookingViewModel, modalSheetState: ModalBottomSheetState
+    viewModel: VerifyBookingViewModel, modalSheetState: ModalBottomSheetState,
+    packages : List<PackageLineItem>
 ) {
     val headerStyle =
         MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
-    val todoListState = listOf("A", "B", "C")
     val coroutineScope = rememberCoroutineScope()
 
     LazyColumn(
@@ -214,16 +212,16 @@ fun PackageTable(
             }
         }
         // data
-        items(todoListState) { booking ->
+        items(packages) { booking ->
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TableCell(text = "DG334523", weight = column1Weight)
-                TableCell(text = "Dangours Good", weight = column2Weight)
-                TableCell(text = "asda", weight = column3Weight)
-                TableCell(text = "ada", weight = column4Weight)
+                TableCell(text = "${booking.packageRefNumber}", weight = column1Weight)
+                TableCell(text = "${getPackageItemCategory(booking.packageItemType)}", weight = column2Weight)
+                TableCell(text = "${booking.chargeableWeight}", weight = column3Weight)
+                TableCell(text = "${booking.dimension}", weight = column4Weight)
                 Row(
                     modifier = Modifier
                         .align(alignment = Alignment.CenterVertically)

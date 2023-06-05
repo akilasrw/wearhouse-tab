@@ -1,19 +1,28 @@
 package com.aeroclubcargo.warehouse.domain.model
 
+import com.aeroclubcargo.warehouse.common.Constants
+
 data class PackageDetails(
-    var bookingId: String,
+    var id: String,
+    var scheduledDepartureDateTime: String,
     var flightNumber: String,
-    var flightDate: String,
-    var bookingRefNumber: String,
-    var packageItemCategory: Int,
-    var cargoPositionType: Int,
-    var aircraftConfigType: Int,
-    var width: Double,
-    var length: Double,
-    var height: Double,
-    var volumeUnit: String,
-    var weight: Double,
-    var weightUnit: String,
-    var awbTrackingNumber: String,
-    var cargoManifestFilePath: String,
+    var aircraftSubTypeName: String,
+    var cutoffTimeMin: Int?,
+    var origin: String,
+    var destination: String,
+    var bookingNumber: String,
+    var awbNumber: String,
+    var bookingAgent: String,
+    var bookingDate: String,
+    @Constants.BookingStatus
+    var bookingStatus: Int,
+    var verifyStatus: Int,
+    var numberOfBoxes: Int,
+    var totalWeight: Int,
+    var totalVolume: Int,
+    var numberOfRecBoxes: Int,
+    var totalRecWeight: Int,
+    var totalRecVolume: Int,
+    var packageItems: List<PackageLineItem>?,
+
 )

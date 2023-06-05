@@ -24,9 +24,9 @@ interface ApiInterface {
         @Query("IncludeCargoBooking") includeCargoBooking: Boolean,
     ): Pagination<PackageListItem>
 
-    @GET("api/${Constants.API_VERSION}/Package")
+    @GET("api/${Constants.API_VERSION}/CargoBooking/GetMobileBooking")
     suspend fun getPackageDetails(
-        @Query("PackageRefNumber") packageRefNumber: String
+        @Query("AWBTrackingNumber") awbTrackingNumber: String
     ): PackageDetails
 
     @POST("api/${Constants.API_VERSION}/CargoBooking")

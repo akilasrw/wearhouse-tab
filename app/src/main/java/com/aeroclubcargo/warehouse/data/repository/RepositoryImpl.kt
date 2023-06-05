@@ -40,7 +40,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPackageDetails(packageRefNumber: String): PackageDetails {
-        return apiInterface.getPackageDetails(packageRefNumber = packageRefNumber)
+        return apiInterface.getPackageDetails(awbTrackingNumber = packageRefNumber)
     }
 
     override suspend fun acceptCargo(configType: Constants.AircraftConfigType,id: String,@Constants.BookingStatus bookingStatus: Int): Boolean {

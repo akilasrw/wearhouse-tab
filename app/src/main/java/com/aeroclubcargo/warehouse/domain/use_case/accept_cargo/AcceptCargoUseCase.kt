@@ -16,22 +16,22 @@ class AcceptCargoUseCase @Inject constructor(var repository: Repository) {
         packageDetail: PackageDetails
     ): Flow<Resource<Boolean>> =
         flow {
-            try {
-                emit(Resource.Loading())
-               val response = repository.acceptCargo(
-                    configType = Constants.AircraftConfigType.values()[packageDetail.aircraftConfigType],
-                    id = packageDetail.bookingId,
-                    bookingStatus = Accepted
-                )
-                emit(Resource.Success(data = response))
-            } catch (e: Exception) {
-                val error = e.localizedMessage
-                emit(
-                    Resource.Error(
-                        message = error ?: (e.localizedMessage ?: "API connection failed!")
-                    )
-                )
-            }
+//            try {
+//                emit(Resource.Loading())
+//               val response = repository.acceptCargo(
+//                    configType = Constants.AircraftConfigType.values()[packageDetail.aircraftConfigType],
+//                    id = packageDetail.bookingId,
+//                    bookingStatus = Accepted
+//                )
+//                emit(Resource.Success(data = response))
+//            } catch (e: Exception) {
+//                val error = e.localizedMessage
+//                emit(
+//                    Resource.Error(
+//                        message = error ?: (e.localizedMessage ?: "API connection failed!")
+//                    )
+//                )
+//            }
         }
 
 }
