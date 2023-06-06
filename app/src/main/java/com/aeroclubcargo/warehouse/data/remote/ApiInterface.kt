@@ -4,7 +4,9 @@ import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateRequestDto
 import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import com.aeroclubcargo.warehouse.domain.model.*
+import retrofit2.Response
 import retrofit2.http.*
+import java.util.concurrent.Flow
 
 interface ApiInterface {
 
@@ -46,6 +48,9 @@ interface ApiInterface {
 
     @PUT("api/${Constants.API_VERSION}/FlightSchedule/UpdateCuttOffTime/{id}")
     suspend fun updateCutOffTIme(@Path("id") id: String,@Body body: CutOffTimeRequest): Boolean
+
+    @PUT("api/${Constants.API_VERSION}/Package/UpdateStatus")
+    suspend fun updatePackageStatus(@Body body: UpdatePackageStatus): Response<Boolean?>
 
 
 }

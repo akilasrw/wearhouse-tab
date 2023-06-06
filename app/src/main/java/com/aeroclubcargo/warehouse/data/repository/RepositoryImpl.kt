@@ -9,6 +9,7 @@ import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import com.aeroclubcargo.warehouse.domain.model.*
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import kotlinx.coroutines.flow.Flow
+import retrofit2.Response
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -69,6 +70,10 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun updateCutOffTIme(id: String, body: CutOffTimeRequest): Boolean {
         return apiInterface.updateCutOffTIme(id = id, body = body)
+    }
+
+    override suspend fun updatePackageStatus(body: UpdatePackageStatus): Response<Boolean?> {
+        return apiInterface.updatePackageStatus(body)
     }
 
     override suspend fun saveCredential(credentialDto: CredentialDto) {

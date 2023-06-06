@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +28,9 @@ import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Constants.getPackageItemCategory
 import com.aeroclubcargo.warehouse.domain.model.PackageLineItem
+import com.aeroclubcargo.warehouse.presentation.components.ProgressIndicatorDialog
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
+import com.aeroclubcargo.warehouse.presentation.login.LoginState
 import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
 import kotlinx.coroutines.launch
@@ -49,6 +52,9 @@ fun VerifyBookingScreen(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
     )
+    val loginState = viewModel.isLoading.observeAsState().value ?: false
+
+    ProgressIndicatorDialog(loginState)
 
     Scaffold(topBar = {
         GetTopBar(navController = navController)
@@ -248,7 +254,9 @@ fun PackageTable(
 
                     Spacer(modifier = Modifier.width(5.dp))
                     // TODO booking status below 20 status
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        viewModel.acceptPackageItem(booking)
+                    }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_accepted),
                             contentDescription = "done",
