@@ -24,9 +24,9 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun UpdatePackageBottomSheet(
-//    content: @Composable() () -> Unit,
-//    modalSheetState: ModalBottomSheetState,
-//    viewModel: VerifyBookingViewModel
+    content: @Composable() () -> Unit,
+    modalSheetState: ModalBottomSheetState,
+    viewModel: VerifyBookingViewModel
 ) {
     val coroutineScope = rememberCoroutineScope()
     val contextForToast = LocalContext.current.applicationContext
@@ -36,14 +36,14 @@ fun UpdatePackageBottomSheet(
         mutableStateOf(false)
     }
 
-//    ModalBottomSheetLayout(
-//        sheetShape = RoundedCornerShape(
-//            topStart = 20.dp,
-//            topEnd = 20.dp,
-//        ),
-//        sheetElevation = 8.dp,
-//        content = content,
-//        sheetContent = {
+    ModalBottomSheetLayout(
+        sheetShape = RoundedCornerShape(
+            topStart = 20.dp,
+            topEnd = 20.dp,
+        ),
+        sheetElevation = 8.dp,
+        content = content,
+        sheetContent = {
 
 
     Column(
@@ -111,29 +111,29 @@ fun UpdatePackageBottomSheet(
                     }
                 }
             }
-//                    DropdownMenu(
-//                        expanded = expanded,
-//                        onDismissRequest = {
-//                            expanded = false
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = {
+                            expanded = false
+                        }
+                    ) {
+                        // adding items
+//                        listItems.forEachIndexed { itemIndex, itemValue ->
+                            DropdownMenuItem(
+                                onClick = {
+//                                    Toast.makeText(contextForToast, itemValue, Toast.LENGTH_SHORT)
+//                                        .show()
+                                    expanded = false
+                                },
+                                enabled = true
+                            ) {
+                                Text(text = "Test")
+                            }
 //                        }
-//                    ) {
-//                        // adding items
-////                        listItems.forEachIndexed { itemIndex, itemValue ->
-//                            DropdownMenuItem(
-//                                onClick = {
-////                                    Toast.makeText(contextForToast, itemValue, Toast.LENGTH_SHORT)
-////                                        .show()
-//                                    expanded = false
-//                                },
-//                                enabled = true
-//                            ) {
-//                                Text(text = "Test")
-//                            }
-////                        }
-//                    }
+                    }
         }
     }
-//        },
-//        sheetState = modalSheetState
-//    )
+        },
+        sheetState = modalSheetState
+    )
 }

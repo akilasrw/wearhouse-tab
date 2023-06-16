@@ -59,109 +59,109 @@ fun VerifyBookingScreen(
     Scaffold(topBar = {
         GetTopBar(navController = navController)
     }) {
-//        UpdatePackageBottomSheet(
-//            viewModel = viewModel,
-//            modalSheetState = updatPackageSheetState,
-//            content = {
-//                Column(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(16.dp),
-//                ) {
-//                    Text(text = "Verify Booking")
-//                    Spacer(modifier = Modifier.height(5.dp))
-//                    Column(
-//                        modifier = Modifier
-//                            .fillMaxSize()
-//                            .background(color = Color.White)
-//                    ) {
-//                        LazyVerticalGrid(
-//                            cells = GridCells.Fixed(4),
-//                            modifier = Modifier.wrapContentSize(),
-//                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
-//                        ) {
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Booking ID",
-//                                    value = viewModel.packageDetail.value?.bookingNumber ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "AWB number",
-//                                    value = viewModel.packageDetail.value?.awbNumber ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Flight Number",
-//                                    value = viewModel.packageDetail.value?.flightNumber ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Aircraft Type",
-//                                    value = viewModel.packageDetail.value?.aircraftSubTypeName ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "From to",
-//                                    value = "${viewModel.packageDetail.value?.origin} ${viewModel.packageDetail.value?.destination}"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Flight Date & Time",
-//                                    value = viewModel.packageDetail.value?.scheduledDepartureDateTime?.toDateTimeDisplayFormat(outputFormat = "MMM d, yyyy HH:mm a") ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Cut Off Time",
-//                                    value = viewModel.packageDetail.value?.cutoffTimeMin?.toString()
-//                                        ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Booking Date",
-//                                    value =  viewModel.packageDetail.value?.scheduledDepartureDateTime?.toDateTimeDisplayFormat(outputFormat = "yyyy/MM/dd")
-//                                        ?: "N/A"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "No.Rec. Pcs",
-//                                    value = "${viewModel.packageDetail.value?.numberOfRecBoxes}"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Total Rec. Weight(Kg)",
-//                                    value = "${viewModel.packageDetail.value?.totalRecWeight}"
-//                                )
-//                            }
-//                            item {
-//                                GetTileWidget(
-//                                    hint = "Total Rec. Volume(m3)",
-//                                    value = "${viewModel.packageDetail.value?.totalRecVolume}"
-//                                )
-//                            }
-////                    item {
-////                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
-////                    }
-//                        }
-//                        PackageTable(
-//                            navController = navController,
-//                            viewModel = viewModel,
-//                            modalSheetState = updatPackageSheetState,
-//                            packages = viewModel.packageDetail.value?.packageItems ?: listOf()
-//                        )
+        UpdatePackageBottomSheet(
+            viewModel = viewModel,
+            modalSheetState = updatPackageSheetState,
+            content = {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                ) {
+                    Text(text = "Verify Booking")
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(color = Color.White)
+                    ) {
+                        LazyVerticalGrid(
+                            cells = GridCells.Fixed(4),
+                            modifier = Modifier.wrapContentSize(),
+                            contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp)
+                        ) {
+                            item {
+                                GetTileWidget(
+                                    hint = "Booking ID",
+                                    value = viewModel.packageDetail.value?.bookingNumber ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "AWB number",
+                                    value = viewModel.packageDetail.value?.awbNumber ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Flight Number",
+                                    value = viewModel.packageDetail.value?.flightNumber ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Aircraft Type",
+                                    value = viewModel.packageDetail.value?.aircraftSubTypeName ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "From to",
+                                    value = "${viewModel.packageDetail.value?.origin} ${viewModel.packageDetail.value?.destination}"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Flight Date & Time",
+                                    value = viewModel.packageDetail.value?.scheduledDepartureDateTime?.toDateTimeDisplayFormat(outputFormat = "MMM d, yyyy HH:mm a") ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Cut Off Time",
+                                    value = viewModel.packageDetail.value?.cutoffTimeMin?.toString()
+                                        ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Booking Date",
+                                    value =  viewModel.packageDetail.value?.scheduledDepartureDateTime?.toDateTimeDisplayFormat(outputFormat = "yyyy/MM/dd")
+                                        ?: "N/A"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "No.Rec. Pcs",
+                                    value = "${viewModel.packageDetail.value?.numberOfRecBoxes}"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Total Rec. Weight(Kg)",
+                                    value = "${viewModel.packageDetail.value?.totalRecWeight}"
+                                )
+                            }
+                            item {
+                                GetTileWidget(
+                                    hint = "Total Rec. Volume(m3)",
+                                    value = "${viewModel.packageDetail.value?.totalRecVolume}"
+                                )
+                            }
+//                    item {
+//                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
 //                    }
-//                }
-//            }
-//        )
+                        }
+                        PackageTable(
+                            navController = navController,
+                            viewModel = viewModel,
+                            modalSheetState = updatPackageSheetState,
+                            packages = viewModel.packageDetail.value?.packageItems ?: listOf()
+                        )
+                    }
+                }
+            }
+        )
 
 
     }
