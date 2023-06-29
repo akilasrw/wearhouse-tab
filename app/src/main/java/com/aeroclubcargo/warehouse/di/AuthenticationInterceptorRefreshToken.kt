@@ -31,7 +31,7 @@ class AuthenticationInterceptorRefreshToken @Inject constructor(
                 originalRequest
                     .newBuilder()
                     .addHeader("Authorization", "Bearer $token").build()
-            val initialResponse = chain.proceed(authenticationRequest)
+            val initialResponse =  chain.proceed(authenticationRequest)
             when {
                 initialResponse.code == 401 -> {
                     val responseNewTokenLoginModel = runBlocking {
@@ -40,6 +40,7 @@ class AuthenticationInterceptorRefreshToken @Inject constructor(
                             try {
                                 tokenRefreshAPI.refreshToken(refreshToken)
                             }catch (e:Exception){
+                                Log.e("AuthenticationInt",e.toString())
                                 e.printStackTrace()
                                 null
                             }

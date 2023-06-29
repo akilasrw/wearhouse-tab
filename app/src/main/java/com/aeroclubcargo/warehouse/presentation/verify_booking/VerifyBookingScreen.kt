@@ -177,7 +177,8 @@ val column5Weight = .2f
 @Composable
 fun PackageTable(
     navController: NavController,
-    viewModel: VerifyBookingViewModel, modalSheetState: ModalBottomSheetState,
+    viewModel: VerifyBookingViewModel,
+    modalSheetState: ModalBottomSheetState,
     packages : List<PackageLineItem>
 ) {
     val headerStyle =
@@ -218,16 +219,16 @@ fun PackageTable(
             }
         }
         // data
-        items(packages) { booking ->
+        items(packages) { lineItem ->
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TableCell(text = "${booking.packageRefNumber}", weight = column1Weight)
-                TableCell(text = "${getPackageItemCategory(booking.packageItemType)}", weight = column2Weight)
-                TableCell(text = "${booking.chargeableWeight}", weight = column3Weight)
-                TableCell(text = "${booking.dimension}", weight = column4Weight)
+                TableCell(text = "${lineItem.packageRefNumber}", weight = column1Weight)
+                TableCell(text = "${getPackageItemCategory(lineItem.packageItemType)}", weight = column2Weight)
+                TableCell(text = "${lineItem.chargeableWeight}", weight = column3Weight)
+                TableCell(text = "${lineItem.dimension}", weight = column4Weight)
                 Row(
                     modifier = Modifier
                         .align(alignment = Alignment.CenterVertically)
@@ -238,8 +239,10 @@ fun PackageTable(
                         coroutineScope.launch {
                             if (modalSheetState.isVisible)
                                 modalSheetState.hide()
-                            else
-                                modalSheetState.animateTo(ModalBottomSheetValue.HalfExpanded)
+                            else {
+                                modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                viewModel.setLineItem(lineItem)
+                            }
                         }
                     }) {
                         Icon(
@@ -255,7 +258,7 @@ fun PackageTable(
                     Spacer(modifier = Modifier.width(5.dp))
                     // TODO booking status below 20 status
                     IconButton(onClick = {
-                        viewModel.acceptPackageItem(booking)
+                        viewModel.acceptPackageItem(lineItem)
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_accepted),
