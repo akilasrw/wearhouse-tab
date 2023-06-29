@@ -24,7 +24,7 @@ fun <T> CommonDropDown(
     var expanded by remember {
         mutableStateOf(false)
     }
-    var selectedOption by remember { mutableStateOf(items.first()) }
+    var selectedOption by remember { mutableStateOf(items.firstOrNull()) }
 
     Column(Modifier.padding(16.dp).fillMaxWidth()) {
         Text(label, style = MaterialTheme
@@ -41,7 +41,7 @@ fun <T> CommonDropDown(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { expanded = true }
             ) {
-                Text(selectedOption.toString(), style = MaterialTheme
+                Text(selectedOption?.toString() ?: "", style = MaterialTheme
                     .typography
                     .subtitle2)
             }

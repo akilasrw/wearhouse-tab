@@ -76,6 +76,9 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.updatePackageStatus(body)
     }
 
+    override suspend fun getUnitList(): Response<List<UnitVM>> {
+        return apiInterface.getUnitList()
+    }
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }

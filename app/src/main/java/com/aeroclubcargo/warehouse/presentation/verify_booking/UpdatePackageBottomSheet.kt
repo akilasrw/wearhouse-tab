@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,16 +35,13 @@ fun UpdatePackageBottomSheet(
 
 
     val coroutineScope = rememberCoroutineScope()
-    val contextForToast = LocalContext.current.applicationContext
-    var selectedOption by remember { mutableStateOf("Option 1") }
-    val options = listOf("Option 1", "Option 2", "Option 3")
     val height = viewModel.heightValue.collectAsState()
     val width = viewModel.widthValue.collectAsState()
     val length = viewModel.lengthValue.collectAsState()
-  val weight =   viewModel.weightValue.collectAsState()
-    var expanded by remember {
-        mutableStateOf(false)
-    }
+    val weight =   viewModel.weightValue.collectAsState()
+    val noOfPackagesValue =  viewModel.noOfPackagesValue.collectAsState()
+
+    val loginState = viewModel.isLoading.observeAsState().value ?: false
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(
@@ -60,6 +58,9 @@ fun UpdatePackageBottomSheet(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top,
     ) {
+        if(loginState){
+           Spacer(modifier = Modifier.fillMaxWidth())
+        } else
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -99,17 +100,6 @@ fun UpdatePackageBottomSheet(
                         }
                     )
                 }
-//                Spacer(modifier = Modifier.width(1.dp))
-//                Row(modifier = Modifier
-//                    .weight(1f)) {
-//                    CommonDropDown(
-//                        label = "Select Option 2",
-//                        items = listOf(DropDownModel(item = "Option 1", label = "option 2")) ,
-//                        onItemSelected = {
-//                            // TODO
-//                        }
-//                    )
-//                }
                 Spacer(modifier = Modifier.width(1.dp))
                 Row(modifier = Modifier
                     .weight(1f)) {
@@ -173,7 +163,8 @@ fun UpdatePackageBottomSheet(
                     .weight(1f)) {
                     CommonDropDown(
                         label = "Unit",
-                        items = listOf(DropDownModel(item = "in", label = "Inch"),DropDownModel(item = "Feet", label = "Feet")) ,
+                        items = viewModel.getLengthUnitList().map { DropDownModel( it ,it.name) }
+                            .toList(),
                         onItemSelected = {
                             // TODO
                         }
@@ -209,13 +200,35 @@ fun UpdatePackageBottomSheet(
                     .weight(1f)) {
                     CommonDropDown(
                         label = "Unit",
-                        items = listOf(DropDownModel(item = "Kilo gram", label = "KG"),DropDownModel(item = "Gram", label = "g")) ,
+                        items = viewModel.getWeightUnitList().map { DropDownModel( it ,it.name) }
+                            .toList(),
                         onItemSelected = {
                             // TODO
                         }
                     )
                 }
                 Spacer(modifier = Modifier.width(1.dp))
+                Row(modifier = Modifier
+                    .weight(1f)) {
+                    CommonTextField(
+                        label = "No. of Packages",
+                        value = noOfPackagesValue.value.toString(),
+                        keyboardOptions =  KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        onValueChange = {
+                            if(it.isEmpty()){
+                                viewModel.setNoOfPakcages(0.0)
+                            }else{
+                                viewModel.setNoOfPakcages(it.toDouble())
+                            }
+                        }
+                    )
+                }
+                Spacer(modifier = Modifier.fillMaxWidth(0.5f))
+
+
             }
 
         }

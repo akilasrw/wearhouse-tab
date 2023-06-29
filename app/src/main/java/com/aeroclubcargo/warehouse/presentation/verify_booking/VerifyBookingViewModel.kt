@@ -8,12 +8,15 @@ import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Resource
 import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.PackageLineItem
+import com.aeroclubcargo.warehouse.domain.model.UnitVM
 import com.aeroclubcargo.warehouse.domain.model.UpdatePackageStatus
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import com.aeroclubcargo.warehouse.domain.use_case.accept_cargo.AcceptCargoUseCase
 import com.aeroclubcargo.warehouse.domain.use_case.verify_booking.VerifyBookingUseCase
 import com.aeroclubcargo.warehouse.presentation.components.DropDownModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.onEach
@@ -29,6 +32,32 @@ class VerifyBookingViewModel @Inject constructor(
     var repository: Repository
 ) :
     ViewModel() {
+
+    // master data
+     var unitList : List<UnitVM> = listOf()
+
+
+    fun getWeightUnitList() : List<UnitVM> {
+        return unitList.filter { it.unitType == 2 }
+    }
+
+    fun getLengthUnitList() : List<UnitVM> {
+        return unitList.filter { it.unitType == 1 }
+    }
+
+    private fun loadUnits(){
+        viewModelScope.launch {
+            try {
+                isLoading.postValue(true)
+                val response = repository.getUnitList()
+                if(response.isSuccessful)
+                    unitList = response.body() ?: listOf()
+            }catch (e:Exception){
+                Log.e("VerifyBookingViewModel",e.toString())
+            }
+            isLoading.postValue(false)
+        }
+    }
 
 
     var isLoading: MutableLiveData<Boolean> = MutableLiveData()
@@ -47,6 +76,9 @@ class VerifyBookingViewModel @Inject constructor(
 
     private val _weightValue = MutableStateFlow(0.0)
     val weightValue = _weightValue.asStateFlow()
+
+    private val _noOfPackagesValue = MutableStateFlow(0.0)
+    val noOfPackagesValue = _noOfPackagesValue.asStateFlow()
 
     fun getCargoPackageItemCategories() : List<DropDownModel<Constants.PackageItemCategory>>{
         return listOf(
@@ -72,6 +104,10 @@ class VerifyBookingViewModel @Inject constructor(
         _weightValue.value = value
     }
 
+    fun setNoOfPakcages(value: Double){
+        _noOfPackagesValue.value = value
+    }
+
     fun setLineItem(item : PackageLineItem){
         packageLineItem = item
         setHeight(packageLineItem!!.height)
@@ -86,6 +122,7 @@ class VerifyBookingViewModel @Inject constructor(
             val response = repository.getPackageDetails(packageRefNumber = "11591530001")
             packageDetail.postValue(response)
             isLoading.value = false
+            loadUnits()
         }
     }
 

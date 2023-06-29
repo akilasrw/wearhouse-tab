@@ -52,5 +52,7 @@ interface ApiInterface {
     @PUT("api/${Constants.API_VERSION}/Package/UpdateStatus")
     suspend fun updatePackageStatus(@Body body: UpdatePackageStatus): Response<Boolean?>
 
+    @GET("api/${Constants.API_VERSION}/Unit")
+    suspend fun getUnitList() : Response<List<UnitVM>>
 
 }
