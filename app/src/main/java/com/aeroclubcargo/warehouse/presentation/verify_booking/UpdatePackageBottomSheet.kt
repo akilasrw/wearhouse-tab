@@ -12,14 +12,12 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.aeroclubcargo.warehouse.presentation.components.CommonDropDown
 import com.aeroclubcargo.warehouse.presentation.components.CommonTextField
 import com.aeroclubcargo.warehouse.presentation.components.DropDownModel
-import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray4
 import kotlinx.coroutines.launch
 
@@ -40,6 +38,10 @@ fun UpdatePackageBottomSheet(
     val length = viewModel.lengthValue.collectAsState()
     val weight =   viewModel.weightValue.collectAsState()
     val noOfPackagesValue =  viewModel.noOfPackagesValue.collectAsState()
+
+    val packageItemCategory =   viewModel.packageItemCategory.collectAsState()
+    val selectedVolumeUnit =   viewModel.selectedVolumeUnit.collectAsState()
+    val selectedWeightUnit =   viewModel.selectedWeightUnit.collectAsState()
 
     val loginState = viewModel.isLoading.observeAsState().value ?: false
 
@@ -95,10 +97,10 @@ fun UpdatePackageBottomSheet(
                     CommonDropDown(
                         label = "Cargo Type",
                         items = viewModel.getCargoPackageItemCategories() ,
-                        onItemSelected = {
-                            // TODO
-                        }
-                    )
+                        selectedIndex = packageItemCategory
+                    ) {
+                        // TODO
+                    }
                 }
                 Spacer(modifier = Modifier.width(1.dp))
                 Row(modifier = Modifier
@@ -165,10 +167,10 @@ fun UpdatePackageBottomSheet(
                         label = "Unit",
                         items = viewModel.getLengthUnitList().map { DropDownModel( it ,it.name) }
                             .toList(),
-                        onItemSelected = {
-                            // TODO
-                        }
-                    )
+                        selectedIndex = selectedVolumeUnit
+                    ) {
+                        // TODO
+                    }
                 }
             }
             Row(
@@ -188,9 +190,9 @@ fun UpdatePackageBottomSheet(
                         ),
                         onValueChange = {
                             if(it.isEmpty()){
-                                viewModel.setweight(0.0)
+                                viewModel.setWeight(0.0)
                             }else{
-                                viewModel.setweight(it.toDouble())
+                                viewModel.setWeight(it.toDouble())
                             }
                         }
                     )
@@ -200,12 +202,12 @@ fun UpdatePackageBottomSheet(
                     .weight(1f)) {
                     CommonDropDown(
                         label = "Unit",
+                        selectedIndex = selectedWeightUnit,
                         items = viewModel.getWeightUnitList().map { DropDownModel( it ,it.name) }
-                            .toList(),
-                        onItemSelected = {
-                            // TODO
-                        }
-                    )
+                            .toList()
+                    ) {
+                        // TODO
+                    }
                 }
                 Spacer(modifier = Modifier.width(1.dp))
                 Row(modifier = Modifier

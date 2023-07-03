@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.common.Constants
-import com.aeroclubcargo.warehouse.common.Resource
 import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.PackageLineItem
 import com.aeroclubcargo.warehouse.domain.model.UnitVM
@@ -15,14 +14,10 @@ import com.aeroclubcargo.warehouse.domain.use_case.accept_cargo.AcceptCargoUseCa
 import com.aeroclubcargo.warehouse.domain.use_case.verify_booking.VerifyBookingUseCase
 import com.aeroclubcargo.warehouse.presentation.components.DropDownModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 
 @HiltViewModel
@@ -80,6 +75,16 @@ class VerifyBookingViewModel @Inject constructor(
     private val _noOfPackagesValue = MutableStateFlow(0.0)
     val noOfPackagesValue = _noOfPackagesValue.asStateFlow()
 
+    // Drop Downs -----
+    private val _packageItemCategory = MutableStateFlow(0)
+    val packageItemCategory = _packageItemCategory.asStateFlow()
+
+    private val _selectedVolumeUnit = MutableStateFlow(0)
+    val selectedVolumeUnit = _selectedVolumeUnit.asStateFlow()
+
+    private val _selectedWeightUnit = MutableStateFlow(0)
+    val selectedWeightUnit = _selectedWeightUnit.asStateFlow()
+
     fun getCargoPackageItemCategories() : List<DropDownModel<Constants.PackageItemCategory>>{
         return listOf(
             DropDownModel(Constants.PackageItemCategory.None,Constants.PackageItemCategory.None.name),
@@ -100,7 +105,7 @@ class VerifyBookingViewModel @Inject constructor(
         _lengthValue.value = value
     }
 
-    fun setweight(value: Double){
+    fun setWeight(value: Double){
         _weightValue.value = value
     }
 
@@ -109,11 +114,23 @@ class VerifyBookingViewModel @Inject constructor(
     }
 
     fun setLineItem(item : PackageLineItem){
+        isLoading.value = true
         packageLineItem = item
+        if(packageLineItem == null){
+            return
+        }
         setHeight(packageLineItem!!.height)
         setWidth(packageLineItem!!.width)
         setLength(packageLineItem!!.length)
-        setweight(packageLineItem!!.weight)
+        setWeight(packageLineItem!!.weight)
+        // TODO verify the data
+        //_noOfPackagesValue.value = item.
+
+        _packageItemCategory.value = packageLineItem!!.packageItemCategory
+        _selectedVolumeUnit.value = getLengthUnitList().indexOfFirst { it.id == packageLineItem!!.volumeUnitId }
+        _selectedWeightUnit.value = getWeightUnitList().indexOfFirst { it.id == packageLineItem!!.weightUnitId }
+        isLoading.value = false
+
     }
 
     fun getPackageDetails() {
@@ -138,7 +155,7 @@ class VerifyBookingViewModel @Inject constructor(
                 isLoading.value = false
             }catch (e:Exception){
                 isLoading.value = false
-                Log.e("verifyBooking",e.localizedMessage)
+                e.localizedMessage?.let { Log.e("verifyBooking", it) }
             }
 
 
