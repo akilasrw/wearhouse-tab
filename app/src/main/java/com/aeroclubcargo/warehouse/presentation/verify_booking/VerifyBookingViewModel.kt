@@ -95,6 +95,10 @@ class VerifyBookingViewModel @Inject constructor(
         )
     }
 
+    fun setPackageItemCategory(value: Int){
+        _packageItemCategory.value = value
+    }
+
     fun setHeight(value: Double){
         _heightValue.value = value
     }
@@ -130,6 +134,34 @@ class VerifyBookingViewModel @Inject constructor(
         _selectedVolumeUnit.value = getLengthUnitList().indexOfFirst { it.id == packageLineItem!!.volumeUnitId }
         _selectedWeightUnit.value = getWeightUnitList().indexOfFirst { it.id == packageLineItem!!.weightUnitId }
         isLoading.value = false
+
+    }
+
+    fun updatePackageItem(onComplete : () -> Unit){
+        packageLineItem!!.height = _heightValue.value
+        packageLineItem!!.weight = _weightValue.value
+        packageLineItem!!.width = _widthValue.value
+        packageLineItem!!.length = _lengthValue.value
+        packageLineItem!!.packageItemCategory = _packageItemCategory.value
+
+        try{
+            packageLineItem!!.volumeUnitId = getLengthUnitList()[_selectedVolumeUnit.value].id
+            packageLineItem!!.weightUnitId = getLengthUnitList()[_selectedWeightUnit.value].id
+        }catch (e:Exception){
+            print(e)
+        }
+        viewModelScope.launch {
+            isLoading.value = true
+            try {
+                var response = repository.updatePackage(packageLineItem!!)
+                if(response.isSuccessful){
+                    onComplete()
+                    getPackageDetails()
+                }
+            }catch (e:Exception){
+                e.localizedMessage?.let { Log.e("verifyBooking", it) }
+            }
+        }.invokeOnCompletion {  isLoading.value = false }
 
     }
 

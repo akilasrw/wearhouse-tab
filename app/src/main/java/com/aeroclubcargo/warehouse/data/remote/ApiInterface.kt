@@ -6,6 +6,7 @@ import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import com.aeroclubcargo.warehouse.domain.model.*
 import retrofit2.Response
 import retrofit2.http.*
+import java.util.*
 import java.util.concurrent.Flow
 
 interface ApiInterface {
@@ -54,5 +55,8 @@ interface ApiInterface {
 
     @GET("api/${Constants.API_VERSION}/Unit")
     suspend fun getUnitList() : Response<List<UnitVM>>
+
+    @PUT("api/${Constants.API_VERSION}/Package")
+    suspend fun updatePackage(@Body body: PackageLineItem): Response<Any>
 
 }

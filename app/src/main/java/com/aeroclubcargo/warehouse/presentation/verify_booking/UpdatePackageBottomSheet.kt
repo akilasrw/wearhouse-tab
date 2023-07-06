@@ -1,5 +1,7 @@
 package com.aeroclubcargo.warehouse.presentation.verify_booking
 
+import android.widget.Space
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -10,28 +12,38 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.CommonDropDown
 import com.aeroclubcargo.warehouse.presentation.components.CommonTextField
 import com.aeroclubcargo.warehouse.presentation.components.DropDownModel
+import com.aeroclubcargo.warehouse.theme.BlueLight2
 import com.aeroclubcargo.warehouse.theme.Gray4
+import com.aeroclubcargo.warehouse.theme.hintLightGray
 import kotlinx.coroutines.launch
 
 
 //@Preview(device = Devices.NEXUS_10)
+@OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @Composable
 fun UpdatePackageBottomSheet(
     content: @Composable() () -> Unit,
     modalSheetState: ModalBottomSheetState,
-    viewModel: VerifyBookingViewModel
+    viewModel: VerifyBookingViewModel,
 ) {
 
-
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val height = viewModel.heightValue.collectAsState()
     val width = viewModel.widthValue.collectAsState()
@@ -99,7 +111,7 @@ fun UpdatePackageBottomSheet(
                         items = viewModel.getCargoPackageItemCategories() ,
                         selectedIndex = packageItemCategory
                     ) {
-                        // TODO
+                        viewModel.setPackageItemCategory(it.ordinal)
                     }
                 }
                 Spacer(modifier = Modifier.width(1.dp))
@@ -232,7 +244,41 @@ fun UpdatePackageBottomSheet(
 
 
             }
-
+            Spacer(modifier = Modifier.height(1.dp))
+            Row(modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+                horizontalArrangement = Arrangement.End
+                ) {
+                Button(onClick = {
+                    coroutineScope.launch {
+                        modalSheetState.hide()
+                    }
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = hintLightGray)) {
+                    Text(
+                        text = "Cancel",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
+                }
+                Spacer(modifier = Modifier.width(16.dp))
+                Button(
+                    onClick = {
+                              viewModel.updatePackageItem(onComplete = {
+                                  coroutineScope.launch {
+                                      modalSheetState.hide()
+                                      Toast.makeText(context, "Item Updated Successfully!", Toast.LENGTH_SHORT).show()
+//                                      showSnackbarWithDelay(snackbarHostState, "Toast message", 3000)
+                                  }
+                              })
+                    },
+                    colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)
+                ) {
+                    Text(
+                        text = "Update",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
+                }
+            }
         }
     }
         },
