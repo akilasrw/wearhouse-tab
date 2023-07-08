@@ -21,7 +21,7 @@ class ScanCargoViewModel @Inject constructor(private var repository: Repository)
         _isLoading.value= isLoading;
     }
 
-    private val _awbNameValue = MutableStateFlow("")
+    private val _awbNameValue = MutableStateFlow("11591530001") // TODO hard coded value
     val awbNameValue = _awbNameValue.asStateFlow()
 
     fun setAWBNumber(awbNumber:String){

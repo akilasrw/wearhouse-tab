@@ -1,9 +1,11 @@
 package com.aeroclubcargo.warehouse.presentation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.aeroclubcargo.warehouse.presentation.cutoff_time.CutOffTimeScreen
 import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
 import com.aeroclubcargo.warehouse.presentation.login.LoginScreen
@@ -41,10 +43,9 @@ fun navigation() {
             ScanCargoScreen(navController)
         }
         composable(
-            route = Screen.VerifyBookingScreen.route
-        ) {
-            VerifyBookingScreen(navController)
-        }
+            route = Screen.VerifyBookingScreen.route+"/{parameter}",
+            arguments = listOf(navArgument("parameter") { type = NavType.StringType })
+        ) { backStackEntry -> VerifyBookingScreen(navController,backStackEntry.arguments?.getString("parameter")) }
         composable(
             route = Screen.UpdateBookingScreen.route
         ) {

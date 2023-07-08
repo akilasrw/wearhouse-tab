@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Constants.getPackageItemCategory
@@ -42,12 +43,15 @@ import kotlinx.coroutines.launch
 @Composable
 fun VerifyBookingScreen(
     navController: NavController,
-    viewModel: VerifyBookingViewModel = hiltViewModel()
+    bookingId: String? = null,
+    viewModel: VerifyBookingViewModel = hiltViewModel(),
 ) {
-    LaunchedEffect(key1 = true) {
-        viewModel.getPackageDetails()
+    if(bookingId == null){
+        navController.popBackStack()
     }
-
+    LaunchedEffect(key1 = true) {
+        viewModel.getPackageDetails(bookingId!!)
+    }
     val updatPackageSheetState = rememberModalBottomSheetState(
         initialValue = ModalBottomSheetValue.Hidden,
         confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },

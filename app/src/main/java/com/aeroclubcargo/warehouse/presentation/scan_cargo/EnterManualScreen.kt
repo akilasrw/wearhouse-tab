@@ -91,9 +91,14 @@ fun EnterManualScreenView(viewModel: ScanCargoViewModel, navController: NavContr
                            Button(
                                modifier = Modifier.wrapContentSize(align = Alignment.Center),
                                onClick = {
-                                   viewModel.findAWBNumber()
-                                   keyboardController?.hide()
-                                   navController.navigate(Screen.VerifyBookingScreen.route)
+                                   if(viewModel.awbNameValue.value.isEmpty()){
+                                       return@Button
+                                   }else{
+                                       if(viewModel.awbNameValue.value.isNotEmpty()){
+                                           keyboardController?.hide()
+                                           navController.navigate(Screen.VerifyBookingScreen.route+"/${viewModel.awbNameValue.value}")
+                                       }
+                                   }
                                },
                            ) {
                                Text(text = "Find", style = TextStyle(color = Color.White))

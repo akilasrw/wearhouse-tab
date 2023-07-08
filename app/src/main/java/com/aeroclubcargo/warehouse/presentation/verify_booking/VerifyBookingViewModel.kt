@@ -28,6 +28,8 @@ class VerifyBookingViewModel @Inject constructor(
 ) :
     ViewModel() {
 
+    var bookingId :String? = null
+
     // master data
      var unitList : List<UnitVM> = listOf()
 
@@ -156,7 +158,7 @@ class VerifyBookingViewModel @Inject constructor(
                 var response = repository.updatePackage(packageLineItem!!)
                 if(response.isSuccessful){
                     onComplete()
-                    getPackageDetails()
+                    getPackageDetails(bookingId!!)
                 }
             }catch (e:Exception){
                 e.localizedMessage?.let { Log.e("verifyBooking", it) }
@@ -165,10 +167,11 @@ class VerifyBookingViewModel @Inject constructor(
 
     }
 
-    fun getPackageDetails() {
+    fun getPackageDetails(value : String) {
+        bookingId = value
         viewModelScope.launch {
             isLoading.value = true
-            val response = repository.getPackageDetails(packageRefNumber = "11591530001")
+            val response = repository.getPackageDetails(packageRefNumber = value) //11591530001
             packageDetail.postValue(response)
             isLoading.value = false
             loadUnits()
