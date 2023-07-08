@@ -210,7 +210,7 @@ fun PackageTable(
                 )
                 TableCell(text = "Cargo Type", weight = column2Weight, style = headerStyle)
                 TableCell(
-                    text = "Package Weight(kg)",
+                    text = "Package Weight",
                     weight = column3Weight,
                     style = headerStyle
                 )
