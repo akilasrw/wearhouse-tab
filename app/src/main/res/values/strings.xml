@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WarehouseTab</string>
-    <string name="skytech_software_solutions_pvt_ltd">© 2022 Aero Club Solutions INC. All rights reserved.</string>
+    <string name="skytech_software_solutions_pvt_ltd">©All right reserved Ikigai Innovations 2023.</string>
     <string name="welcome_back">Welcome Back!</string>
     <string name="hello">Hello,</string>
     <string name="enter_credentials_msg">Enter your login details and start journey with us</string>
