@@ -31,15 +31,16 @@ class VerifyBookingViewModel @Inject constructor(
     var bookingId :String? = null
 
     // master data
-     var unitList : List<UnitVM> = listOf()
+    var weightUnitListTypes : List<UnitVM> = listOf()
+    var lengthUnitListTypes : List<UnitVM> = listOf()
 
 
     fun getWeightUnitList() : List<UnitVM> {
-        return unitList.filter { it.unitType == 2 }
+        return weightUnitListTypes
     }
 
     fun getLengthUnitList() : List<UnitVM> {
-        return unitList.filter { it.unitType == 1 }
+        return lengthUnitListTypes
     }
 
     private fun loadUnits(){
@@ -47,8 +48,11 @@ class VerifyBookingViewModel @Inject constructor(
             try {
                 isLoading.postValue(true)
                 val response = repository.getUnitList()
-                if(response.isSuccessful)
-                    unitList = response.body() ?: listOf()
+                if(response.isSuccessful){
+                    val unitList = response.body() ?: listOf()
+                    weightUnitListTypes = unitList.filter { it.unitType == 2 }
+                    lengthUnitListTypes = unitList.filter { it.unitType == 1 }
+                }
             }catch (e:Exception){
                 Log.e("VerifyBookingViewModel",e.toString())
             }
@@ -101,6 +105,14 @@ class VerifyBookingViewModel @Inject constructor(
         _packageItemCategory.value = value
     }
 
+    fun setVolumeUnit(value: Int){
+        _selectedVolumeUnit.value = value
+    }
+
+    fun setWeightUnit(value: Int){
+        _selectedWeightUnit.value = value
+    }
+
     fun setHeight(value: Double){
         _heightValue.value = value
     }
@@ -148,7 +160,7 @@ class VerifyBookingViewModel @Inject constructor(
 
         try{
             packageLineItem!!.volumeUnitId = getLengthUnitList()[_selectedVolumeUnit.value].id
-            packageLineItem!!.weightUnitId = getLengthUnitList()[_selectedWeightUnit.value].id
+            packageLineItem!!.weightUnitId = getWeightUnitList()[_selectedWeightUnit.value].id
         }catch (e:Exception){
             print(e)
         }

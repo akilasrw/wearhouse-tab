@@ -22,6 +22,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.CommonDropDown
 import com.aeroclubcargo.warehouse.presentation.components.CommonTextField
@@ -181,7 +182,7 @@ fun UpdatePackageBottomSheet(
                             .toList(),
                         selectedIndex = selectedVolumeUnit
                     ) {
-                        // TODO
+                        viewModel.setVolumeUnit(viewModel.getLengthUnitList().indexOfFirst { item -> item.id == it.id })
                     }
                 }
             }
@@ -218,7 +219,7 @@ fun UpdatePackageBottomSheet(
                         items = viewModel.getWeightUnitList().map { DropDownModel( it ,it.name) }
                             .toList()
                     ) {
-                        // TODO
+                        viewModel.setWeightUnit(viewModel.getWeightUnitList().indexOfFirst { item -> item.id == it.id })
                     }
                 }
                 Spacer(modifier = Modifier.width(1.dp))

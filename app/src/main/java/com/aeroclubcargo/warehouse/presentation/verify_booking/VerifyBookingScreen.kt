@@ -277,7 +277,7 @@ fun PackageTable(
                         )
                     }
                     Spacer(modifier = Modifier.width(5.dp))
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = { /* TODO ("implement delete package item") */ }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_baseline_delete_outline_24),
                             contentDescription = "delete",
