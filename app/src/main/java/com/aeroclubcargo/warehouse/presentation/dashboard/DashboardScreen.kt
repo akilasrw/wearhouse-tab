@@ -53,7 +53,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_scan,
                 text = stringResource(R.string.verify_booking),
                 onClick = {
-                    navController.navigate(Screen.VerifyBookingScreen.route+"/11591530001") // TODO remove hadcoded navigation
+                    navController.navigate(Screen.VerifyBookingScreen.route+"/11591530000") // TODO remove hadcoded navigation
 //                    navController.navigate(Screen.VerifyBookingScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))

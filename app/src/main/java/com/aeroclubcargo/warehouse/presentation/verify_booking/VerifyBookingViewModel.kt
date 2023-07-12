@@ -188,25 +188,11 @@ class VerifyBookingViewModel @Inject constructor(
                         packageItemStatus = Constants.PackageItemStatus.Accepted.ordinal)
                 )
                 isLoading.value = false
+                getPackageDetails(bookingId!!)
             }catch (e:Exception){
                 isLoading.value = false
                 e.localizedMessage?.let { Log.e("verifyBooking", it) }
             }
-
-
-//            acceptCargoUseCase.invoke(packageDetail = packageDetail).onEach { result ->
-//                when (result) {
-//                    is Resource.Error -> result.let {
-//                        isLoading.value = false
-//                        Log.e("LoginViewModel", "${result.message}")
-//                    }
-//                    is Resource.Loading -> isLoading.value = true
-//                    is Resource.Success -> {
-//                        isLoading.value = false
-//                        getPackageDetails()
-//                    }
-//                }
-//            }
         }
     }
 

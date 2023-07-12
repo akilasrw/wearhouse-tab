@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -260,9 +261,11 @@ fun PackageTable(
                     }
 
                     Spacer(modifier = Modifier.width(5.dp))
-                    // TODO booking status below 20 status
-                    IconButton(onClick = {
-                        viewModel.acceptPackageItem(lineItem)
+                    IconButton(
+                        onClick = {
+                            if(lineItem.packageItemStatus != Constants.PackageItemStatus.Accepted.ordinal) {
+                                viewModel.acceptPackageItem(lineItem)
+                            }
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_accepted),
@@ -270,7 +273,7 @@ fun PackageTable(
                             modifier = Modifier
                                 .size(24.dp)
                                 .padding(3.dp),
-                            tint = BlueLight
+                            tint = if (lineItem.packageItemStatus != Constants.PackageItemStatus.Accepted.ordinal) BlueLight else Green
                         )
                     }
                     Spacer(modifier = Modifier.width(5.dp))
