@@ -48,8 +48,8 @@ class AuthenticationInterceptorRefreshToken @Inject constructor(
                             null
                         }
                     }
-                    return when {
-                        responseNewTokenLoginModel == null -> {
+                    return when (responseNewTokenLoginModel) {
+                        null -> {
                             runBlocking {
                                 dataStorePreferenceRepository.clearCredential()
                                 dataStorePreferenceRepository.removeLoginUserDetails()
