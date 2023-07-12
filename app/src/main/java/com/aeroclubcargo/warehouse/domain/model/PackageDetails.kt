@@ -18,11 +18,11 @@ data class PackageDetails(
     var bookingStatus: Int,
     var verifyStatus: Int,
     var numberOfBoxes: Int,
-    var totalWeight: Int,
-    var totalVolume: Int,
+    var totalWeight: Double,
+    var totalVolume: Double,
     var numberOfRecBoxes: Int,
-    var totalRecWeight: Int,
-    var totalRecVolume: Int,
+    var totalRecWeight: Double,
+    var totalRecVolume: Double,
     var packageItems: List<PackageLineItem>?,
 
 )
