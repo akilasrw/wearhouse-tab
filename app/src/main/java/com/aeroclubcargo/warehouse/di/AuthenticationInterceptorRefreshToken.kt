@@ -64,7 +64,11 @@ class AuthenticationInterceptorRefreshToken @Inject constructor(
                                 )
                                 dataStorePreferenceRepository.saveJwtToken(responseNewTokenLoginModel.jwtToken!!)
                             }
-                            chain.proceed(authenticationRequest)
+                            val updatedAuthenticationRequest =
+                                originalRequest
+                                    .newBuilder()
+                                    .addHeader("Authorization", "Bearer ${responseNewTokenLoginModel.jwtToken}").build()
+                            chain.proceed(updatedAuthenticationRequest)
                         }
                     }
                 }
