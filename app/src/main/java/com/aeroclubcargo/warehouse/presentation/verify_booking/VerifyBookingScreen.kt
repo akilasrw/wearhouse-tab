@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -36,6 +37,7 @@ import com.aeroclubcargo.warehouse.presentation.login.LoginState
 import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
 import com.facebook.stetho.common.Util
+import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -54,31 +56,66 @@ fun VerifyBookingScreen(
     val rememberScroll = rememberScrollState()
 
     if (showDialog.value) {
-        AlertDialog(
+        Dialog(
             onDismissRequest = { showDialog.value = false },
-            title = { Text("Cargo Handling Instructions.", fontSize = 24.sp) },
-            text = {
-                Column(
-                    modifier = Modifier
-                        .verticalScroll(state = rememberScroll),
-                ) {
+//            title = { Text("Cargo Handling Instructions.", fontSize = 24.sp) },
+            content = {
+                Column(Modifier.background(Color.White).padding(8.dp)
+                    .fillMaxHeight(0.8f)) {
                     Text(
-                        text = stringResource(id = R.string.long_text),
-                        fontSize = 14.sp,
-                        softWrap = true,
-                        textAlign = TextAlign.Start
+                        text = "Pick something from the list",
+                        fontSize = 22.sp,
+                        style = MaterialTheme.typography.subtitle1,
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
-                }
-            },
-            confirmButton = { },
-            dismissButton = {
-                Button(
-                    onClick = { showDialog.value = false },
+                    FlowRow(
+                        modifier = Modifier
+                            .verticalScroll(rememberScroll)
+                            .weight(1f)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.long_text),
+                            fontSize = 18.sp,
+                            softWrap = true,
+                            textAlign = TextAlign.Start
+                        )
+                    }
+                    FlowRow(
+                        mainAxisSpacing = 8.dp,
+                        crossAxisSpacing = 12.dp,
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(horizontal = 8.dp, vertical = 2.dp)
+                    ) {
+                        Button(
+                        onClick = { showDialog.value = false },
 
-                ) {
-                    Text("Done", style = TextStyle(color = Color.White))
+                        ) {
+                            Text("Done", style = TextStyle(color = Color.White))
+                        }
+                    }
                 }
-            }
+//                Column(
+//                    modifier = Modifier
+//                        .verticalScroll(state = rememberScroll),
+//                ) {
+//                    Text(
+//                        text = stringResource(id = R.string.long_text),
+//                        fontSize = 14.sp,
+//                        softWrap = true,
+//                        textAlign = TextAlign.Start
+//                    )
+//                }
+            },
+//            confirmButton = { },
+//            dismissButton = {
+//                Button(
+//                    onClick = { showDialog.value = false },
+//
+//                ) {
+//                    Text("Done", style = TextStyle(color = Color.White))
+//                }
+//            }
         )
     }
     if(bookingId == null){
