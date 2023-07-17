@@ -22,5 +22,5 @@
     <string name="verify_booking">Verify Booking</string>
     <string name="accept_cargo">Accepted Cargo</string>
     <string name="recent_accepted_cargo_booking">Recent Accepted Cargo Bookings</string>
-
+    <string name="long_text">Test</string>
 </resources>

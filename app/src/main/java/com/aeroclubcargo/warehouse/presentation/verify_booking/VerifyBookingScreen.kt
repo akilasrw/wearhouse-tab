@@ -1,8 +1,7 @@
 package com.aeroclubcargo.warehouse.presentation.verify_booking
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import android.widget.ScrollView
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +17,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,6 +35,7 @@ import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.presentation.login.LoginState
 import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
+import com.facebook.stetho.common.Util
 import kotlinx.coroutines.launch
 
 @OptIn(
@@ -47,6 +48,39 @@ fun VerifyBookingScreen(
     bookingId: String? = null,
     viewModel: VerifyBookingViewModel = hiltViewModel(),
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
+    val showDialog = remember { mutableStateOf(false) }
+    val rememberScroll = rememberScrollState()
+
+    if (showDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showDialog.value = false },
+            title = { Text("Cargo Handling Instructions.", fontSize = 24.sp) },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(state = rememberScroll),
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.long_text),
+                        fontSize = 14.sp,
+                        softWrap = true,
+                        textAlign = TextAlign.Start
+                    )
+                }
+            },
+            confirmButton = { },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog.value = false },
+
+                ) {
+                    Text("Done", style = TextStyle(color = Color.White))
+                }
+            }
+        )
+    }
     if(bookingId == null){
         navController.popBackStack()
     }
@@ -152,6 +186,18 @@ fun VerifyBookingScreen(
                                     hint = "Total Rec. Volume(m3)",
                                     value = "${viewModel.packageDetail.value?.totalRecVolume}"
                                 )
+                            }
+                            item {
+                                Box(modifier = Modifier.clickable {
+                                    coroutineScope.launch {
+                                        showDialog.value = true
+                                    }
+                                }) {
+                                    GetTileWidget(
+                                        hint = "Cargo Handling Instructions",
+                                        value = "View"
+                                    )
+                                }
                             }
 //                    item {
 //                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
@@ -324,10 +370,10 @@ fun GetTileWidget(hint: String, value: String) {
         Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(all = 16.dp)) {
             Text(
                 text = hint,
-                style = MaterialTheme.typography.body2.copy(color = hintLightGray, fontSize = 10.sp)
+                style = MaterialTheme.typography.body2.copy(color = hintLightGray, fontSize = 12.sp)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = value, style = MaterialTheme.typography.body2.copy(fontSize = 10.sp))
+            Text(text = value, style = MaterialTheme.typography.body2.copy(fontSize = 12.sp))
         }
     }
 
