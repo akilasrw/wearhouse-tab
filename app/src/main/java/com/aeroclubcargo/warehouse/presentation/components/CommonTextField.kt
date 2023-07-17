@@ -10,6 +10,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.aeroclubcargo.warehouse.theme.Gray2
 
@@ -19,8 +20,9 @@ fun CommonTextField(
     value:String,
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit,
+    padding: Dp = 16.dp
 ){
-    Column(Modifier.padding(16.dp).fillMaxWidth()) {
+    Column(Modifier.padding(padding).fillMaxWidth()) {
         Text(text = label,style = MaterialTheme
             .typography
             .subtitle2)

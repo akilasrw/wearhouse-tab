@@ -110,7 +110,7 @@ fun Pulsating(color: Color, scale: Float) {
 
 @Composable
 fun MiddleBanner() {
-    val image = painterResource(id = R.drawable.ic_logo_skytech)
+    val image = painterResource(id = R.drawable.ic_ikigai_cargo_logo)
     Image(
         painter = image,
         contentDescription = "Splash Wave ",

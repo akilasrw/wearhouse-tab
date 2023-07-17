@@ -93,7 +93,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_uld_master, // TODO replace icon
                 text = stringResource(R.string.uld_master),
                 onClick = {
-                    // TODO
+                    navController.navigate(Screen.ULDMasterScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
