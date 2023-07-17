@@ -63,7 +63,7 @@ fun VerifyBookingScreen(
                 Column(Modifier.background(Color.White).padding(8.dp)
                     .fillMaxHeight(0.8f)) {
                     Text(
-                        text = "Pick something from the list",
+                        text = "Cargo Handling Instructions",
                         fontSize = 22.sp,
                         style = MaterialTheme.typography.subtitle1,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
@@ -74,7 +74,7 @@ fun VerifyBookingScreen(
                             .weight(1f)
                     ) {
                         Text(
-                            text = stringResource(id = R.string.long_text),
+                            text = stringResource(id = R.string.long_text), // TODO add proper text
                             fontSize = 18.sp,
                             softWrap = true,
                             textAlign = TextAlign.Start
@@ -95,27 +95,7 @@ fun VerifyBookingScreen(
                         }
                     }
                 }
-//                Column(
-//                    modifier = Modifier
-//                        .verticalScroll(state = rememberScroll),
-//                ) {
-//                    Text(
-//                        text = stringResource(id = R.string.long_text),
-//                        fontSize = 14.sp,
-//                        softWrap = true,
-//                        textAlign = TextAlign.Start
-//                    )
-//                }
             },
-//            confirmButton = { },
-//            dismissButton = {
-//                Button(
-//                    onClick = { showDialog.value = false },
-//
-//                ) {
-//                    Text("Done", style = TextStyle(color = Color.White))
-//                }
-//            }
         )
     }
     if(bookingId == null){
