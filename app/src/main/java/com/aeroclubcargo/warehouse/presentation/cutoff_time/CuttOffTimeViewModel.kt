@@ -42,7 +42,7 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
             try {
                 var scheduledDepartureTime = cutOffTimeModel.scheduledDepartureDateTime
                 repository.updateCutOffTIme(cutOffTimeModel.id,
-                    CutOffTimeRequest(id = cutOffTimeModel.id, cutOffTimeMin = scheduledDepartureTime!!.updateTimeOnly(hours = hours,minutes = minutes)))
+                    CutOffTimeRequest(id = cutOffTimeModel.id, cutOffTime = scheduledDepartureTime!!.updateTimeOnly(hours = hours,minutes = minutes)))
             }catch (e:Exception){
                 e.localizedMessage?.let { Log.e("CutOffTimeViewModel", it) }
             }finally {
