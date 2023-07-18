@@ -1,6 +1,5 @@
 package com.aeroclubcargo.warehouse.presentation.verify_booking
 
-import android.widget.ScrollView
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
@@ -9,13 +8,13 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -26,17 +25,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Constants.getPackageItemCategory
 import com.aeroclubcargo.warehouse.domain.model.PackageLineItem
 import com.aeroclubcargo.warehouse.presentation.components.ProgressIndicatorDialog
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
-import com.aeroclubcargo.warehouse.presentation.login.LoginState
 import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
-import com.facebook.stetho.common.Util
 import com.google.accompanist.flowlayout.FlowRow
 import kotlinx.coroutines.launch
 
@@ -58,19 +54,36 @@ fun VerifyBookingScreen(
     if (showDialog.value) {
         Dialog(
             onDismissRequest = { showDialog.value = false },
-//            title = { Text("Cargo Handling Instructions.", fontSize = 24.sp) },
             content = {
-                Column(Modifier.background(Color.White).padding(8.dp)
-                    .fillMaxHeight(0.8f)) {
-                    Text(
-                        text = "Cargo Handling Instructions",
-                        fontSize = 22.sp,
-                        style = MaterialTheme.typography.subtitle1,
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
-                    )
+                Column(
+                    Modifier
+                        .background(Color.White)
+                        .fillMaxHeight(0.8f)) {
+                    Row(modifier = Modifier.fillMaxWidth()
+                        .padding(vertical = 16.dp, horizontal = 32.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Text(
+                            text = "Cargo Handling Instructions",
+                            fontSize = 22.sp,
+                            style = MaterialTheme.typography.subtitle1,
+                        )
+                        IconButton(onClick = { showDialog.value = false  }) {
+                            Icon(
+                                Icons.Outlined.Close,
+                                contentDescription = "notifications",
+                                modifier = Modifier.size(30.dp),
+                                tint = MaterialTheme.colors.primary
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(2.dp))
+                    Divider(modifier = Modifier.fillMaxWidth(), color = hintLightGray)
+                    Spacer(modifier = Modifier.height(2.dp))
                     FlowRow(
                         modifier = Modifier
                             .verticalScroll(rememberScroll)
+                            .padding(vertical = 16.dp, horizontal = 32.dp)
                             .weight(1f)
                     ) {
                         Text(
@@ -80,20 +93,7 @@ fun VerifyBookingScreen(
                             textAlign = TextAlign.Start
                         )
                     }
-                    FlowRow(
-                        mainAxisSpacing = 8.dp,
-                        crossAxisSpacing = 12.dp,
-                        modifier = Modifier
-                            .align(Alignment.End)
-                            .padding(horizontal = 8.dp, vertical = 2.dp)
-                    ) {
-                        Button(
-                        onClick = { showDialog.value = false },
-
-                        ) {
-                            Text("Done", style = TextStyle(color = Color.White))
-                        }
-                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             },
         )
@@ -216,9 +216,6 @@ fun VerifyBookingScreen(
                                     )
                                 }
                             }
-//                    item {
-//                        GetTileWidgetWithIcon(hint = "View Cargo Manifest")
-//                    }
                         }
                         PackageTable(
                             navController = navController,
@@ -394,32 +391,4 @@ fun GetTileWidget(hint: String, value: String) {
         }
     }
 
-}
-
-@Composable
-fun GetTileWidgetWithIcon(hint: String) {
-    Surface(
-        modifier = Modifier
-            .padding(4.dp),
-
-        elevation = 0.dp,
-        shape = RoundedCornerShape(5),
-        color = MaterialTheme.colors.onSurface
-    ) {
-        Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(all = 16.dp)) {
-            Text(
-                text = hint,
-                style = MaterialTheme.typography.body2.copy(color = hintLightGray, fontSize = 10.sp)
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Image(
-                painter = painterResource(R.drawable.ic_pdf_icon),
-                contentDescription = "pdf",
-                modifier = Modifier
-                    .size(24.dp)
-                    .padding(4.dp),
-            )
-
-        }
-    }
 }
