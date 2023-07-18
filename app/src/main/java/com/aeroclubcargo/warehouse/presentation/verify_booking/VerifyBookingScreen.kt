@@ -77,9 +77,7 @@ fun VerifyBookingScreen(
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(2.dp))
                     Divider(modifier = Modifier.fillMaxWidth(), color = hintLightGray)
-                    Spacer(modifier = Modifier.height(2.dp))
                     FlowRow(
                         modifier = Modifier
                             .verticalScroll(rememberScroll)
@@ -212,7 +210,8 @@ fun VerifyBookingScreen(
                                 }) {
                                     GetTileWidget(
                                         hint = "Cargo Handling Instructions",
-                                        value = "View"
+                                        value = "View",
+                                        textColor = BlueLight2
                                     )
                                 }
                             }
@@ -372,22 +371,24 @@ fun RowScope.TableCell(
 }
 
 @Composable
-fun GetTileWidget(hint: String, value: String) {
+fun GetTileWidget(hint: String, value: String, textColor: Color = Color.Black) {
     Surface(
         modifier = Modifier
             .padding(8.dp),
-
         elevation = 0.dp,
         shape = RoundedCornerShape(5),
-        color = MaterialTheme.colors.onSurface
+        color = MaterialTheme.colors.onSurface,
     ) {
-        Column(horizontalAlignment = Alignment.Start, modifier = Modifier.padding(all = 16.dp)) {
+        Column(horizontalAlignment = Alignment.Start,
+            modifier = Modifier.padding(all = 16.dp)) {
             Text(
                 text = hint,
-                style = MaterialTheme.typography.body2.copy(color = hintLightGray, fontSize = 12.sp)
+                style = MaterialTheme.typography.body2
+                    .copy(color = hintLightGray, fontSize = 12.sp)
             )
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = value, style = MaterialTheme.typography.body2.copy(fontSize = 12.sp))
+            Text(text = value, style = MaterialTheme.typography.body2
+                .copy(fontSize = 12.sp, color = textColor))
         }
     }
 
