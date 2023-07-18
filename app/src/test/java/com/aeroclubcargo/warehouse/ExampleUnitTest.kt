@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse
 
+import com.aeroclubcargo.warehouse.utils.updateTimeOnly
 import org.junit.Test
 
 import org.junit.Assert.*
@@ -12,6 +13,8 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        var dateTime = "2023-07-02T10:30:00"
+        var updateTime =  dateTime.updateTimeOnly(3,45)
+        assertEquals("2023-07-02T03:45:00", updateTime)
     }
 }

@@ -37,6 +37,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import com.aeroclubcargo.warehouse.utils.toDateTimeHour
+import com.aeroclubcargo.warehouse.utils.toDateTimeMin
 import java.util.*
 
 @Composable
@@ -231,13 +233,15 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
         }
         // data
         items(todoListState.value) {booking->
+
             // Creating a TimePicker dialod
             val mTimePickerDialog = TimePickerDialog(
                 mContext,
                 {_, mHour : Int, mMinute: Int ->
                     mTime.value = "$mHour:$mMinute"
                     viewModel.updateCutOffTime(hours = mHour, minutes = mMinute, cutOffTimeModel = booking)
-                }, 0, 0, false
+                }, booking.scheduledDepartureDateTime?.toDateTimeHour() ?: 0,
+                booking.scheduledDepartureDateTime?.toDateTimeMin()?:0, true
             )
             Row(
                 Modifier.fillMaxWidth(),

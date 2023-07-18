@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
 import com.aeroclubcargo.warehouse.domain.model.CutOffTimeRequest
 import com.aeroclubcargo.warehouse.domain.repository.Repository
+import com.aeroclubcargo.warehouse.utils.updateTimeOnly
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,15 +37,12 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
     }
 
     fun updateCutOffTime(hours:Int, minutes:Int,cutOffTimeModel: CutOffTimeModel){
-        // TODO
-        print("TIME NEED TO UPDATE HERE $hours,$minutes")
         viewModelScope.launch {
             setLoading(true)
             try {
-                var totalTimeInMinutes  = minutes + hours* 60
-                repository.updateCutOffTIme(cutOffTimeModel.id, CutOffTimeRequest(id = cutOffTimeModel.id,
-                    flightId = cutOffTimeModel.id,
-                    cutOffTimeMin = totalTimeInMinutes))
+                var scheduledDepartureTime = cutOffTimeModel.scheduledDepartureDateTime
+                repository.updateCutOffTIme(cutOffTimeModel.id,
+                    CutOffTimeRequest(id = cutOffTimeModel.id, cutOffTimeMin = scheduledDepartureTime!!.updateTimeOnly(hours = hours,minutes = minutes)))
             }catch (e:Exception){
                 e.localizedMessage?.let { Log.e("CutOffTimeViewModel", it) }
             }finally {
