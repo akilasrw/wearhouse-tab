@@ -43,10 +43,12 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
                 var scheduledDepartureTime = cutOffTimeModel.scheduledDepartureDateTime
                 repository.updateCutOffTIme(cutOffTimeModel.id,
                     CutOffTimeRequest(id = cutOffTimeModel.id, cutOffTime = scheduledDepartureTime!!.updateTimeOnly(hours = hours,minutes = minutes)))
+
             }catch (e:Exception){
                 e.localizedMessage?.let { Log.e("CutOffTimeViewModel", it) }
             }finally {
                 setLoading(false)
+                getScheduleList()
             }
         }
     }
@@ -79,10 +81,7 @@ class CutOffTimeViewModel @Inject constructor(private var repository: Repository
                 val paginatedList = repository.cargoBookingSummaryList(FlightNumber = flightNameValue.value, FlightDate = flightDateValue.value,1,11)
                 if(paginatedList.data!= null){
                     todoList.clear()
-//                    cutOffTimeList.postValue(paginatedList.data)
-//                    todoList = mutableStateListOf<CutOffTimeModel>(paginatedList.data!!)
                     todoList.addAll(paginatedList.data!!)
-//                    _todoListFlow.value = mutableStateListOf(paginatedList.data)
                 }
                 setLoading(false)
             }catch (e:Exception){

@@ -37,8 +37,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.aeroclubcargo.warehouse.utils.toDateTimeHour
 import com.aeroclubcargo.warehouse.utils.toDateTimeMin
+import com.aeroclubcargo.warehouse.utils.toDurationTime
 import java.util.*
 
 @Composable
@@ -50,7 +52,7 @@ fun CutOffTimeScreen(navController: NavController, viewModel: CutOffTimeViewMode
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun GetCutOffTimeList(viewModel: CutOffTimeViewModel, navController: NavController) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -198,15 +200,26 @@ val column10Weight = .09f
 @Composable
 fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
     val mContext = LocalContext.current
-
-    // Value for storing time as a string
-    val mTime = remember { mutableStateOf("") }
-
-
-
-
     val todoListState = viewModel.todoListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
+    val showAlert = remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
+    if (showAlert.value) {
+        AlertDialog(
+            onDismissRequest = { showAlert.value = false },
+            title = { Text("Error") },
+            text = { Text("cut-off time should be Below the scheduled time") },
+            confirmButton = {
+                Button(
+                    onClick = { showAlert.value = false }
+                ) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
     LazyColumn(
         Modifier
             .fillMaxSize()
@@ -233,13 +246,17 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
         }
         // data
         items(todoListState.value) {booking->
-
-            // Creating a TimePicker dialod
             val mTimePickerDialog = TimePickerDialog(
                 mContext,
                 {_, mHour : Int, mMinute: Int ->
-                    mTime.value = "$mHour:$mMinute"
-                    viewModel.updateCutOffTime(hours = mHour, minutes = mMinute, cutOffTimeModel = booking)
+                    var hour = booking.scheduledDepartureDateTime?.toDateTimeHour() ?: 0
+                    var minutes = booking.scheduledDepartureDateTime?.toDateTimeMin()?:0
+                    if(hour < mHour || ( minutes < mMinute  && hour == mHour) ){
+                        showAlert.value = true
+                    }else {
+                        viewModel.updateCutOffTime(hours = mHour, minutes = mMinute, cutOffTimeModel = booking)
+                    }
+
                 }, booking.scheduledDepartureDateTime?.toDateTimeHour() ?: 0,
                 booking.scheduledDepartureDateTime?.toDateTimeMin()?:0, true
             )
@@ -251,7 +268,7 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 TableCell(text = "${booking.flightNumber}", weight = column1Weight)
                 TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.first()}", weight = column2Weight)
                 TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.last()}", weight = column3Weight)
-                TableCell(text = "${booking.cutoffTimeMin ?: "-"}", weight = column4Weight)
+                TableCell(text = booking.cutoffTimeMin?.toDurationTime() ?: "-", weight = column4Weight)
                 TableCell(text = "${booking.originAirportCode}", weight = column5Weight)
                 TableCell(text = "${booking.destinationAirportCode}", weight = column6Weight)
                 TableCell(text = booking.aircraftRegNo ?:"-", weight = column7Weight)
