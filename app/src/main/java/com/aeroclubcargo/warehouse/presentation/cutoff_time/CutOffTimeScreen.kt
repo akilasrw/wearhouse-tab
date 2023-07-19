@@ -239,8 +239,8 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 TableCell(text = "Origin", weight = column5Weight, style = headerStyle)
                 TableCell(text = "Dest", weight = column6Weight, style = headerStyle)
                 TableCell(text = "Aircraft Type", weight = column7Weight, style = headerStyle)
-                TableCell(text = "Tot.Weight(KG)", weight = column8Weight, style = headerStyle)
-                TableCell(text = "Tot.Volume(m3)", weight = column9Weight, style = headerStyle)
+                TableCell(text = "Tot.Weight\n(KG)", weight = column8Weight, style = headerStyle)
+                TableCell(text = "Tot.Volume\n(m3)", weight = column9Weight, style = headerStyle)
                 TableCell(text = "Actions", weight = column10Weight, style = headerStyle)
             }
         }
