@@ -247,7 +247,11 @@ fun MainUI(navController: NavController?, viewModel: LoginViewModel, index: Int)
                         ) {
                             Checkbox(
                                 checked = rememberMeCheckState.value,
-                                onCheckedChange = viewModel::onRememberCheckState
+                                onCheckedChange = viewModel::onRememberCheckState,
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = MaterialTheme.colors.primary,
+                                    uncheckedColor = MaterialTheme.colors.secondary
+                                ),
                             )
                             Text(
                                 stringResource(id = R.string.remember_me),
