@@ -310,7 +310,7 @@ fun PackageTable(
                         }
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_edit_icon),
+                            painter = painterResource(R.drawable.ic_edit),
                             contentDescription = "edit",
                             modifier = Modifier
                                 .size(24.dp)
@@ -327,7 +327,7 @@ fun PackageTable(
                             }
                     }) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_accepted),
+                            painter = painterResource(R.drawable.ic_ok),
                             contentDescription = "done",
                             modifier = Modifier
                                 .size(24.dp)
@@ -338,7 +338,7 @@ fun PackageTable(
                     Spacer(modifier = Modifier.width(5.dp))
                     IconButton(onClick = { /* TODO ("implement delete package item") */ }) {
                         Icon(
-                            painter = painterResource(R.drawable.ic_baseline_delete_outline_24),
+                            painter = painterResource(R.drawable.ic_delete),
                             contentDescription = "delete",
                             modifier = Modifier
                                 .size(24.dp)
