@@ -6,6 +6,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.sharp.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -18,8 +21,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.presentation.Screen
+import com.aeroclubcargo.warehouse.theme.BlueLight4
 import com.aeroclubcargo.warehouse.theme.Gray1
 import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray3
@@ -65,31 +70,49 @@ fun EnterManualScreenView(viewModel: ScanCargoViewModel, navController: NavContr
                    }else{
                        Row(
                            modifier = Modifier
-                               .wrapContentSize(align = Alignment.CenterStart)
+                               .wrapContentSize(align = Alignment.CenterStart),
+                           horizontalArrangement = Arrangement.End,
+                           verticalAlignment = Alignment.Bottom
                        ) {
-                           OutlinedTextField(
-                               value = awbName.value,
-                               onValueChange = {
-                                   viewModel.setAWBNumber(it)
-                               },
-                               placeholder = {
-                                   Text(text = "AWB number")
-                               },
-                               singleLine = true,
-                               keyboardOptions = KeyboardOptions(
-                                   keyboardType = KeyboardType.Text,
-                                   imeAction = ImeAction.Done
-                               ),
-                               modifier = Modifier
-                                   .width(200.dp)
-                                   .height(50.dp).background(color = Color.White),
-                               colors = TextFieldDefaults.outlinedTextFieldColors(
-                                   unfocusedBorderColor = Gray2
-                               ),
-                           )
+                           Column(verticalArrangement = Arrangement.Bottom) {
+                               Text(text = "AWB Number")
+                               OutlinedTextField(
+                                   value = awbName.value,
+                                   onValueChange = {
+                                       viewModel.setAWBNumber(it)
+                                   },
+                                   trailingIcon = {
+                                       IconButton(onClick = {
+                                           viewModel.setAWBNumber("")
+                                       }) {
+                                           Icon(
+                                               modifier = Modifier.size(size = 30.dp),
+                                               imageVector = Icons.Sharp.Close,
+                                               contentDescription = "close",
+                                               tint = BlueLight4
+                                           )
+                                       }
+                                   },
+                                   placeholder = {
+                                       Text(text = "AWB number")
+                                   },
+                                   singleLine = true,
+                                   keyboardOptions = KeyboardOptions(
+                                       keyboardType = KeyboardType.Text,
+                                       imeAction = ImeAction.Done
+                                   ),
+                                   modifier = Modifier
+                                       .width(200.dp)
+                                       .height(50.dp)
+                                       .background(color = Color.White),
+                                   colors = TextFieldDefaults.outlinedTextFieldColors(
+                                       unfocusedBorderColor = Gray2
+                                   ),
+                               )  
+                           }
                            Spacer(modifier = Modifier.width(10.dp))
                            Button(
-                               modifier = Modifier.wrapContentSize(align = Alignment.Center),
+                               modifier = Modifier.wrapContentSize(align = Alignment.Center).padding(bottom = 2.dp),
                                onClick = {
                                    if(viewModel.awbNameValue.value.isEmpty()){
                                        return@Button
@@ -101,7 +124,7 @@ fun EnterManualScreenView(viewModel: ScanCargoViewModel, navController: NavContr
                                    }
                                },
                            ) {
-                               Text(text = "Find", style = TextStyle(color = Color.White))
+                               Text(text = "Find", style = TextStyle(color = Color.White, fontSize = 18.sp))
                            }
                        }
                    }
