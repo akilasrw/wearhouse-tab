@@ -319,7 +319,7 @@ fun PackageTable(
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(2.dp))
                     IconButton(
                         onClick = {
                             if(lineItem.packageItemStatus != Constants.PackageItemStatus.Accepted.ordinal) {
@@ -335,7 +335,7 @@ fun PackageTable(
                             tint = if (lineItem.packageItemStatus != Constants.PackageItemStatus.Accepted.ordinal) BlueLight else Green
                         )
                     }
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(2.dp))
                     IconButton(onClick = { /* TODO ("implement delete package item") */ }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_delete),
@@ -346,7 +346,7 @@ fun PackageTable(
                             tint = BlueLight
                         )
                     }
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Spacer(modifier = Modifier.width(2.dp))
                 }
             }
         }

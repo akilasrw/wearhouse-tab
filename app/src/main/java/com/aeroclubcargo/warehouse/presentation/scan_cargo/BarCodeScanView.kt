@@ -65,12 +65,11 @@ fun BarCodeScanView(  viewModel: ScanCargoViewModel){
             Box(
                 modifier = Modifier
                     .width(600.dp)
-                    .height(260.dp)
-                    .fillMaxSize()
-                    .border(width = 30.dp, color = Gray3)
+                    .fillMaxWidth()
             ) {
                 if (hasCameraPermission) {
-                    Image(painter = painterResource(id = R.drawable.ic_qr_code)
+                    Image(painter = painterResource(id = R.drawable.ic_qr_code),
+                        modifier = Modifier.fillMaxWidth()
                         , contentDescription = " QR Icon" )
 
 //                    AndroidView(factory = { context ->
