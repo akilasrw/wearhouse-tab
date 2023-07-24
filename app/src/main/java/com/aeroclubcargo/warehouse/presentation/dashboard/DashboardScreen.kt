@@ -71,6 +71,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                     navController.navigate(Screen.VerifyBookingScreen.route+"/11591530000") // TODO remove hadcoded navigation
 //                    navController.navigate(Screen.VerifyBookingScreen.route)
                 })
+            Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
                 id = R.drawable.ic_accepted,
                 text = stringResource(R.string.accept_cargo),
