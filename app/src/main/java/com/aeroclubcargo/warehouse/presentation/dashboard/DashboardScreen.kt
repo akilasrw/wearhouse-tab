@@ -53,7 +53,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_flight_schedule,
                 text = stringResource(R.string.flight_schedule),
                 onClick = {
-                    // TODO
+                    navController.navigate(Screen.FlightScheduleScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
 

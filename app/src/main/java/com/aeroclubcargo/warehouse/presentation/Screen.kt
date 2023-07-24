@@ -9,5 +9,5 @@ sealed class Screen(val route: String) {
     object UpdateBookingScreen: Screen("update_booking_screen")
     object CutOffTimeScreen : Screen("cutt_off_time_screen")
     object ULDMasterScreen : Screen("ULD_master_screen")
-
+    object FlightScheduleScreen : Screen("flight_schedule_screen")
 }
