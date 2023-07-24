@@ -97,6 +97,8 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 text = stringResource(R.string.booking_assignment),
                 onClick = {
                     // TODO
+                    navController.navigate(Screen.ULDAssignmentScreen.route)
+
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(

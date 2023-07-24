@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.Gray1
@@ -208,7 +209,7 @@ fun GetCutOffTimeList(
                     CircularProgressIndicator()
                 }
             } else {
-                FlightsTable(viewModel= viewModel)
+                FlightsTable(viewModel= viewModel, navController = navController)
             }
         }
     }
@@ -227,7 +228,7 @@ val column9Weight = .125f
 val column10Weight = .09f
 
 @Composable
-fun FlightsTable(viewModel: FlightScheduleViewModel) {
+fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController) {
     val mContext = LocalContext.current
     val todoListState = viewModel.todoListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
@@ -291,7 +292,7 @@ fun FlightsTable(viewModel: FlightScheduleViewModel) {
                 TableCell(text = (booking.totalBookedVolume.toString()), weight =  column9Weight)
                 IconButton(
                     onClick = {
-                        //TODO
+                        navController.navigate(Screen.ULDAssignmentScreen.route)
                     }
                 ) {
                     Icon(

@@ -12,6 +12,7 @@ import com.aeroclubcargo.warehouse.presentation.flight_schedule.FlightScheduleSc
 import com.aeroclubcargo.warehouse.presentation.login.LoginScreen
 import com.aeroclubcargo.warehouse.presentation.scan_cargo.ScanCargoScreen
 import com.aeroclubcargo.warehouse.presentation.splash.SplashScreen
+import com.aeroclubcargo.warehouse.presentation.uld_assignment.ULDAssignmentScreen
 import com.aeroclubcargo.warehouse.presentation.uld_master.ULDMasterScreen
 import com.aeroclubcargo.warehouse.presentation.update_booking.UpdateBookingScreen
 import com.aeroclubcargo.warehouse.presentation.verify_booking.VerifyBookingScreen
@@ -67,6 +68,9 @@ fun navigation() {
             route = Screen.FlightScheduleScreen.route
         ){
             FlightScheduleScreen(navController)
+        }
+        composable(route = Screen.ULDAssignmentScreen.route){
+            ULDAssignmentScreen(navController)
         }
     }
 }

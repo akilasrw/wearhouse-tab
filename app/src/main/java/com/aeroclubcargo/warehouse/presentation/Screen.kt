@@ -10,4 +10,5 @@ sealed class Screen(val route: String) {
     object CutOffTimeScreen : Screen("cutt_off_time_screen")
     object ULDMasterScreen : Screen("ULD_master_screen")
     object FlightScheduleScreen : Screen("flight_schedule_screen")
+    object ULDAssignmentScreen : Screen("uld_assignment_screen")
 }
