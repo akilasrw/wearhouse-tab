@@ -59,4 +59,10 @@ interface ApiInterface {
     @PUT("api/${Constants.API_VERSION}/Package")
     suspend fun updatePackage(@Body body: PackageLineItem): Response<Any>
 
+    @GET("api/${Constants.API_VERSION}/flightScheduleSector/GetFlightScheduleWithULDCount")
+    suspend fun getFlightScheduleWithULDCount(
+        @Query("ScheduledDepartureStartDateTime") scheduledDepartureStartDateTime : String,
+        @Query("ScheduledDepartureEndDateTime") scheduledDepartureEndDateTime : String,
+    ): Response<List<FlightScheduleModel>>
+
 }

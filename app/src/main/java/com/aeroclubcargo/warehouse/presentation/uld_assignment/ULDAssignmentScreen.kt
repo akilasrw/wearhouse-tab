@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toDurationTime
@@ -48,7 +49,8 @@ import java.util.*
 
 
 @Composable
-fun ULDAssignmentScreen(navController: NavController, viewModel: ULDAssignmentViewModel = hiltViewModel()){
+fun ULDAssignmentScreen(navController: NavController, scheduleModel: FlightScheduleModel?, viewModel: ULDAssignmentViewModel = hiltViewModel()){
+    viewModel.setFlightSchedule(scheduleModel)
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
@@ -65,29 +67,10 @@ fun GetCutOffTimeList(
     val keyboardController = LocalSoftwareKeyboardController.current
     val mContext = LocalContext.current
 
-    val frFlightFromDate = remember { FocusRequester() }
-    val frFlightToDate = remember { FocusRequester() }
-    val filterButton = remember { FocusRequester() }
-
-    val dateFromValue = viewModel.flightDateFromValue.collectAsState()
-    val dateToValue = viewModel.flightDateToValue.collectAsState()
+    val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
 
     val isLoading  = viewModel.isLoading.collectAsState()
     var calendar = Calendar.getInstance()
-
-    val datePickerDialogFrom = DatePickerDialog(
-        mContext,
-        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            viewModel.onFlightFromDateChange("$year-${1+month}-$dayOfMonth")
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-    )
-
-    val datePickerDialogTo = DatePickerDialog(
-        mContext,
-        { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            viewModel.onFlightToDateChange("$year-${1+month}-$dayOfMonth")
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
-    )
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -114,7 +97,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Flight No",
-                            desctiption = "3G001"
+                            desctiption = flightScheduleValue.value?.flightNumber?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -125,7 +108,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Dept. Date",
-                            desctiption = "2023/03/23"
+                            desctiption =  flightScheduleValue.value?.scheduledDepartureDateTime?.split("T")?.first() ?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -136,7 +119,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Dept. Time",
-                            desctiption = "10:20 PM"
+                            desctiption = flightScheduleValue.value?.scheduledDepartureDateTime?.split("T")?.last()?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -147,7 +130,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Cut Off Time",
-                            desctiption = "11:00 PM"
+                            desctiption =flightScheduleValue.value?.cutoffTime?.split("T")?.last() ?: "-"
                         )
                     }
 
@@ -159,7 +142,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "ORIG",
-                            desctiption = "CAD"
+                            desctiption = flightScheduleValue.value?.originAirportCode?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -170,7 +153,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "DEST",
-                            desctiption = "NZW"
+                            desctiption = flightScheduleValue.value?.destinationAirportCode?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -181,7 +164,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Act Type",
-                            desctiption = "A320"
+                            desctiption = flightScheduleValue.value?.aircraftSubTypeName?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -192,7 +175,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "ULD Position",
-                            desctiption = "10"
+                            desctiption =  flightScheduleValue.value?.uldPositionCount.toString()?: "0"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -203,7 +186,7 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "ULD Count",
-                            desctiption = "8",
+                            desctiption =  flightScheduleValue.value?.uldCount.toString()?: "0",
                             textColor = Green
                         )
                     }

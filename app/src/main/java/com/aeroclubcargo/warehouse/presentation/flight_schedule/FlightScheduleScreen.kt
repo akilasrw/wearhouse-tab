@@ -1,7 +1,6 @@
 package com.aeroclubcargo.warehouse.presentation.flight_schedule
 
 import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.widget.DatePicker
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.BlueLight
@@ -41,6 +41,8 @@ import com.aeroclubcargo.warehouse.theme.Gray1
 import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.hintLightGray
 import com.aeroclubcargo.warehouse.utils.toDurationTime
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -193,9 +195,6 @@ fun GetCutOffTimeList(
                     onClick = {
                         viewModel.getScheduleList()
                         keyboardController?.hide()
-                        filterButton.freeFocus()
-                        frFlightToDate.freeFocus()
-                        frFlightFromDate.freeFocus()
                     },
                 ) {
                     Text(text = "Find", style = TextStyle(color = Color.White))
@@ -230,7 +229,7 @@ val column10Weight = .09f
 @Composable
 fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController) {
     val mContext = LocalContext.current
-    val todoListState = viewModel.todoListFlow.collectAsState()
+    val flightScheduleList = viewModel.flightScheduleListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
     val showAlert = remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -275,24 +274,30 @@ fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController
             }
         }
         // data
-        items(todoListState.value) {booking->
+        items(flightScheduleList.value) { flightScheduleModel->
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TableCell(text = "${booking.flightNumber}", weight =  column1Weight)
-                TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.first()}", weight =  column2Weight)
-                TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.last()}", weight =  column3Weight)
-                TableCell(text = booking.cutoffTimeMin?.toDurationTime() ?: "-", weight =  column4Weight)
-                TableCell(text = "${booking.originAirportCode}", weight =  column5Weight)
-                TableCell(text = "${booking.destinationAirportCode}", weight =  column6Weight)
-                TableCell(text = booking.aircraftRegNo ?:"-", weight =  column7Weight)
-                TableCell(text = (booking.totalBookedWeight.toString()), weight =  column8Weight)
-                TableCell(text = (booking.totalBookedVolume.toString()), weight =  column9Weight)
+                TableCell(text = "${flightScheduleModel.flightNumber}", weight =  column1Weight)
+                TableCell(text = "${flightScheduleModel.scheduledDepartureDateTime?.split("T")?.first()}", weight =  column2Weight)
+                TableCell(text = "${flightScheduleModel.scheduledDepartureDateTime?.split("T")?.last()}", weight =  column3Weight)
+                TableCell(text = flightScheduleModel.cutoffTime?.split("T")?.last() ?: "-", weight =  column4Weight)
+                TableCell(text = "${flightScheduleModel.originAirportCode}", weight =  column5Weight)
+                TableCell(text = "${flightScheduleModel.destinationAirportCode}", weight =  column6Weight)
+                TableCell(text = flightScheduleModel.aircraftSubTypeName ?:"-", weight =  column7Weight)
+                TableCell(text = (flightScheduleModel.uldPositionCount.toString()), weight =  column8Weight)
+                TableCell(text = (flightScheduleModel.uldCount.toString()), weight =  column9Weight)
                 IconButton(
                     onClick = {
-                        navController.navigate(Screen.ULDAssignmentScreen.route)
+
+                        val moshi = Moshi.Builder()
+                            .add(KotlinJsonAdapterFactory())
+                            .build()
+                        val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
+                        val flightJson = jsonAdapter.toJson(flightScheduleModel)
+                        navController.navigate(Screen.ULDAssignmentScreen.route+"/${flightJson}")
                     }
                 ) {
                     Icon(

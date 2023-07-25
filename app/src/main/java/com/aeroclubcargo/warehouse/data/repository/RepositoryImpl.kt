@@ -84,6 +84,13 @@ class RepositoryImpl @Inject constructor(
         return  apiInterface.updatePackage(body)
     }
 
+    override suspend fun getFlightScheduleWithULDCount(
+        scheduledDepartureStartDateTime: String,
+        scheduledDepartureEndDateTime: String
+    ): Response<List<FlightScheduleModel>> {
+        return apiInterface.getFlightScheduleWithULDCount(scheduledDepartureStartDateTime, scheduledDepartureEndDateTime)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }

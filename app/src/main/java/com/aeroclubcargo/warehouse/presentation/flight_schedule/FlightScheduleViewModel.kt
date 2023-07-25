@@ -5,13 +5,17 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.domain.model.CutOffTimeModel
+import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.domain.repository.Repository
+import com.aeroclubcargo.warehouse.utils.Utils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,14 +39,15 @@ class FlightScheduleViewModel  @Inject constructor(private var repository: Repos
     fun onFlightToDateChange(date: String){
         _dateToValue.value = date
     }
-    private var todoList = mutableStateListOf<CutOffTimeModel>()
+    private var todoList = mutableStateListOf<FlightScheduleModel>()
     private val _todoListFlow = MutableStateFlow(todoList)
 
-    val todoListFlow: StateFlow<List<CutOffTimeModel>> get() = _todoListFlow
+    val flightScheduleListFlow: StateFlow<List<FlightScheduleModel>> get() = _todoListFlow
 
     init {
         getScheduleList()
-
+        _dateFromValue.value = Utils.getDateBeforeOneMonth()
+        _dateToValue.value = Utils.getTodayDate()
     }
 
     fun setLoading( isLoading: Boolean){
@@ -54,15 +59,16 @@ class FlightScheduleViewModel  @Inject constructor(private var repository: Repos
             setLoading(true)
             delay(timeMillis = 1000)
             try{
-                val paginatedList = repository.cargoBookingSummaryList(FlightNumber = "", FlightDate = flightDateFromValue.value,1,11)
-                if(paginatedList.data!= null){
+                val paginatedList = repository.getFlightScheduleWithULDCount( scheduledDepartureStartDateTime = flightDateFromValue.value,scheduledDepartureEndDateTime = flightDateToValue.value)
+                if(paginatedList.isSuccessful &&
+                    paginatedList.body() != null) {
                     todoList.clear()
-                    todoList.addAll(paginatedList.data!!)
+                    todoList.addAll(paginatedList.body()!!)
                 }
                 setLoading(false)
             }catch (e:Exception){
                 setLoading(false)
-                Log.d("CutOffTimeViewModel",e.toString())
+                Log.d("FlightScheduleViewModel",e.toString())
             }
         }
     }
