@@ -68,7 +68,7 @@ fun ScanCargoScreen(navController: NavController, viewModel: ScanCargoViewModel 
 
         var tabIndex by remember { mutableStateOf(0) }
 
-        val tabs = listOf("Scan QR code", "Enter AWB number")
+        val tabs = listOf(" code", "Enter AWB number")
 
 
         Column(modifier = Modifier
