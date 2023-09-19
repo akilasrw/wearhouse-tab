@@ -22,8 +22,16 @@ class ULDAssignmentViewModel  @Inject constructor(private var repository: Reposi
     val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
+
     private val _flightScheduleValue = MutableStateFlow<FlightScheduleModel?>(null)
     val flightScheduleValue = _flightScheduleValue.asStateFlow()
+
+    private val _flightULDvalue = MutableStateFlow<String>("")
+    val flightULDValue = _flightULDvalue.asStateFlow()
+
+    fun setFlightULDValue (value : String){
+        _flightULDvalue.value = value
+    }
 
     fun setFlightSchedule(schedule: FlightScheduleModel?){
         _flightScheduleValue.value = schedule

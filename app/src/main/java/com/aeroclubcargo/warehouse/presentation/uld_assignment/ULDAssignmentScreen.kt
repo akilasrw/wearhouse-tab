@@ -13,10 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -48,30 +45,44 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun ULDAssignmentScreen(navController: NavController, scheduleModel: FlightScheduleModel?, viewModel: ULDAssignmentViewModel = hiltViewModel()){
+fun ULDAssignmentScreen(navController: NavController,
+                        scheduleModel: FlightScheduleModel?,
+                        viewModel: ULDAssignmentViewModel = hiltViewModel()){
     viewModel.setFlightSchedule(scheduleModel)
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
-        GetCutOffTimeList(viewModel, navController)
+
+        val updatePackageSheetState = rememberModalBottomSheetState(
+            initialValue = ModalBottomSheetValue.Hidden,
+            confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
+        )
+
+        CheckPackageItemSheet(content = {
+            GetCutOffTimeList(viewModel, navController, modalSheetState = updatePackageSheetState)
+        }, modalSheetState = updatePackageSheetState, viewModel = viewModel)
+
+
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun GetCutOffTimeList(
     viewModel: ULDAssignmentViewModel,
     navController: NavController,
+    modalSheetState: ModalBottomSheetState,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     val keyboardController = LocalSoftwareKeyboardController.current
     val mContext = LocalContext.current
 
     val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
 
     val isLoading  = viewModel.isLoading.collectAsState()
-    var calendar = Calendar.getInstance()
-
     Column(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp),
@@ -203,10 +214,19 @@ fun GetCutOffTimeList(
                     Spacer(modifier = Modifier.width(6.dp))
                     Divider(color = Gray4)
                     Spacer(modifier = Modifier.width(6.dp))
-                    Row(modifier = Modifier.fillMaxWidth().padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
                         Text(text = "Added ULD")
                         Button(onClick = {
-                            /*TODO*/
+                            coroutineScope.launch {
+                                if (modalSheetState.isVisible)
+                                    modalSheetState.hide()
+                                else {
+                                    modalSheetState.animateTo(ModalBottomSheetValue.Expanded)
+                                }
+                            }
+
                         }) {
                             Text(text = "Add ULD", style = TextStyle(color = Color.White))
                         }

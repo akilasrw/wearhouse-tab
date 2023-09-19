@@ -12,3 +12,14 @@ sealed class Screen(val route: String) {
     object FlightScheduleScreen : Screen("flight_schedule_screen")
     object ULDAssignmentScreen : Screen("uld_assignment_screen")
 }
+
+// TODO
+// CHANGE TILE ORDERS
+/**
+ * 1. verify booking -> (rename to) accept Cargo (barcode QR code)
+ * 2. flight schedule -> (rename to) Assign ULD
+ * 3. received cargo (same screens as update cutoff time)
+ * 4
+
+ */
+//
