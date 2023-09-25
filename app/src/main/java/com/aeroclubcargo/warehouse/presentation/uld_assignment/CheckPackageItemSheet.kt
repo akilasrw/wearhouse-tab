@@ -26,6 +26,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -128,7 +129,7 @@ fun CheckPackageItemSheet(
                     }
                     Spacer(modifier = Modifier.weight(0.5f))
                 }
-                Column(modifier = Modifier.fillMaxHeight()) {
+                Column(modifier = Modifier.fillMaxHeight().padding(16.dp)) {
                     Divider(color = Gray4)
                     ULDRowItemTitle()
                     ULDTable()
@@ -203,21 +204,22 @@ fun ULDRowItemTitle(
             .fillMaxWidth()
             .background(color = Gray5)
             .padding(8.dp),
+
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         Spacer(modifier = Modifier.weight(column1Weight))
-        Text(text = "ULD Number")
+        Text(text = "ULD Number", textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column2Weight))
-        Text(text = "ULD type")
+        Text(text = "ULD type", textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column3Weight))
-        Text(text = "Dimensions (L x W x H) cm")
+        Text(text = "Dimensions (L x W x H) cm", textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column4Weight))
-        Text(text = "Max Weight")
+        Text(text = "Max Weight", textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column5Weight))
-        Text(text = "Max Volume") // Replace with your data for Column E
+        Text(text = "Max Volume", textAlign = TextAlign.Start) // Replace with your data for Column E
         Spacer(modifier = Modifier.weight(column6Weight))
-        Text(text = "Add") //
+        Text(text = "Add", textAlign = TextAlign.Start) //
     }
 }
 
@@ -231,20 +233,20 @@ fun ULDRowItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp),
+            .height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start
     ) {
         Spacer(modifier = Modifier.weight(column1Weight))
-        Text(text = uldInfo.uldNumber)
+        Text(text = uldInfo.uldNumber, textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column2Weight))
-        Text(text = uldInfo.type)
+        Text(text = uldInfo.type, textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column3Weight))
-        Text(text = uldInfo.dimensions)
+        Text(text = uldInfo.dimensions, textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column4Weight))
-        Text(text = uldInfo.maxWeight)
+        Text(text = uldInfo.maxWeight, textAlign = TextAlign.Start)
         Spacer(modifier = Modifier.weight(column5Weight))
-        Text(text = uldInfo.maxVolume) // Replace with your data for Column E
+        Text(text = uldInfo.maxVolume, textAlign = TextAlign.Start) // Replace with your data for Column E
         Spacer(modifier = Modifier.weight(column6Weight))
         Checkbox(
             checked = isChecked,
