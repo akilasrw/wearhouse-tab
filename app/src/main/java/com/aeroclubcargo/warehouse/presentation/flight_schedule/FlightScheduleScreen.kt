@@ -36,10 +36,7 @@ import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
-import com.aeroclubcargo.warehouse.theme.BlueLight
-import com.aeroclubcargo.warehouse.theme.Gray1
-import com.aeroclubcargo.warehouse.theme.Gray2
-import com.aeroclubcargo.warehouse.theme.hintLightGray
+import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toDurationTime
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -230,7 +227,7 @@ val column10Weight = .09f
 fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController) {
     val mContext = LocalContext.current
     val flightScheduleList = viewModel.flightScheduleListFlow.collectAsState()
-    val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
+    val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
     val showAlert = remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -257,7 +254,7 @@ fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController
         // header
         item {
             Row(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxWidth().background(color = Gray5),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
