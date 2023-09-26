@@ -216,7 +216,8 @@ fun GetCutOffTimeList(
                     Spacer(modifier = Modifier.width(6.dp))
                     Row(modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+                        .padding(8.dp), horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically) {
                         Text(text = "Added ULD")
                         Button(onClick = {
                             coroutineScope.launch {
@@ -231,6 +232,7 @@ fun GetCutOffTimeList(
                             Text(text = "Add ULD", style = TextStyle(color = Color.White))
                         }
                     }
+                    FlightsTable(viewModel= viewModel)
                 }
             }
 
@@ -253,116 +255,147 @@ fun HeaderTile(title:String,desctiption:String,textColor: Color =  Color.Black) 
     }
 }
 
-//
-//val column1Weight = .1f
-//val column2Weight = .12f
-//val column3Weight = .12f
-//val column4Weight = .1f
-//val column5Weight = .1f
-//val column6Weight = .1f
-//val column7Weight = .1f
-//val column8Weight = .125f
-//val column9Weight = .125f
-//val column10Weight = .09f
-//
-//@Composable
-//fun FlightsTable(viewModel: ULDAssignmentViewModel) {
-//    val mContext = LocalContext.current
-//    val todoListState = viewModel.todoListFlow.collectAsState()
-//    val headerStyle = MaterialTheme.typography.body2.copy(color = hintLightGray)
-//    val showAlert = remember { mutableStateOf(false) }
-//    val context = LocalContext.current
-//
-//    if (showAlert.value) {
-//        AlertDialog(
-//            onDismissRequest = { showAlert.value = false },
-//            title = { Text("Error") },
-//            text = { Text("cut-off time should be Below the scheduled time") },
-//            confirmButton = {
-//                Button(
-//                    onClick = { showAlert.value = false }
-//                ) {
-//                    Text(stringResource(R.string.ok))
-//                }
-//            },
-//            modifier = Modifier.padding(16.dp)
-//        )
-//    }
-//    LazyColumn(
-//        Modifier
-//            .fillMaxSize()
-//            .padding(16.dp)
-//    ) {
-//        // header
-//        item {
-//            Row(
-//                Modifier.fillMaxWidth(),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Start
-//            ) {
-//                TableCell(text = "Flight No.", weight = column1Weight, style = headerStyle)
-//                TableCell(text = "Dep.Date", weight = column2Weight, style = headerStyle)
-//                TableCell(text = "Dep.Time", weight = column3Weight, style = headerStyle)
-//                TableCell(text = "Cut Off Time", weight = column4Weight, style = headerStyle)
-//                TableCell(text = "Origin", weight = column5Weight, style = headerStyle)
-//                TableCell(text = "Dest", weight = column6Weight, style = headerStyle)
-//                TableCell(text = "Aircraft Type", weight = column7Weight, style = headerStyle)
-//                TableCell(text = "ULD\nPositions", weight = column8Weight, style = headerStyle)
-//                TableCell(text = "ULD\nCount", weight = column9Weight, style = headerStyle)
-//                TableCell(text = "Add ULD", weight = column10Weight, style = headerStyle)
-//            }
-//        }
-//        // data
-//        items(todoListState.value) {booking->
-//            Row(
-//                Modifier.fillMaxWidth(),
-//                verticalAlignment = Alignment.CenterVertically,
-//                horizontalArrangement = Arrangement.Center
-//            ) {
-//                TableCell(text = "${booking.flightNumber}", weight =  column1Weight)
-//                TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.first()}", weight =  column2Weight)
-//                TableCell(text = "${booking.scheduledDepartureDateTime?.split("T")?.last()}", weight =  column3Weight)
-//                TableCell(text = booking.cutoffTimeMin?.toDurationTime() ?: "-", weight =  column4Weight)
-//                TableCell(text = "${booking.originAirportCode}", weight =  column5Weight)
-//                TableCell(text = "${booking.destinationAirportCode}", weight =  column6Weight)
-//                TableCell(text = booking.aircraftRegNo ?:"-", weight =  column7Weight)
-//                TableCell(text = (booking.totalBookedWeight.toString()), weight =  column8Weight)
-//                TableCell(text = (booking.totalBookedVolume.toString()), weight =  column9Weight)
-//                IconButton(
-//                    onClick = {
-//                        //TODO
-//                    }
-//                ) {
-//                    Icon(
-//                        painter = painterResource(R.drawable.ic_add),
-//                        contentDescription = "edit",
-//                        modifier = Modifier
-//                            .size(24.dp)
-//                            .padding(3.dp),
-//                        tint = BlueLight
-//                    )
-//                }
-//
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun RowScope.TableCell(
-//    text: String,
-//    weight: Float,
-//    style: TextStyle = MaterialTheme.typography.body2
-//) {
-//    Text(
-//        text = text,
-//        Modifier
-//            .weight(weight)
-//            .padding(8.dp),
-//        style = style,
-//        textAlign = TextAlign.Center
-//    )
-//}
-//
+
+
+
+@Composable
+fun FlightsTable(viewModel: ULDAssignmentViewModel) {
+    val mContext = LocalContext.current
+    val todoListState = viewModel.todoListFlow.collectAsState()
+    val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
+    val showAlert = remember { mutableStateOf(false) }
+
+    if (showAlert.value) {
+        AlertDialog(
+            onDismissRequest = { showAlert.value = false },
+            title = { Text("Error") },
+            text = { Text("cut-off time should be Below the scheduled time") },
+            confirmButton = {
+                Button(
+                    onClick = { showAlert.value = false }
+                ) {
+                    Text(stringResource(R.string.ok))
+                }
+            },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        // header
+        item {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = Gray5),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                TableCell(text = "ULD number", weight = column2Weight, style = headerStyle)
+                TableCell(text = "ULD Type", weight = column1Weight, style = headerStyle)
+                TableCell(text = "Dimensions", weight = column2Weight, style = headerStyle)
+                TableCell(text = "Max Weight", weight = column3Weight, style = headerStyle)
+                TableCell(text = "Received Weight", weight = column10Weight, style = headerStyle)
+                TableCell(text = "Max Volume", weight = column5Weight, style = headerStyle)
+                TableCell(text = "Received Volume", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Actions", weight = column8Weight, style = headerStyle)
+            }
+        }
+        // data
+        items(todoListState.value) {booking->
+            Row(
+                Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
+                TableCell(text = "PAG 20006 4G", weight =  column2Weight)
+                TableCell(text = "Palette", weight =  column1Weight)
+                TableCell(text = "317.5 x 122.5 x 55", weight =  column2Weight)
+                TableCell(text =  "1814 Kg", weight =  column3Weight)
+                TableCell(text = "-", weight =  column10Weight)
+                TableCell(text = "0.01 m3", weight =  column5Weight)
+                TableCell(text = "-", weight =  column6Weight)
+                Row(Modifier.weight(column8Weight)) {
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_view),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_edit),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_add),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_delete),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun RowScope.TableCell(
+    text: String,
+    weight: Float,
+    style: TextStyle = MaterialTheme.typography.body2
+) {
+    Text(
+        text = text,
+        Modifier
+            .weight(weight)
+            .padding(8.dp),
+        style = style,
+        textAlign = TextAlign.Center
+    )
+}
+
 
 

@@ -29,6 +29,9 @@ class ULDAssignmentViewModel  @Inject constructor(private var repository: Reposi
     private val _flightULDvalue = MutableStateFlow<String>("")
     val flightULDValue = _flightULDvalue.asStateFlow()
 
+    private val _todoListFlow = MutableStateFlow<List<String>>(value = listOf("asd","asda","asd","dasd","sada","ada","asd","asda","asd","dasd","sada","ada"))
+    var todoListFlow = _todoListFlow.asStateFlow()
+
     fun setFlightULDValue (value : String){
         _flightULDvalue.value = value
     }
