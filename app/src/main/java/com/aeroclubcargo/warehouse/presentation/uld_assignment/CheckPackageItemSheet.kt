@@ -192,7 +192,7 @@ val column5Weight = .1f
 val column6Weight = .1f
 val column7Weight = .1f
 val column8Weight = .125f
-val column9Weight = .125f
+val column9Weight = .12f
 val column10Weight = .09f
 
 

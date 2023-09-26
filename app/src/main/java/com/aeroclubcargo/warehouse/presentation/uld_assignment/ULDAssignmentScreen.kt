@@ -301,7 +301,7 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                 TableCell(text = "Received Weight", weight = column10Weight, style = headerStyle)
                 TableCell(text = "Max Volume", weight = column5Weight, style = headerStyle)
                 TableCell(text = "Received Volume", weight = column6Weight, style = headerStyle)
-                TableCell(text = "Actions", weight = column8Weight, style = headerStyle)
+                TableCell(text = "Actions", weight = column9Weight, style = headerStyle)
             }
         }
         // data
@@ -318,8 +318,9 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                 TableCell(text = "-", weight =  column10Weight)
                 TableCell(text = "0.01 m3", weight =  column5Weight)
                 TableCell(text = "-", weight =  column6Weight)
-                Row(Modifier.weight(column8Weight)) {
+                Row(Modifier.weight(column9Weight), horizontalArrangement = Arrangement.SpaceBetween) {
                     IconButton(
+                        modifier = Modifier.size(24.dp),
                         onClick = {
 
                         }
@@ -328,12 +329,13 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                             painter = painterResource(R.drawable.ic_view),
                             contentDescription = "edit",
                             modifier = Modifier
-                                .size(24.dp)
-                                .padding(3.dp),
+                                .size(18.dp)
+                                .padding(1.dp),
                             tint = BlueLight
                         )
                     }
                     IconButton(
+                        modifier = Modifier.size(24.dp),
                         onClick = {
 
                         }
@@ -342,12 +344,13 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                             painter = painterResource(R.drawable.ic_edit),
                             contentDescription = "edit",
                             modifier = Modifier
-                                .size(24.dp)
-                                .padding(3.dp),
+                                .size(18.dp)
+                                .padding(1.dp),
                             tint = BlueLight
                         )
                     }
                     IconButton(
+                        modifier = Modifier.size(24.dp),
                         onClick = {
 
                         }
@@ -356,12 +359,13 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                             painter = painterResource(R.drawable.ic_add),
                             contentDescription = "edit",
                             modifier = Modifier
-                                .size(24.dp)
-                                .padding(3.dp),
+                                .size(18.dp)
+                                .padding(1.dp),
                             tint = BlueLight
                         )
                     }
                     IconButton(
+                        modifier = Modifier.size(24.dp),
                         onClick = {
 
                         }
@@ -370,8 +374,8 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                             painter = painterResource(R.drawable.ic_delete),
                             contentDescription = "edit",
                             modifier = Modifier
-                                .size(24.dp)
-                                .padding(3.dp),
+                                .size(18.dp)
+                                .padding(1.dp),
                             tint = BlueLight
                         )
                     }
