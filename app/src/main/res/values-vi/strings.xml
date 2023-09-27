@@ -21,7 +21,7 @@
     <string name="cancel">Cancel</string>
     <string name="verify_booking">Verify Booking</string>
     <string name="accept_cargo">Accept Cargo</string>
-    <string name="recent_accepted_cargo_booking">Recent Accepted Cargo Bookings</string>
+    <string name="recent_accepted_cargo_booking">Recently Accepted Cargo</string>
     <string name="long_text">Test</string>
     <string name="add_lir_data">Add LIR Data</string>
     <string name="assign_cargo_to_uld">Assign Cargo to ULD</string>
