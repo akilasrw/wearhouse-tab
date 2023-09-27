@@ -50,13 +50,19 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
             GetTileButton(
-                id = R.drawable.ic_flight_schedule,
-                text = stringResource(R.string.flight_schedule),
+                id = R.drawable.ic_accepted,
+                text = stringResource(R.string.accept_cargo),
+                onClick = {
+                    navController.navigate(Screen.ScanCargoScreen.route)
+                })
+            Spacer(modifier = Modifier.width(8.dp))
+            GetTileButton(
+                id = R.drawable.ic_outline_inventory_2_24,
+                text = stringResource(R.string.receive_cargo),
                 onClick = {
                     navController.navigate(Screen.FlightScheduleScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
-
             GetTileButton(
                 id = R.drawable.ic_cut_off_time, // TODO replace icon
                 text = stringResource(R.string.cutt_off_time),
@@ -65,18 +71,11 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_scan,
-                text = stringResource(R.string.verify_booking),
+                id = R.drawable.ic_document,
+                text = stringResource(R.string.add_lir_data),
                 onClick = {
-                    navController.navigate(Screen.VerifyBookingScreen.route+"/11591530000") // TODO remove hadcoded navigation
+//                    navController.navigate(Screen.VerifyBookingScreen.route+"/11591530000") // TODO remove hadcoded navigation
 //                    navController.navigate(Screen.VerifyBookingScreen.route)
-                })
-            Spacer(modifier = Modifier.width(8.dp))
-            GetTileButton(
-                id = R.drawable.ic_accepted,
-                text = stringResource(R.string.accept_cargo),
-                onClick = {
-                    navController.navigate(Screen.ScanCargoScreen.route)
                 })
             Spacer(modifier = Modifier.width(16.dp))
         }
@@ -84,30 +83,35 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
 
-
             GetTileButton(
-                id = R.drawable.ic_uld_master, // TODO replace icon
-                text = stringResource(R.string.uld_master),
+                id = R.drawable.ic_pallet_24,
+                text = stringResource(R.string.assign_cargo_to_uld),
                 onClick = {
-                    navController.navigate(Screen.ULDMasterScreen.route)
+                    navController.navigate(Screen.FlightScheduleScreen.route)
                 })
+//            GetTileButton(
+//                id = R.drawable.ic_uld_master, // TODO replace icon
+//                text = stringResource(R.string.uld_master),
+//                onClick = {
+//                    navController.navigate(Screen.ULDMasterScreen.route)
+//                })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
                 id = R.drawable.ic_booking_assignment, // TODO replace icon
-                text = stringResource(R.string.booking_assignment),
+                text = stringResource(R.string.finalize_lir),
                 onClick = {
                     // TODO
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_pallet_assignment, // TODO replace icon
-                text = stringResource(R.string.pallet_assignment),
+                id = R.drawable.ic_shelves_24, // TODO replace icon
+                text = stringResource(R.string.uld_master),
                 onClick = {
 
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_document,
+                id = R.drawable.ic_outline_comment_24,
                 text = stringResource(R.string.special_package_handling),
                 onClick = {
                     // TODO
