@@ -11,6 +11,7 @@ import com.aeroclubcargo.warehouse.presentation.cutoff_time.CutOffTimeScreen
 import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
 import com.aeroclubcargo.warehouse.presentation.flight_schedule.FlightScheduleScreen
 import com.aeroclubcargo.warehouse.presentation.login.LoginScreen
+import com.aeroclubcargo.warehouse.presentation.receive_cargo.ReceiveCargoListScreen
 import com.aeroclubcargo.warehouse.presentation.scan_cargo.ScanCargoScreen
 import com.aeroclubcargo.warehouse.presentation.splash.SplashScreen
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.ULDAssignmentScreen
@@ -71,6 +72,11 @@ fun navigation() {
             route = Screen.FlightScheduleScreen.route
         ){
             FlightScheduleScreen(navController)
+        }
+        composable(
+            route = Screen.ReceiveCargoListScreen.route
+        ){
+            ReceiveCargoListScreen(navController)
         }
         composable(
             route = Screen.ULDAssignmentScreen.route+"/{parameter}",

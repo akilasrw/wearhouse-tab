@@ -60,7 +60,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_outline_inventory_2_24,
                 text = stringResource(R.string.receive_cargo),
                 onClick = {
-                    navController.navigate(Screen.FlightScheduleScreen.route)
+                    navController.navigate(Screen.ReceiveCargoListScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
@@ -82,7 +82,6 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
         Spacer(modifier = Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
-
             GetTileButton(
                 id = R.drawable.ic_pallet_24,
                 text = stringResource(R.string.assign_cargo_to_uld),
