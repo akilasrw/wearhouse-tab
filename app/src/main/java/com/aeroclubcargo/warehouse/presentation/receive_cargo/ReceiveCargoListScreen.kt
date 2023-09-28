@@ -314,6 +314,7 @@ fun FlightsTable(viewModel: ReceiveCargoListViewModel, navController: NavControl
                 TableCell(text = "${flightScheduleModel.destinationAirportCode}", weight =  column6Weight)
                 TableCell(text = flightScheduleModel.aircraftSubTypeName ?:"-", weight =  column7Weight)
                 IconButton(
+                    modifier = Modifier.weight(column10Weight),
                     onClick = {
 //                    TODO    navController.navigate( // add route)
                     }
