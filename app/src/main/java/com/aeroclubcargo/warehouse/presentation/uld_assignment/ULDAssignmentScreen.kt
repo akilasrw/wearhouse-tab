@@ -3,6 +3,7 @@ package com.aeroclubcargo.warehouse.presentation.uld_assignment
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.widget.DatePicker
+import androidx.collection.CircularIntArray
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -34,6 +35,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
@@ -305,83 +307,86 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
             }
         }
         // data
-        items(todoListState.value) {booking->
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                TableCell(text = "PAG 20006 4G", weight =  column2Weight)
-                TableCell(text = "Palette", weight =  column1Weight)
-                TableCell(text = "317.5 x 122.5 x 55", weight =  column2Weight)
-                TableCell(text =  "1814 Kg", weight =  column3Weight)
-                TableCell(text = "-", weight =  column10Weight)
-                TableCell(text = "0.01 m3", weight =  column5Weight)
-                TableCell(text = "-", weight =  column6Weight)
-                Row(Modifier.weight(column9Weight), horizontalArrangement = Arrangement.SpaceBetween) {
-                    IconButton(
-                        modifier = Modifier.size(24.dp),
-                        onClick = {
+        if (todoListState.value!= null){
+            items(todoListState.value!!) {uldModel->
+                Row(
+                    Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    TableCell(text = "${uldModel.serialNumber}", weight =  column2Weight)
+                    TableCell(text = "${getULDType(uldModel.uldType)}", weight =  column1Weight)
+                    TableCell(text = "${uldModel.width} x ${uldModel.height}x ${uldModel.length}", weight =  column2Weight)
+                    TableCell(text =  "${uldModel.maxWeight} Kg", weight =  column3Weight)
+                    TableCell(text = "${uldModel.weight} kg", weight =  column10Weight)
+                    TableCell(text = "${uldModel.maxVolume} m3", weight =  column5Weight)
+                    TableCell(text = "${uldModel.width* uldModel.height * uldModel.length} m3", weight =  column6Weight)
+                    Row(Modifier.weight(column9Weight), horizontalArrangement = Arrangement.SpaceBetween) {
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
 
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_view),
+                                contentDescription = "edit",
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .padding(1.dp),
+                                tint = BlueLight
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_view),
-                            contentDescription = "edit",
-                            modifier = Modifier
-                                .size(18.dp)
-                                .padding(1.dp),
-                            tint = BlueLight
-                        )
-                    }
-                    IconButton(
-                        modifier = Modifier.size(24.dp),
-                        onClick = {
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
 
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_edit),
+                                contentDescription = "edit",
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .padding(1.dp),
+                                tint = BlueLight
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_edit),
-                            contentDescription = "edit",
-                            modifier = Modifier
-                                .size(18.dp)
-                                .padding(1.dp),
-                            tint = BlueLight
-                        )
-                    }
-                    IconButton(
-                        modifier = Modifier.size(24.dp),
-                        onClick = {
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
 
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_add),
+                                contentDescription = "edit",
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .padding(1.dp),
+                                tint = BlueLight
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_add),
-                            contentDescription = "edit",
-                            modifier = Modifier
-                                .size(18.dp)
-                                .padding(1.dp),
-                            tint = BlueLight
-                        )
-                    }
-                    IconButton(
-                        modifier = Modifier.size(24.dp),
-                        onClick = {
+                        IconButton(
+                            modifier = Modifier.size(24.dp),
+                            onClick = {
 
+                            }
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_delete),
+                                contentDescription = "edit",
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .padding(1.dp),
+                                tint = BlueLight
+                            )
                         }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_delete),
-                            contentDescription = "edit",
-                            modifier = Modifier
-                                .size(18.dp)
-                                .padding(1.dp),
-                            tint = BlueLight
-                        )
                     }
                 }
             }
         }
+
     }
 }
 

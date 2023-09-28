@@ -51,6 +51,30 @@ object Constants {
         Dgr
     }
 
+    enum class ULDType
+    {
+        None,
+        Pallet ,
+        Container
+    }
+
+    fun getULDType(type: Int?): String {
+        if (type == null) {
+            return ""
+        }
+        when (ULDType.values()[type]) {
+            ULDType.None -> {
+                return "None"
+            }
+            ULDType.Pallet -> {
+                return "On Floor"
+            }
+            ULDType.Container -> {
+                return "On Seat"
+            }
+        }
+    }
+
 
 
     fun getPackageItemCategory(packageType : Int) : String{

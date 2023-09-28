@@ -65,4 +65,7 @@ interface ApiInterface {
         @Query("ScheduledDepartureEndDateTime") scheduledDepartureEndDateTime : String,
     ): Response<List<FlightScheduleModel>>
 
+    @GET("api/${Constants.API_VERSION}/ULD/GetFilteredList")
+    suspend fun getULDFilteredList(@Query("PageIndex") pageIndex:Int,@Query("PageSize") pageSize:Int): Response<Pagination<ULDModel>>
+
 }
