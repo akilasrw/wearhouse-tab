@@ -314,7 +314,12 @@ fun FlightsTable(viewModel: ReceiveCargoListViewModel, navController: NavControl
                 IconButton(
                     modifier = Modifier.weight(column10Weight),
                     onClick = {
-                        navController.navigate(Screen.ReceivedCargoDetailScreen.route)
+                        val moshi = Moshi.Builder()
+                            .add(KotlinJsonAdapterFactory())
+                            .build()
+                        val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
+                        val flightJson = jsonAdapter.toJson(flightScheduleModel)
+                        navController.navigate(Screen.ReceivedCargoDetailScreen.route+"/${flightJson}")
                     }
                 ) {
                     Icon(

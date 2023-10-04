@@ -79,8 +79,17 @@ fun navigation() {
         ){
             ReceiveCargoListScreen(navController)
         }
-        composable(route = Screen.ReceivedCargoDetailScreen.route){
-            ReceivedCargoDetailScreen(navController)
+        composable(
+            route = Screen.ReceivedCargoDetailScreen.route+"/{parameter}",
+            arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
+            ){ backStackEntry ->
+            val userJson =  backStackEntry.arguments?.getString("parameter")
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+            val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
+            val userObject = jsonAdapter.fromJson(userJson)
+            ReceivedCargoDetailScreen(navController,userObject)
         }
         composable(
             route = Screen.ULDAssignmentScreen.route+"/{parameter}",

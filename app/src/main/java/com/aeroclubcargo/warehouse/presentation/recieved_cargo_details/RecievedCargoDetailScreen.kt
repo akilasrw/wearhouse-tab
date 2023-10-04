@@ -55,6 +55,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
+import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
 import kotlinx.coroutines.launch
@@ -62,8 +63,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ReceivedCargoDetailScreen(navController: NavController,
+                              scheduleModel: FlightScheduleModel?,
                            viewModel : ReceivedCargoDetailVM = hiltViewModel()
 ){
+    viewModel.setFlightSchedule(scheduleModel)
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
@@ -85,7 +88,7 @@ fun GetCutOffTimeList(
     val keyboardController = LocalSoftwareKeyboardController.current
     val mContext = LocalContext.current
 
-//    val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
+    val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
 
     val isLoading  = viewModel.isLoading.collectAsState()
     Column(modifier = Modifier
@@ -112,8 +115,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "Agent Name",
-                            description = "DHL"
+                            title = "Flight No",
+                            description = flightScheduleValue.value?.flightNumber?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -123,8 +126,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "AWB Number",
-                            description =  "345678964"
+                            title = "Dept. Date",
+                            description =  flightScheduleValue.value?.scheduledDepartureDateTime?.split("T")?.first() ?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -134,8 +137,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "No of Packages",
-                            description = "12"
+                            title = "Dept. Time",
+                            description = flightScheduleValue.value?.scheduledDepartureDateTime?.split("T")?.last()?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -145,8 +148,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "Total Weight",
-                            description = "53"
+                            title = "Cut Off Time",
+                            description =flightScheduleValue.value?.cutoffTime?.split("T")?.last() ?: "-"
                         )
                     }
 
@@ -157,8 +160,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "Total Volme",
-                            description = "1m3"
+                            title = "ORIG",
+                            description = flightScheduleValue.value?.originAirportCode?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -168,8 +171,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "Recevied Date and Time",
-                            description = "26/09/23 10.34am"
+                            title = "DEST",
+                            description = flightScheduleValue.value?.destinationAirportCode?: "-"
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -179,8 +182,8 @@ fun GetCutOffTimeList(
 
                     ) {
                         HeaderTile(
-                            title = "Cargo Details",
-                            description =  "show more",
+                            title = "Act Type",
+                            description = flightScheduleValue.value?.aircraftSubTypeName?: "-",
                             textColor = Green
                         )
                     }
@@ -255,8 +258,12 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
+                TableCell(text = "Agent Name", weight =  .2f, style = headerStyle)
                 TableCell(text = "AWB Number", weight =  .2f, style = headerStyle)
-                TableCell(text = "", weight = .8f )
+                TableCell(text = "No of Packages", weight =  .2f, style = headerStyle)
+                TableCell(text = "Total Weight", weight =  .2f, style = headerStyle)
+                TableCell(text = "Total Volume", weight =  .2f, style = headerStyle)
+                TableCell(text = "Received Date and Time", weight =  .4f, style = headerStyle)
                 TableCell(text = "Action", weight = column1Weight, style = headerStyle)
             }
         }
@@ -283,8 +290,12 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        TableCell(text = "2340505", weight =  .2f ,style = MaterialTheme.typography.button)
-                        TableCell(text = "", weight = .8f )
+                        TableCell(text = "DHL", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "345678964", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "12", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "53", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "1m3", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "26/09/23 10.34am", weight =  .4f ,style = MaterialTheme.typography.button)
                         Row(modifier = Modifier
                             .padding(0.dp)
                             .weight(column1Weight),
@@ -304,7 +315,6 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                     }
                     if (isExpanded) {
                         Column {
-                            // Header Row for Sub-table
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -312,13 +322,9 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                                     .padding(8.dp)
                             ) {
                                 SubTableCell(text = "Booking Reference", weight = .1f)
-//                                Spacer(modifier = Modifier.weight(1f))
                                 SubTableCell(text = "Cargo Type",weight = .1f)
-//                                Spacer(modifier = Modifier.weight(1f))
                                 SubTableCell(text = "Package Weight",weight = .1f)
-//                                Spacer(modifier = Modifier.weight(1f))
                                 SubTableCell(text = "Dimensions",weight = .1f)
-//                                Spacer(modifier = Modifier.weight(1f))
                                 SubTableCell(text = "No of Packages",weight = .1f)
                             }
 
@@ -331,13 +337,9 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                                         .padding(8.dp)
                                 ) {
                                     SubTableCell(text = "DG-2340505",weight = .1f )
-//                                    Spacer(modifier = Modifier.weight(1f))
                                     SubTableCell(text = "General",weight = .1f)
-//                                    Spacer(modifier = Modifier.weight(1f))
                                     SubTableCell(text = "120kg",weight = .1f)
-//                                    Spacer(modifier = Modifier.weight(1f))
                                     SubTableCell(text = "0.5m3",weight = .1f)
-//                                    Spacer(modifier = Modifier.weight(1f))
                                     SubTableCell(text = "2",weight = .1f)
                                 }
                             }
