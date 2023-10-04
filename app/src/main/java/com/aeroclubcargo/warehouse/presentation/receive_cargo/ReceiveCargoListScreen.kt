@@ -295,7 +295,6 @@ fun FlightsTable(viewModel: ReceiveCargoListViewModel, navController: NavControl
                 TableCell(text = "Cut Off Time", weight = column4Weight, style = headerStyle)
                 TableCell(text = "Origin", weight = column5Weight, style = headerStyle)
                 TableCell(text = "Dest", weight = column6Weight, style = headerStyle)
-                TableCell(text = "Aircraft Type", weight = column7Weight, style = headerStyle)
                 TableCell(text = "Review", weight = column10Weight, style = headerStyle)
             }
         }
@@ -312,11 +311,10 @@ fun FlightsTable(viewModel: ReceiveCargoListViewModel, navController: NavControl
                 TableCell(text = flightScheduleModel.cutoffTime?.split("T")?.last() ?: "-", weight =  column4Weight)
                 TableCell(text = "${flightScheduleModel.originAirportCode}", weight =  column5Weight)
                 TableCell(text = "${flightScheduleModel.destinationAirportCode}", weight =  column6Weight)
-                TableCell(text = flightScheduleModel.aircraftSubTypeName ?:"-", weight =  column7Weight)
                 IconButton(
                     modifier = Modifier.weight(column10Weight),
                     onClick = {
-//                    TODO    navController.navigate( // add route)
+                        navController.navigate(Screen.ReceivedCargoDetailScreen.route)
                     }
                 ) {
                     Icon(
