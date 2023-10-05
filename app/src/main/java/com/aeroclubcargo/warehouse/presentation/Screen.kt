@@ -13,5 +13,6 @@ sealed class Screen(val route: String) {
     object ULDAssignmentScreen : Screen("uld_assignment_screen")
     object ReceiveCargoListScreen : Screen("receive_cargo_list_screen")
     object ReceivedCargoDetailScreen : Screen("receive_cargo_detail_screen")
+    object ChatScreen : Screen("chat_screen")
 
 }

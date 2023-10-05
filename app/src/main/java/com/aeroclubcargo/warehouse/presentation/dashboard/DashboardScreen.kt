@@ -113,7 +113,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_outline_comment_24,
                 text = stringResource(R.string.special_package_handling),
                 onClick = {
-                    // TODO
+                   /** TODO */
                 })
             Spacer(modifier = Modifier.width(16.dp))
         }

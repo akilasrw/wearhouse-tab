@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
+import com.aeroclubcargo.warehouse.presentation.chat.ChatScreen
 import com.aeroclubcargo.warehouse.presentation.cutoff_time.CutOffTimeScreen
 import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
 import com.aeroclubcargo.warehouse.presentation.flight_schedule.FlightScheduleScreen
@@ -102,6 +103,11 @@ fun navigation() {
             val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
             val userObject = jsonAdapter.fromJson(userJson)
             ULDAssignmentScreen(navController,userObject)
+        }
+        composable(route = Screen.ChatScreen.route){
+            ChatScreen(
+                navController = navController
+            )
         }
     }
 }

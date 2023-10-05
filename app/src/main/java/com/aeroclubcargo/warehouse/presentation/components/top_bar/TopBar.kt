@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.*
@@ -22,6 +24,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.theme.BlueLight
 
 @Composable
@@ -127,6 +130,28 @@ fun GetTopBar(
                 }) {
                     Icon(
                         Icons.Outlined.Notifications,
+                        contentDescription = "notifications",
+                        modifier = Modifier.size(30.dp),
+                        tint = MaterialTheme.colors.primary
+                    )
+                }
+            }
+            IconButton(onClick = {
+                navController.navigate(Screen.ChatScreen.route)
+            }) {
+                BadgedBox(badge = {
+                    Badge() {
+                        Text(
+                            "1",
+                            style = MaterialTheme.typography.caption.copy(
+                                fontSize = 7.sp,
+                                color = Color.White
+                            )
+                        )
+                    }
+                }) {
+                    Icon(
+                        painterResource(id = R.drawable.ic_outline_comment_24),
                         contentDescription = "notifications",
                         modifier = Modifier.size(30.dp),
                         tint = MaterialTheme.colors.primary
