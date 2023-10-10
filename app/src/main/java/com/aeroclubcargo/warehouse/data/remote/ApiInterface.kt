@@ -68,4 +68,7 @@ interface ApiInterface {
     @GET("api/${Constants.API_VERSION}/ULD/GetFilteredList")
     suspend fun getULDFilteredList(@Query("PageIndex") pageIndex:Int,@Query("PageSize") pageSize:Int): Response<Pagination<ULDModel>>
 
+    @GET("api/${Constants.API_VERSION}/CargoBooking/GetList")
+    suspend fun getBookingListPerFlightSchedule(@Query("FlightScheduleSectorId") flightScheduleSectorId:String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
+
 }

@@ -58,6 +58,7 @@ import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
+import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
 import kotlinx.coroutines.launch
 
 
@@ -290,12 +291,12 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Start
                     ) {
-                        TableCell(text = "DHL", weight =  .2f ,style = MaterialTheme.typography.button)
-                        TableCell(text = "345678964", weight =  .2f ,style = MaterialTheme.typography.button)
-                        TableCell(text = "12", weight =  .2f ,style = MaterialTheme.typography.button)
-                        TableCell(text = "53", weight =  .2f ,style = MaterialTheme.typography.button)
-                        TableCell(text = "1m3", weight =  .2f ,style = MaterialTheme.typography.button)
-                        TableCell(text = "26/09/23 10.34am", weight =  .4f ,style = MaterialTheme.typography.button)
+                        TableCell(text = uldModel.bookingAgent, weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = uldModel.awbNumber, weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "${uldModel.numberOfBoxes}", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "${uldModel.totalWeight}", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "${uldModel.totalVolume}", weight =  .2f ,style = MaterialTheme.typography.button)
+                        TableCell(text = "${uldModel.bookingDate.toDateTimeDisplayFormat(outputFormat = "MMM d, yyyy HH:mm a")}", weight =  .4f ,style = MaterialTheme.typography.button)
                         Row(modifier = Modifier
                             .padding(0.dp)
                             .weight(column1Weight),
