@@ -99,7 +99,7 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun getBookingListPerFlightSchedule(flightScheduleSectorId: String): Response<List<BookingModel>> {
-        return  apiInterface.getBookingListPerFlightSchedule(flightScheduleSectorId)
+        return  apiInterface.getBookingListPerFlightSchedule(flightScheduleSectorId,true)
     }
 
     override suspend fun saveCredential(credentialDto: CredentialDto) {

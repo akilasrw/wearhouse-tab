@@ -17,5 +17,7 @@ data class BookingModel(
     var totalRecWeight : Double,
     var totalRecVolume : Double,
     var numberOfRecBoxes : Int,
-    var cargoHandlingInstruction: String
+    var cargoHandlingInstruction: String,
+    var packageItems: List<PackageItemModel>? = null
+
 )

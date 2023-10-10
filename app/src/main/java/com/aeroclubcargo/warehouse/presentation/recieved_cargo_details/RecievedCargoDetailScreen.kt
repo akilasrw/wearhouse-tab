@@ -55,6 +55,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
+import com.aeroclubcargo.warehouse.common.Constants.getPackageItemCategory
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
@@ -304,7 +305,7 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                         ){
                             IconButton(onClick = {
                                 isExpanded = !isExpanded
-                            }) {
+                            }, enabled = (uldModel.packageItems == null || uldModel.packageItems!!.isEmpty())) {
                                 Icon(
                                     painter = if(isExpanded) painterResource(R.drawable.baseline_keyboard_arrow_up_24) else painterResource(R.drawable.baseline_keyboard_arrow_down_24),
                                     contentDescription = "delete",
@@ -322,26 +323,24 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                                     .background(Gray7)
                                     .padding(8.dp)
                             ) {
-                                SubTableCell(text = "Booking Reference", weight = .1f)
+                                SubTableCell(text = "Package Reference", weight = .1f)
                                 SubTableCell(text = "Cargo Type",weight = .1f)
                                 SubTableCell(text = "Package Weight",weight = .1f)
                                 SubTableCell(text = "Dimensions",weight = .1f)
-                                SubTableCell(text = "No of Packages",weight = .1f)
                             }
 
                             // Sub-table Rows
-                            listOf<Int>(1,3,4,5).forEach { subItem ->
+                            uldModel.packageItems?.forEach { packageItem ->
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .background(Color.White)
                                         .padding(8.dp)
                                 ) {
-                                    SubTableCell(text = "DG-2340505",weight = .1f )
-                                    SubTableCell(text = "General",weight = .1f)
-                                    SubTableCell(text = "120kg",weight = .1f)
-                                    SubTableCell(text = "0.5m3",weight = .1f)
-                                    SubTableCell(text = "2",weight = .1f)
+                                    SubTableCell(text = "${packageItem.packageRefNumber}",weight = .1f )
+                                    SubTableCell(text = "${getPackageItemCategory(packageItem.packageItemType)}",weight = .1f)
+                                    SubTableCell(text = "${packageItem.weight}kg",weight = .1f)
+                                    SubTableCell(text = "${packageItem.width * packageItem.height* packageItem.length}m3",weight = .1f)
                                 }
                             }
                         }
