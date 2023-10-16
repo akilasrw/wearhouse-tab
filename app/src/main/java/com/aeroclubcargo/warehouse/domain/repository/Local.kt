@@ -22,9 +22,5 @@ interface Local {
     suspend fun getLoggedInUser(): Flow<AuthenticateResponseDto?>
     suspend fun getUnitList() : Response<List<UnitVM>>
     suspend fun updatePackage(body: PackageLineItem): Response<Any>
-    suspend fun getFlightScheduleWithULDCount(scheduledDepartureStartDateTime : String, scheduledDepartureEndDateTime : String): Response<List<FlightScheduleModel>>
-    suspend fun getULDFilteredList( pageIndex:Int, pageSize:Int): Response<Pagination<ULDModel>>
-    suspend fun getBookingListPerFlightSchedule(flightScheduleSectorId:String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
-
 
 }

@@ -29,4 +29,9 @@ interface Remote {
     suspend fun updateCutOffTIme(id: String,body: CutOffTimeRequest): Boolean
     suspend fun updatePackageStatus(@Body body: UpdatePackageStatus): Response<Boolean?>
 
+    suspend fun getFlightScheduleWithULDCount(scheduledDepartureStartDateTime : String, scheduledDepartureEndDateTime : String,excludeFinalizedSchedules : Boolean,): Response<List<FlightScheduleModel>>
+    suspend fun getULDFilteredList( pageIndex:Int, pageSize:Int): Response<Pagination<ULDModel>>
+    suspend fun getBookingListPerFlightSchedule(flightScheduleSectorId:String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
+
+
 }

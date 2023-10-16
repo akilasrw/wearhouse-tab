@@ -56,7 +56,7 @@ class ReceiveCargoListViewModel @Inject constructor(private var repository: Repo
             setLoading(true)
             delay(timeMillis = 1000)
             try{
-                val paginatedList = repository.getFlightScheduleWithULDCount( scheduledDepartureStartDateTime = flightDateFromValue.value,scheduledDepartureEndDateTime = flightDateToValue.value)
+                val paginatedList = repository.getFlightScheduleWithULDCount( scheduledDepartureStartDateTime = flightDateFromValue.value,scheduledDepartureEndDateTime = flightDateToValue.value,excludeFinalizedSchedules = true)
                 if(paginatedList.isSuccessful &&
                     paginatedList.body() != null) {
                     todoList.clear()

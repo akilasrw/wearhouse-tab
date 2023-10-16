@@ -63,6 +63,7 @@ interface ApiInterface {
     suspend fun getFlightScheduleWithULDCount(
         @Query("ScheduledDepartureStartDateTime") scheduledDepartureStartDateTime : String,
         @Query("ScheduledDepartureEndDateTime") scheduledDepartureEndDateTime : String,
+        @Query("ExcludeFinalizedSchedules") excludeFinalizedSchedules : Boolean,
     ): Response<List<FlightScheduleModel>>
 
     @GET("api/${Constants.API_VERSION}/ULD/GetFilteredList")

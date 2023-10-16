@@ -86,9 +86,10 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getFlightScheduleWithULDCount(
         scheduledDepartureStartDateTime: String,
-        scheduledDepartureEndDateTime: String
+        scheduledDepartureEndDateTime: String,
+        excludeFinalizedSchedules : Boolean,
     ): Response<List<FlightScheduleModel>> {
-        return apiInterface.getFlightScheduleWithULDCount(scheduledDepartureStartDateTime, scheduledDepartureEndDateTime)
+        return apiInterface.getFlightScheduleWithULDCount(scheduledDepartureStartDateTime, scheduledDepartureEndDateTime,excludeFinalizedSchedules)
     }
 
     override suspend fun getULDFilteredList(

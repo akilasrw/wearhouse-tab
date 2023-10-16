@@ -59,7 +59,7 @@ class FlightScheduleViewModel  @Inject constructor(private var repository: Repos
             setLoading(true)
             delay(timeMillis = 1000)
             try{
-                val paginatedList = repository.getFlightScheduleWithULDCount( scheduledDepartureStartDateTime = flightDateFromValue.value,scheduledDepartureEndDateTime = flightDateToValue.value)
+                val paginatedList = repository.getFlightScheduleWithULDCount( scheduledDepartureStartDateTime = flightDateFromValue.value,scheduledDepartureEndDateTime = flightDateToValue.value, excludeFinalizedSchedules = false)
                 if(paginatedList.isSuccessful &&
                     paginatedList.body() != null) {
                     todoList.clear()
