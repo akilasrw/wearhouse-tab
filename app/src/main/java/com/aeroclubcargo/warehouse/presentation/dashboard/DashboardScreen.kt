@@ -74,8 +74,7 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_document,
                 text = stringResource(R.string.add_lir_data),
                 onClick = {
-//                    navController.navigate(Screen.VerifyBookingScreen.route+"/11591530000") // TODO remove hadcoded navigation
-//                    navController.navigate(Screen.VerifyBookingScreen.route)
+                    navController.navigate(Screen.LirScheduleListScreen.route)
                 })
             Spacer(modifier = Modifier.width(16.dp))
         }
