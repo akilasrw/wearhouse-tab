@@ -299,7 +299,7 @@ fun FlightsTable(viewModel: LirSchedulesViewModel, navController: NavController)
                             val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
                             val flightJson = jsonAdapter.toJson(flightScheduleModel)
 //                            navController.navigate(Screen.ULDAssignmentScreen.route+"/${flightJson}")
-                            navController.navigate(Screen.LirScheduleListScreen.route+"/${flightJson}")
+                            navController.navigate(Screen.LirDetailScreen.route+"/${flightJson}")
 
                         }
                     ) {

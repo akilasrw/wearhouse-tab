@@ -117,7 +117,7 @@ fun navigation() {
             )
         }
         composable(
-            route = Screen.LirScheduleListScreen.route+"/{parameter}",
+            route = Screen.LirDetailScreen.route+"/{parameter}",
             arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
             ){ backStackEntry ->
             val userJson =  backStackEntry.arguments?.getString("parameter")
