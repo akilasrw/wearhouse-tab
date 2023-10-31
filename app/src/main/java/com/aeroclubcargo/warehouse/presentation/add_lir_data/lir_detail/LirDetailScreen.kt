@@ -1,6 +1,5 @@
 package com.aeroclubcargo.warehouse.presentation.add_lir_data.lir_detail
 
-import android.graphics.Paint.Align
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +24,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,9 +58,12 @@ fun LirDetailScreen(navController: NavController, scheduleModel: FlightScheduleM
     }) {
         AddLirDataMainScreen(flightScheduleValue = scheduleModel, viewModel = viewModel)
     }
+    LaunchedEffect(key1 = true ){
+        viewModel.getCargoPositionsDetails(scheduleModel)
+    }
 }
 
-val column0Weight = .035f
+val column0Weight = .04f
 val column1Weight = .05f
 val column2Weight = .1f
 val column3Weight = .12f
@@ -73,7 +76,7 @@ fun AddLirDataMainScreen(
     flightScheduleValue: FlightScheduleModel?, viewModel: LirDetailsViewModel
 ){
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
-    val flightScheduleList = viewModel.flightScheduleListFlow.collectAsState()
+    val cargoPositionsDetailListFlow = viewModel.cargoPositionsDetailListFlow.collectAsState()
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -216,25 +219,25 @@ fun AddLirDataMainScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Start
                         ) {
-                            TableCell(text = "ULD\nPosition", weight = column0Weight, style = headerStyle)
+                            TableCell(text = "ULD Number", weight = column0Weight, style = headerStyle)
                             TableCell(text = "LIR Weight", weight = column2Weight, style = headerStyle)
                             TableCell(text = "LIR Volume", weight = column3Weight, style = headerStyle)
-                            TableCell(text = "ULD Number", weight = column4Weight, style = headerStyle)
-                            TableCell(text = "Position Max Weight", weight = column1Weight, style = headerStyle)
+                            TableCell(text = "LIR Height", weight = column1Weight, style = headerStyle)
                         }
                     }
                     // data
-                    items(3) { item->
+
+                    items(cargoPositionsDetailListFlow.value.size) { index->
+                        var cargoItem = cargoPositionsDetailListFlow.value[index]
                         Row(
                             Modifier.fillMaxWidth(),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-                            TableCell(text = "1", weight =  column0Weight)
-                            TableCellEditText(text = "2",column2Weight)
-                            TableCellEditText(text = "2",column2Weight)
-                            TableCellEditText(text = "2",column2Weight)
-                            TableCell(text = "20", weight =  column1Weight)
+                            TableCell(text = "${cargoItem.name}",column0Weight)
+                            TableCellEditText(text = "${cargoItem.maxWeight}",column2Weight)
+                            TableCellEditText(text = "${cargoItem.maxVolume}",column2Weight)
+                            TableCellEditText(text = "${cargoItem.height}",column2Weight)
                         }
                     }
                 }

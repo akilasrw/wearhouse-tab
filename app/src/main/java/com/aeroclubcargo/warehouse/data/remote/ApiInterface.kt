@@ -72,4 +72,7 @@ interface ApiInterface {
     @GET("api/${Constants.API_VERSION}/CargoBooking/GetList")
     suspend fun getBookingListPerFlightSchedule(@Query("FlightScheduleSectorId") flightScheduleSectorId:String,@Query("IncludePackageItems") includePackageItems : Boolean) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
 
+    @GET("api/${Constants.API_VERSION}/CargoPosition/GetSummaryCargoPositions")
+    suspend fun getSummaryCargoPositions(@Query ("AircraftLayoutId") aircraftLayoutId : String) : Response<List<FlightScheduleSectorUldPositionVM>>
+
 }

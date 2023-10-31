@@ -14,4 +14,5 @@ data class FlightScheduleModel(
     var cutoffTime: String?,
     var uldPositionCount: Int = 0,
     var uldCount: Int = 0,
+    var aircraftLayoutId : String?,
 )

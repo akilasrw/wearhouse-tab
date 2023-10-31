@@ -103,6 +103,10 @@ class RepositoryImpl @Inject constructor(
         return  apiInterface.getBookingListPerFlightSchedule(flightScheduleSectorId,true)
     }
 
+    override suspend fun getSummaryCargoPositions(aircraftLayoutId: String): Response<List<FlightScheduleSectorUldPositionVM>> {
+        return  apiInterface.getSummaryCargoPositions(aircraftLayoutId)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }
