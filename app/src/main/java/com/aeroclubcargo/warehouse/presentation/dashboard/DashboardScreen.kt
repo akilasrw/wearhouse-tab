@@ -71,10 +71,10 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
-                id = R.drawable.ic_document,
-                text = stringResource(R.string.add_lir_data),
+                id = R.drawable.ic_pallet_24,
+                text = stringResource(R.string.assign_cargo_to_uld),
                 onClick = {
-                    navController.navigate(Screen.LirScheduleListScreen.route)
+                    navController.navigate(Screen.FlightScheduleScreen.route)
                 })
             Spacer(modifier = Modifier.width(16.dp))
         }
@@ -82,10 +82,10 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
         Row(horizontalArrangement = Arrangement.SpaceAround, modifier = Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.width(16.dp))
             GetTileButton(
-                id = R.drawable.ic_pallet_24,
-                text = stringResource(R.string.assign_cargo_to_uld),
+                id = R.drawable.ic_document,
+                text = stringResource(R.string.add_lir_data),
                 onClick = {
-                    navController.navigate(Screen.FlightScheduleScreen.route)
+                    navController.navigate(Screen.LirScheduleListScreen.route)
                 })
 //            GetTileButton(
 //                id = R.drawable.ic_uld_master, // TODO replace icon
