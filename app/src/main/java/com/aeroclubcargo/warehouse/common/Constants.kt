@@ -95,6 +95,14 @@ object Constants {
         Overhead
     }
 
+    enum class ULDLocateStatus {
+        None ,
+        OnGround,
+        OnBoard,
+        Maintenance ,
+        Lend,
+    }
+
     fun getCargoType(type: Int?): String {
         if (type == null) {
             return ""

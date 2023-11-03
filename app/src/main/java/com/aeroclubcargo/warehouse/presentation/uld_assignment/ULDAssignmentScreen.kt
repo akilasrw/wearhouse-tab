@@ -1,35 +1,23 @@
 package com.aeroclubcargo.warehouse.presentation.uld_assignment
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
-import android.widget.DatePicker
-import androidx.collection.CircularIntArray
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,10 +27,6 @@ import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
-import com.aeroclubcargo.warehouse.utils.toDurationTime
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -263,7 +247,7 @@ fun HeaderTile(title:String,desctiption:String,textColor: Color =  Color.Black) 
 @Composable
 fun FlightsTable(viewModel: ULDAssignmentViewModel) {
     val mContext = LocalContext.current
-    val todoListState = viewModel.todoListFlow.collectAsState()
+    val todoListState = viewModel.assignedUldListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
     val showAlert = remember { mutableStateOf(false) }
 

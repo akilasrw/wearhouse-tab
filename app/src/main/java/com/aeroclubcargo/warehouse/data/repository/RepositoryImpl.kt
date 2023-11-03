@@ -107,6 +107,13 @@ class RepositoryImpl @Inject constructor(
         return  apiInterface.getSummaryCargoPositions(aircraftLayoutId)
     }
 
+    override suspend fun getPalletsByFlightScheduleId(
+        flightScheduleId: String,
+        uldLocateStatus: Int
+    ): Response<List<ULDPalletVM>> {
+        return  apiInterface.getPalletsByFlightScheduleId(flightScheduleId, uldLocateStatus)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }
