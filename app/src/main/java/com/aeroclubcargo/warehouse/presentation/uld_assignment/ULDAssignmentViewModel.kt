@@ -29,10 +29,19 @@ class ULDAssignmentViewModel  @Inject constructor(private var repository: Reposi
     private val _flightULDvalue = MutableStateFlow<String>("")
     val flightULDValue = _flightULDvalue.asStateFlow()
 
-    private var allULDPallets: List<ULDPalletVM> = listOf();
+    private var allULDPallets: List<ULDPalletVM> = listOf()
 
     private val _assignedULDListFlow = MutableStateFlow<List<ULDPalletVM>?>(null)
     var assignedUldListFlow = _assignedULDListFlow.asStateFlow()
+
+    private val _allULDListFlow = MutableStateFlow<List<ULDPalletVM>?>(null)
+    var allUldListFlow = _allULDListFlow.asStateFlow()
+
+    fun refreshAllULDList(){
+        viewModelScope.launch {
+            _allULDListFlow.emit(allULDPallets)
+        }
+    }
 
     fun setFlightULDValue (value : String){
         _flightULDvalue.value = value
@@ -65,7 +74,7 @@ class ULDAssignmentViewModel  @Inject constructor(private var repository: Reposi
             }
         }
     }
-
+// TODO remove
 //    fun getULDList(){
 //        viewModelScope.launch {
 //            try {

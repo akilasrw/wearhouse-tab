@@ -207,6 +207,7 @@ fun GetCutOffTimeList(
                         Text(text = "Added ULD")
                         Button(onClick = {
                             coroutineScope.launch {
+                                viewModel.refreshAllULDList()
                                 if (modalSheetState.isVisible)
                                     modalSheetState.hide()
                                 else {
