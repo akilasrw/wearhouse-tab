@@ -147,25 +147,26 @@ fun CheckPackageItemSheet(
 
 @Composable
 fun ULDTable(viewModel: ULDAssignmentViewModel) {
-    val allListFlow = viewModel.allUldListFlow.collectAsState()
-    var selectedRows by remember { mutableStateOf(setOf<ULDPalletVM>()) }
-    
-    if(allListFlow.value == null){
+    val allListFlow by viewModel.allUldListFlow.collectAsState()
+    var selectedRows = viewModel.selectedRows
+
+    if(allListFlow == null){
         Text(text = "No data available!")
     }else  {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            items(allListFlow.value!!) { uld ->
+            items(allListFlow!!) { uld ->
+                val isChecked = uld in selectedRows
                 ULDRowItem(
                     uldInfo = uld,
-                    isChecked = uld.isAssigned,
+                    isChecked = isChecked,
                     onCheckedChange = { isChecked ->
                         if (isChecked) {
-                            selectedRows = selectedRows + uld
+                            viewModel.selectedRows.add(uld)
                         } else {
-                            selectedRows = selectedRows - uld
+                            viewModel.selectedRows.remove(uld)
                         }
                     }
                 )
@@ -182,7 +183,6 @@ val column3Weight = .12f
 val column4Weight = .1f
 val column5Weight = .1f
 val column6Weight = .1f
-val column7Weight = .1f
 val column8Weight = .125f
 val column9Weight = .12f
 val column10Weight = .09f
@@ -198,20 +198,14 @@ fun ULDRowItemTitle(
             .padding(8.dp),
 
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.weight(column1Weight))
-        Text(text = "ULD Number", textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column2Weight))
-        Text(text = "ULD type", textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column3Weight))
-        Text(text = "Dimensions (L x W x H) cm", textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column4Weight))
-        Text(text = "Max Weight", textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column5Weight))
-        Text(text = "Max Volume", textAlign = TextAlign.Start) // Replace with your data for Column E
-        Spacer(modifier = Modifier.weight(column6Weight))
-        Text(text = "Add", textAlign = TextAlign.Start) //
+        TableCellText(text = "ULD Number", weight = (column2Weight),)
+        TableCellText(text = "ULD type", weight = (column1Weight),)
+        TableCellText(text = "Dimensions (L x W x H) cm",weight = (column8Weight) ,)
+        TableCellText(text = "Max Weight",weight = (column4Weight) ,)
+        TableCellText(text = "Max Volume",weight = (column5Weight) )
+        TableCellText(text = "Add",weight = (column6Weight))
     }
 }
 
@@ -227,21 +221,16 @@ fun ULDRowItem(
             .fillMaxWidth()
             .height(40.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+        horizontalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.weight(column1Weight))
-        Text(text = uldInfo.serialNumber, textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column2Weight))
-        Text(text = getULDType(uldInfo.uldType), textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column3Weight))
-        Text(text = "${uldInfo.length} x ${uldInfo.width} x ${uldInfo.height}", textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column4Weight))
-        Text(text = "${uldInfo.maxWeight}", textAlign = TextAlign.Start)
-        Spacer(modifier = Modifier.weight(column5Weight))
-        Text(text = "${uldInfo.maxVolume}", textAlign = TextAlign.Start) // Replace with your data for Column E
-        Spacer(modifier = Modifier.weight(column6Weight))
+        TableCellText(text = uldInfo.serialNumber,weight = column2Weight)
+        TableCellText(text = getULDType(uldInfo.uldType), weight = column1Weight)
+        TableCellText(text = "${uldInfo.length} x ${uldInfo.width} x ${uldInfo.height}",weight = column8Weight)
+        TableCellText(text = "${uldInfo.maxWeight}",weight = column4Weight )
+        TableCellText(text = "${uldInfo.maxVolume}",weight = column5Weight)
         Checkbox(
             checked = isChecked,
+            modifier = Modifier.weight(column6Weight),
             colors = CheckboxDefaults.colors(
                 checkedColor = Green,
                 uncheckedColor = BlueLight2,
@@ -252,4 +241,22 @@ fun ULDRowItem(
         )
     }
 }
+
+@Composable
+fun RowScope.TableCellText(
+    text: String,
+    weight: Float,
+    style: TextStyle = typography.body2
+) {
+    Text(
+        text = text,
+        Modifier
+            .weight(weight)
+            .padding(8.dp),
+        style = style,
+        textAlign = TextAlign.Center
+    )
+}
+
+
 

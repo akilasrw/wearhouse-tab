@@ -1,6 +1,7 @@
 package com.aeroclubcargo.warehouse.presentation.uld_assignment
 
 import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.common.Constants
@@ -36,8 +37,10 @@ class ULDAssignmentViewModel  @Inject constructor(private var repository: Reposi
 
     private val _allULDListFlow = MutableStateFlow<List<ULDPalletVM>?>(null)
     var allUldListFlow = _allULDListFlow.asStateFlow()
+    val selectedRows = mutableStateListOf<ULDPalletVM>()
 
-    fun refreshAllULDList(){
+
+    suspend fun refreshAllULDList(){
         viewModelScope.launch {
             _allULDListFlow.emit(allULDPallets)
         }
@@ -65,6 +68,8 @@ class ULDAssignmentViewModel  @Inject constructor(private var repository: Reposi
                     var list = response.body()
                     if(list != null) {
                         allULDPallets = (list)
+                        _allULDListFlow.emit(allULDPallets)
+
                         var assignedList = allULDPallets.toList().filter { it.isAssigned }
                         _assignedULDListFlow.emit(assignedList)
                     }

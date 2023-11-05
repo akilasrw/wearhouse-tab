@@ -27,6 +27,8 @@ import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -297,7 +299,7 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     TableCell(text = "${uldModel.serialNumber}", weight =  column2Weight)
                     TableCell(text = "${getULDType(uldModel.uldType)}", weight =  column1Weight)
