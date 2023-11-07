@@ -33,5 +33,6 @@ interface Remote {
     suspend fun getBookingListPerFlightSchedule(flightScheduleSectorId:String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
     suspend fun getSummaryCargoPositions(aircraftLayoutId : String) : Response<List<FlightScheduleSectorUldPositionVM>>
     suspend fun getPalletsByFlightScheduleId(flightScheduleId : String, uldLocateStatus: Int) : Response<List<ULDPalletVM>>
+    suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
 
 }

@@ -114,6 +114,10 @@ class RepositoryImpl @Inject constructor(
         return  apiInterface.getPalletsByFlightScheduleId(flightScheduleId, uldLocateStatus)
     }
 
+    override suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM): Response<Any> {
+        return apiInterface.addPalletListToFlight(flightSchedulePalletUpdateListRM)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }

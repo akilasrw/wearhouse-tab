@@ -67,10 +67,10 @@ object Constants {
                 return "None"
             }
             ULDType.Pallet -> {
-                return "On Floor"
+                return "Pallet"
             }
             ULDType.Container -> {
-                return "On Seat"
+                return "Container"
             }
         }
     }

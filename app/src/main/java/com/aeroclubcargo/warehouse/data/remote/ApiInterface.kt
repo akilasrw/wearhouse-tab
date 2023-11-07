@@ -78,6 +78,6 @@ interface ApiInterface {
     @GET("api/${Constants.API_VERSION}/ULDCargoBooking/GetPalletsByFlightScheduleId")
     suspend fun getPalletsByFlightScheduleId(@Query ("FlightScheduleId") flightScheduleId : String,@Query("ULDLocateStatus") uldLocateStatus: Int) : Response<List<ULDPalletVM>>
 
-// add Pallet to flight
-//    https://localhost:7130/api/v1/ULDCargoBooking/AddPalleteToFlight
+    @POST("api/${Constants.API_VERSION}/ULDCargoBooking/CreateRemovePalleteList")
+    suspend fun addPalletListToFlight(@Body  flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
 }

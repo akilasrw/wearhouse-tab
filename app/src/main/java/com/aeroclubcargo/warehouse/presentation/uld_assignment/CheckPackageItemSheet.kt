@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
@@ -124,12 +126,28 @@ fun CheckPackageItemSheet(
                             .weight(0.2f)
                             .wrapContentSize(align = Alignment.Center),
                         onClick = {
+                            viewModel.setFlightULDValue(flightValue.value)
                             keyboardController?.hide()
                         },
                     ) {
                         Text(text = "Find", style = TextStyle(color = Color.White))
                     }
-                    Spacer(modifier = Modifier.weight(0.5f))
+//                    Spacer(modifier = Modifier.fillMaxWidth())
+                    Button(
+                        modifier = Modifier
+                            .weight(0.2f)
+                            .wrapContentSize(align = Alignment.Center),
+                        onClick = {
+                            viewModel.updateData()
+                            keyboardController?.hide()
+                        },
+                    ) {
+                        Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center){
+                            Icon(painter = painterResource(id = R.drawable.baseline_save_24), contentDescription = "update")
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(text = "Update", style = TextStyle(color = Color.White))
+                        }
+                    }
                 }
                 Column(modifier = Modifier
                     .fillMaxHeight()
@@ -171,7 +189,7 @@ fun ULDTable(viewModel: ULDAssignmentViewModel) {
                     }
                 )
             }
-        } 
+        }
     }
     
    
