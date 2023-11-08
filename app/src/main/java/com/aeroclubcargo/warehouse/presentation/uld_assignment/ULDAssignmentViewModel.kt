@@ -45,6 +45,12 @@ class ULDAssignmentViewModel @Inject constructor(private var repository: Reposit
     suspend fun refreshAllULDList() {
         viewModelScope.launch {
             _allULDListFlow.emit(allULDPallets)
+            allULDPallets.forEach { uldPalletVM ->
+                if (!selectedRows.any { it.id == uldPalletVM.id } && uldPalletVM.isAssigned) {
+                    selectedRows.add(uldPalletVM)
+                }
+
+            }
         }
     }
 
@@ -60,19 +66,21 @@ class ULDAssignmentViewModel @Inject constructor(private var repository: Reposit
         }
     }
 
-    fun updateData() {
+    fun updateData(onComplete: ()-> Unit) {
         viewModelScope.launch {
-            if(flightScheduleSectorPalletRMs.isNotEmpty()) (flightScheduleSectorPalletRMs as ArrayList).clear()
+            if (flightScheduleSectorPalletRMs.isNotEmpty()) (flightScheduleSectorPalletRMs as ArrayList).clear()
 
             _allULDListFlow.value?.forEach { item ->
                 if (selectedRows.any { it.id == item.id }) {
                     // assigned item
                     Log.e("#######", "assigned item -> ${item.serialNumber}")
-                    flightScheduleSectorPalletRMs.add(FlightScheduleSectorPalletCreateRM(
-                        isAdded = true,
-                        flightScheduleSectorId = _flightScheduleValue.value!!.id,
-                        uldId = item.id,
-                    ))
+                    flightScheduleSectorPalletRMs.add(
+                        FlightScheduleSectorPalletCreateRM(
+                            isAdded = true,
+                            flightScheduleSectorId = _flightScheduleValue.value!!.id,
+                            uldId = item.id,
+                        )
+                    )
                 } else {
                     // unassigned item
                     Log.e("#######", "unassigned item -> ${item.serialNumber}")
@@ -86,14 +94,15 @@ class ULDAssignmentViewModel @Inject constructor(private var repository: Reposit
                 }
 
             }
-            if(flightScheduleSectorPalletRMs.isNotEmpty()){
-               var response = repository.addPalletListToFlight(
+            if (flightScheduleSectorPalletRMs.isNotEmpty()) {
+                var response = repository.addPalletListToFlight(
                     FlightScheduleSectorPalletCreateListRM(
                         flightScheduleSectorPalletRMs = flightScheduleSectorPalletRMs
                     )
                 )
                 Log.e("#######", "Updated Items -> ${response.body()}")
-
+                getULDList()
+                onComplete()
             }
 
         }
