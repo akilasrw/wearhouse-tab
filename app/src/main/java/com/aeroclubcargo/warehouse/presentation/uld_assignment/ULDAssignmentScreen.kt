@@ -357,7 +357,7 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                         IconButton(
                             modifier = Modifier.size(24.dp),
                             onClick = {
-
+                                viewModel.deleteAssignedPallet(uldModel.id)
                             }
                         ) {
                             Icon(

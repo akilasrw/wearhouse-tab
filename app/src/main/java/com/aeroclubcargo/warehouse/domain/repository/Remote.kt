@@ -34,5 +34,6 @@ interface Remote {
     suspend fun getSummaryCargoPositions(aircraftLayoutId : String) : Response<List<FlightScheduleSectorUldPositionVM>>
     suspend fun getPalletsByFlightScheduleId(flightScheduleId : String, uldLocateStatus: Int) : Response<List<ULDPalletVM>>
     suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
+    suspend fun removeAssignedULDFromSchedule(flightScheduleSectorDeleteRM:FlightScheduleSectorPalletDeleteRM) : Response<Any>
 
 }

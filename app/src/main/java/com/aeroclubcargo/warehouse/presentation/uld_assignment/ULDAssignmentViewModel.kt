@@ -8,13 +8,13 @@ import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleSectorPalletCreateListRM
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleSectorPalletCreateRM
+import com.aeroclubcargo.warehouse.domain.model.FlightScheduleSectorPalletDeleteRM
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -130,14 +130,31 @@ class ULDAssignmentViewModel @Inject constructor(private var repository: Reposit
                     var list = response.body()
                     if (list != null) {
                         allULDPallets = (list)
-                        _allULDListFlow.emit(allULDPallets)
-
+                        refreshAllULDList()
                         var assignedList = allULDPallets.toList().filter { it.isAssigned }
                         _assignedULDListFlow.emit(assignedList)
                     }
                 }
             } catch (e: Exception) {
                 Log.e("ULDAssignment Model", e.message.toString())
+            }
+        }
+    }
+
+    fun deleteAssignedPallet(uldId:String){
+        viewModelScope.launch {
+            try {
+                setLoading(true)
+                val response = repository.removeAssignedULDFromSchedule(
+                    FlightScheduleSectorPalletDeleteRM(flightScheduleSectorId = _flightScheduleValue!!.value!!.id!!, uldId = uldId)
+                )
+                if(response.isSuccessful){
+                    getULDList()
+                }
+                setLoading(false)
+            }   catch (e:Exception){
+                print(e)
+                setLoading(false)
             }
         }
     }

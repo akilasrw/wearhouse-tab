@@ -8,3 +8,8 @@ data class FlightScheduleSectorPalletCreateRM  (
     )
 
 data class FlightScheduleSectorPalletCreateListRM ( var flightScheduleSectorPalletRMs : List<FlightScheduleSectorPalletCreateRM> )
+
+data class FlightScheduleSectorPalletDeleteRM  (
+    var flightScheduleSectorId: String,
+    var uldId: String,
+)

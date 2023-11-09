@@ -80,4 +80,8 @@ interface ApiInterface {
 
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/CreateRemovePalleteList")
     suspend fun addPalletListToFlight(@Body  flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
+
+    @POST("api/${Constants.API_VERSION}/ULDCargoBooking/RemoveAssignedPallet")
+    suspend fun removeAssignedULDFromSchedule(@Body flightScheduleSectorDeleteRM:FlightScheduleSectorPalletDeleteRM) : Response<Any>
+
 }
