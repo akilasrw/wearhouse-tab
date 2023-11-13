@@ -25,8 +25,12 @@ import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
+import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
+import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -221,7 +225,7 @@ fun GetCutOffTimeList(
                             Text(text = "Add ULD", style = TextStyle(color = Color.White))
                         }
                     }
-                    FlightsTable(viewModel= viewModel)
+                    FlightsTable(viewModel= viewModel, navController = navController)
                 }
             }
 
@@ -248,7 +252,7 @@ fun HeaderTile(title:String,desctiption:String,textColor: Color =  Color.Black) 
 
 
 @Composable
-fun FlightsTable(viewModel: ULDAssignmentViewModel) {
+fun FlightsTable(viewModel: ULDAssignmentViewModel,navController: NavController,) {
     val mContext = LocalContext.current
     val todoListState = viewModel.assignedUldListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
@@ -342,7 +346,12 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel) {
                         IconButton(
                             modifier = Modifier.size(24.dp),
                             onClick = {
-
+                                val moshi = Moshi.Builder()
+                                    .add(KotlinJsonAdapterFactory())
+                                    .build()
+                                val jsonAdapter = moshi.adapter(ULDPalletVM::class.java).lenient()
+                                val uldJson = jsonAdapter.toJson(uldModel)
+                                navController.navigate(Screen.CargoAssignmentScreen.route+"/${uldJson}")
                             }
                         ) {
                             Icon(

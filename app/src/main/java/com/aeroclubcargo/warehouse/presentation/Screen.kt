@@ -16,5 +16,5 @@ sealed class Screen(val route: String) {
     object ChatScreen : Screen("chat_screen")
     object LirScheduleListScreen : Screen("lir_schedule_list_screen")
     object LirDetailScreen: Screen("lir_details_screen")
-
+    object CargoAssignmentScreen: Screen("cargo_assignment_screen")
 }

@@ -7,8 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
+import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.presentation.add_lir_data.lir_detail.LirDetailScreen
 import com.aeroclubcargo.warehouse.presentation.add_lir_data.schedule_list.LirScheduleListScreen
+import com.aeroclubcargo.warehouse.presentation.cargo_assignment.CargoAssignmentScreen
 import com.aeroclubcargo.warehouse.presentation.chat.ChatScreen
 import com.aeroclubcargo.warehouse.presentation.cutoff_time.CutOffTimeScreen
 import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
@@ -129,6 +131,21 @@ fun navigation() {
             LirDetailScreen(
                 navController = navController,
                 scheduleModel = userObject
+            )
+        }
+        composable(
+            route = Screen.CargoAssignmentScreen.route+"/{parameter}",
+            arguments = listOf(navArgument("parameter"){type = NavType.StringType})
+            ){ backStack ->
+            val cargoModel =  backStack.arguments?.getString("parameter")
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+            val jsonAdapter = moshi.adapter(ULDPalletVM::class.java).lenient()
+            val userObject = jsonAdapter.fromJson(cargoModel)
+            CargoAssignmentScreen(
+                navController = navController,
+                uldPalletVM = userObject
             )
         }
     }
