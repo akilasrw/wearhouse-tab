@@ -31,8 +31,6 @@ import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -52,7 +50,7 @@ fun ULDAssignmentScreen(navController: NavController,
             confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
         )
 
-        CheckPackageItemSheet(content = {
+        CheckULDItemSheet(content = {
             GetCutOffTimeList(viewModel, navController, modalSheetState = updatePackageSheetState)
         }, modalSheetState = updatePackageSheetState, viewModel = viewModel)
 

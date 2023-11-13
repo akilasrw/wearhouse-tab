@@ -61,6 +61,7 @@ fun CargoAssignmentScreen(navController: NavController,uldPalletVM: ULDPalletVM?
             initialValue = ModalBottomSheetValue.Hidden,
             confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
         )
+
         GetCutOffTimeList(viewModel, navController, modalSheetState = updatePackageSheetState)
     }
 }
@@ -151,7 +152,8 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Received Weight",
-                            desctiption =  "${uldPalletVMValue.value?.weight} kg" // TODO apply calculated weight
+                            desctiption =  "${uldPalletVMValue.value?.weight} kg", // TODO apply calculated weight
+                            textColor = Green
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -173,7 +175,8 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Received Volume",
-                            desctiption = "${(uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height )}" // TODO apply calculated volume
+                            desctiption = "${(uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height )}", // TODO apply calculated volume
+                            textColor = Green
                         )
                     }
                 }

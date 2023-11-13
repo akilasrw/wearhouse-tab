@@ -20,20 +20,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
-import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
-import com.aeroclubcargo.warehouse.presentation.Screen
-import com.aeroclubcargo.warehouse.presentation.components.CommonDropDown
-import com.aeroclubcargo.warehouse.presentation.components.CommonTextField
-import com.aeroclubcargo.warehouse.presentation.components.DropDownModel
 import com.aeroclubcargo.warehouse.theme.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -41,7 +31,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalComposeUiApi::class)
 @ExperimentalMaterialApi
 @Composable
-fun CheckPackageItemSheet(
+fun CheckULDItemSheet(
     content: @Composable() () -> Unit,
     modalSheetState: ModalBottomSheetState,
     viewModel: ULDAssignmentViewModel,
