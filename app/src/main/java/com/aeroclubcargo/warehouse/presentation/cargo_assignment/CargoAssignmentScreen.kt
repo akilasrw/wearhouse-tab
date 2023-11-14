@@ -61,15 +61,16 @@ fun CargoAssignmentScreen(navController: NavController,uldPalletVM: ULDPalletVM?
             initialValue = ModalBottomSheetValue.Hidden,
             confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
         )
-
-        GetCutOffTimeList(viewModel, navController, modalSheetState = updatePackageSheetState)
+        CheckPackageItemSheet(content = {
+            GetCargoList(viewModel, navController, modalSheetState = updatePackageSheetState)
+        }, modalSheetState = updatePackageSheetState, viewModel = viewModel)
     }
 }
 
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
 @Composable
-fun GetCutOffTimeList(
+fun GetCargoList(
     viewModel: CargoAssignmentViewModel,
     navController: NavController,
     modalSheetState: ModalBottomSheetState,
