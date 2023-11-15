@@ -50,9 +50,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CargoAssignmentScreen(navController: NavController,uldPalletVM: ULDPalletVM? ,viewModel : CargoAssignmentViewModel = hiltViewModel()){
+fun CargoAssignmentScreen(navController: NavController,uldPalletVM: ULDPalletVM? , flightScheduleSector: String? ,viewModel : CargoAssignmentViewModel = hiltViewModel()){
 
     uldPalletVM?.let { viewModel.setULDPalletVM(it) }
+    flightScheduleSector?.let { viewModel.setFlightSectorId(it) }
 
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
@@ -181,7 +182,7 @@ fun GetCargoList(
                         )
                     }
                 }
-                if (isLoading.value) {
+                if (isLoading.value && !modalSheetState.isVisible) {
                     Box(
                         modifier = Modifier.fillMaxSize(),
                         contentAlignment = Alignment.Center,
@@ -199,7 +200,7 @@ fun GetCargoList(
                         Text(text = "Added Cargo")
                         Button(onClick = {
                             coroutineScope.launch {
-//                                viewModel.refreshAllULDList()
+                                viewModel.getBookingListForFlightScheduleSector()
                                 if (modalSheetState.isVisible)
                                     modalSheetState.hide()
                                 else {

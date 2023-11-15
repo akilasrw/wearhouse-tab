@@ -51,7 +51,7 @@ fun ULDAssignmentScreen(navController: NavController,
         )
 
         CheckULDItemSheet(content = {
-            GetCutOffTimeList(viewModel, navController, modalSheetState = updatePackageSheetState)
+            GetCutOffTimeList(viewModel, navController, modalSheetState = updatePackageSheetState, scheduleModel = scheduleModel)
         }, modalSheetState = updatePackageSheetState, viewModel = viewModel)
 
 
@@ -64,6 +64,7 @@ fun GetCutOffTimeList(
     viewModel: ULDAssignmentViewModel,
     navController: NavController,
     modalSheetState: ModalBottomSheetState,
+    scheduleModel: FlightScheduleModel?,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -223,7 +224,7 @@ fun GetCutOffTimeList(
                             Text(text = "Add ULD", style = TextStyle(color = Color.White))
                         }
                     }
-                    FlightsTable(viewModel= viewModel, navController = navController)
+                    FlightsTable(viewModel= viewModel, navController = navController,scheduleModel = scheduleModel)
                 }
             }
 
@@ -250,7 +251,7 @@ fun HeaderTile(title:String,desctiption:String,textColor: Color =  Color.Black) 
 
 
 @Composable
-fun FlightsTable(viewModel: ULDAssignmentViewModel,navController: NavController,) {
+fun FlightsTable(viewModel: ULDAssignmentViewModel,navController: NavController,scheduleModel: FlightScheduleModel?,) {
     val mContext = LocalContext.current
     val todoListState = viewModel.assignedUldListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
@@ -349,7 +350,7 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel,navController: NavController,
                                     .build()
                                 val jsonAdapter = moshi.adapter(ULDPalletVM::class.java).lenient()
                                 val uldJson = jsonAdapter.toJson(uldModel)
-                                navController.navigate(Screen.CargoAssignmentScreen.route+"/${uldJson}")
+                                navController.navigate(Screen.CargoAssignmentScreen.route+"/${uldJson}/${scheduleModel!!.id}")
                             }
                         ) {
                             Icon(

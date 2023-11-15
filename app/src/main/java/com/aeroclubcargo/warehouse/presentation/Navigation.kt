@@ -134,10 +134,11 @@ fun navigation() {
             )
         }
         composable(
-            route = Screen.CargoAssignmentScreen.route+"/{parameter}",
-            arguments = listOf(navArgument("parameter"){type = NavType.StringType})
+            route = Screen.CargoAssignmentScreen.route+"/{cargoModel}/{flightScheduleSector}",
+            arguments = listOf(navArgument("cargoModel"){type = NavType.StringType},navArgument("flightScheduleSector"){type = NavType.StringType})
             ){ backStack ->
-            val cargoModel =  backStack.arguments?.getString("parameter")
+            val flightScheduleSector =  backStack.arguments?.getString("flightScheduleSector")
+            val cargoModel =  backStack.arguments?.getString("cargoModel")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
@@ -145,7 +146,8 @@ fun navigation() {
             val userObject = jsonAdapter.fromJson(cargoModel)
             CargoAssignmentScreen(
                 navController = navController,
-                uldPalletVM = userObject
+                uldPalletVM = userObject,
+                flightScheduleSector = flightScheduleSector,
             )
         }
     }
