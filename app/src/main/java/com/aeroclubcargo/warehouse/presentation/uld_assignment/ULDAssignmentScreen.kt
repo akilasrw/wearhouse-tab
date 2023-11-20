@@ -40,7 +40,10 @@ import java.util.*
 fun ULDAssignmentScreen(navController: NavController,
                         scheduleModel: FlightScheduleModel?,
                         viewModel: ULDAssignmentViewModel = hiltViewModel()){
-    viewModel.setFlightSchedule(scheduleModel)
+
+    LaunchedEffect(key1 = true ){
+        viewModel.setFlightSchedule(scheduleModel)
+    }
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {

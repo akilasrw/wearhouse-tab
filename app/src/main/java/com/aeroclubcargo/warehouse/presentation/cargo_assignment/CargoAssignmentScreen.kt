@@ -24,6 +24,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -51,10 +52,10 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CargoAssignmentScreen(navController: NavController,uldPalletVM: ULDPalletVM? , flightScheduleSector: String? ,viewModel : CargoAssignmentViewModel = hiltViewModel()){
-
-    uldPalletVM?.let { viewModel.setULDPalletVM(it) }
-    flightScheduleSector?.let { viewModel.setFlightSectorId(it) }
-
+    LaunchedEffect(key1 = true ){
+        uldPalletVM?.let { viewModel.setULDPalletVM(it) }
+        flightScheduleSector?.let { viewModel.setFlightSectorId(it) }
+    }
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
@@ -177,7 +178,7 @@ fun GetCargoList(
                     ) {
                         HeaderTile(
                             title = "Received Volume",
-                            desctiption = "${(uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height )}", // TODO apply calculated volume
+                            desctiption = "${if(uldPalletVMValue.value != null) (uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height ) else 0 }  ", // TODO apply calculated volume
                             textColor = Green
                         )
                     }

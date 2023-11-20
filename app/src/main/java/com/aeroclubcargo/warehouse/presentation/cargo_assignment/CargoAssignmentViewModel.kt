@@ -1,16 +1,16 @@
 package com.aeroclubcargo.warehouse.presentation.cargo_assignment
 
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.domain.model.BookingModel
+import com.aeroclubcargo.warehouse.domain.model.BookingAssignmentRM
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import java.util.stream.Stream
 import javax.inject.Inject
 
 
@@ -56,9 +56,25 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
             var responsePackageList = repository.getBookingListPerFlightSchedule(_flightSectorId)
             if(responsePackageList.isSuccessful){
                 _listOfPackages.value = responsePackageList.body()
+//                _listOfPackages.value?.forEach { it.packageItems?.forEach { it.isAddedToCargo = true  } }
             }
             setLoading(false)
         }
+    }
+
+    fun assignCargoToUld(packageItemId: String){
+        if(uldPalletVMValue.value != null) {
+            setLoading(true)
+            viewModelScope.launch {
+                var response = repository.updatePackageULDContainerRM(BookingAssignmentRM(packageId = packageItemId, uldId = uldPalletVMValue.value!!.id))
+                if(response.isSuccessful){
+                    setLoading(false)
+                    Log.e("assignCargoToUld() => ","${response.body()}")
+                }
+                setLoading(false)
+            }
+        }
+
     }
 
 

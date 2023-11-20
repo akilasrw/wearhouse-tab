@@ -180,6 +180,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
     val todoListState = viewModel.listOfPackages.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Light)
     val subDataStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
+    val uldPalletVMValue = viewModel.uldPalletVMValue.collectAsState()
 
     LazyColumn(
         Modifier
@@ -298,30 +299,95 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
+                                        .height(50.dp)
                                         .background(Color.White)
-                                        .padding(8.dp)
+                                        .padding(8.dp),
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center,
                                 ) {
                                     SubTableCell(text = "${packageItem.packageRefNumber}", weight = column1Weight)
                                     SubTableCell(text = "${packageItem.length}x${packageItem.width}x${packageItem.height}", weight = column7Weight)
                                     SubTableCell(text = "${packageItem.weight}kg", weight = column1Weight)
-                                    Row(
-                                        modifier = Modifier
-                                            .padding(0.dp)
-                                            .weight(column1Weight),
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        IconButton(
-                                            onClick = {
-
-                                            },
+                                    if((uldPalletVMValue.value != null) && (packageItem.assignedUldId == uldPalletVMValue.value?.id)) {
+                                        Row(
+                                            modifier = Modifier
+                                                .padding(0.dp)
+                                                .weight(column1Weight),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.Center,
                                         ) {
-                                            Icon(
-                                                painter = painterResource(R.drawable.ic_add),
-                                                contentDescription = "delete",
-                                                tint = BlueLight
-                                            )
+                                            IconButton(
+                                                onClick = {
+                                                    // Do
+                                                },
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.ic_accepted),
+                                                    contentDescription = "done status",
+                                                    tint = Green,
+                                                    modifier = Modifier
+                                                        .size(24.dp)
+                                                        .padding(3.dp),
+                                                )
+                                            }
+
+                                            IconButton(
+                                                onClick = {
+                                                    // TODO
+                                                },
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.outline_remove_check_box_24),
+                                                    contentDescription = "delete",
+                                                    tint = BlueLight,
+                                                    modifier = Modifier
+                                                        .size(28.dp)
+                                                        .padding(3.dp),
+                                                )
+                                            }
+                                        }
+                                    } else if (packageItem.assignedUldId == null || packageItem.assignedUldId!!.isEmpty()) {
+                                        Row(
+                                            modifier = Modifier
+                                                .padding(0.dp)
+                                                .weight(column1Weight),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.Center,
+                                        ) {
+                                            IconButton(
+                                                onClick = {
+                                                    viewModel.assignCargoToUld(packageItemId = packageItem.id)
+                                                },
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.ic_add),
+                                                    contentDescription = "Add",
+                                                    tint = BlueLight
+                                                )
+                                            }
+                                        }
+                                    }else if(packageItem.assignedUldId!!.isNotEmpty() && packageItem.assignedUldId != uldPalletVMValue.value?.id) {
+                                        Row(
+                                            modifier = Modifier
+                                                .padding(0.dp)
+                                                .weight(column1Weight),
+                                            verticalAlignment = Alignment.CenterVertically,
+                                            horizontalArrangement = Arrangement.Center,
+                                        ) {
+                                            IconButton(
+                                                onClick = {
+                                                    // TODO
+                                                },
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(R.drawable.ic_add),
+                                                    contentDescription = "disable button",
+                                                    tint = Gray1
+                                                )
+                                            }
                                         }
                                     }
+
                                 }
                             }
                         }

@@ -7,7 +7,6 @@ import com.aeroclubcargo.warehouse.domain.model.*
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
-import java.util.concurrent.Flow
 
 interface ApiInterface {
 
@@ -83,5 +82,9 @@ interface ApiInterface {
 
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/RemoveAssignedPallet")
     suspend fun removeAssignedULDFromSchedule(@Body flightScheduleSectorDeleteRM:FlightScheduleSectorPalletDeleteRM) : Response<Any>
+
+    @POST("api/${Constants.API_VERSION}/ULDCargoBooking/SaveBookingAssigment")
+    suspend fun saveBookingAssignment(@Body bookingAssignmentRM: BookingAssignmentRM) : Response<Any>
+
 
 }

@@ -122,6 +122,10 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.removeAssignedULDFromSchedule(flightScheduleSectorDeleteRM)
     }
 
+    override suspend fun updatePackageULDContainerRM(bookingAssignmentRM: BookingAssignmentRM): Response<Any> {
+        return apiInterface.saveBookingAssignment(bookingAssignmentRM)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }

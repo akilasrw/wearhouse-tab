@@ -15,4 +15,5 @@ data class PackageItemModel (
     var packageItemType: Int,
     var packageItemCategory: Int,
     var cargoBookingId: String,
+    var assignedUldId : String? ,
 )
