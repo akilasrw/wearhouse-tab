@@ -25,12 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aeroclubcargo.warehouse.R
-import com.aeroclubcargo.warehouse.common.Constants
-import com.aeroclubcargo.warehouse.common.Constants.getULDType
-import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
-import com.aeroclubcargo.warehouse.presentation.recieved_cargo_details.ReceivedCargoDetailVM
 import com.aeroclubcargo.warehouse.theme.*
-import com.aeroclubcargo.warehouse.utils.toDateTimeDisplayFormat
 import kotlinx.coroutines.launch
 
 
@@ -85,6 +80,7 @@ fun CheckPackageItemSheet(
                         IconButton(onClick = {
                             coroutineScope.launch {
                                 modalSheetState.hide()
+                                viewModel.getCargoBookingAssignedCargoList()
                             }
                         }) {
                             Icon(
@@ -130,32 +126,7 @@ fun CheckPackageItemSheet(
                         ) {
                             Text(text = "Find", style = TextStyle(color = Color.White))
                         }
-                        Button(
-                            modifier = Modifier
-                                .weight(0.2f)
-                                .wrapContentSize(align = Alignment.Center),
-                            onClick = {
-                                // TODO
-//                            viewModel.updateData(onComplete = {
-//                                coroutineScope.launch {
-//                                    modalSheetState.hide()
-//                                }
-//                            })
-                                keyboardController?.hide()
-                            },
-                        ) {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.Center
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_save_24),
-                                    contentDescription = "update"
-                                )
-                                Spacer(modifier = Modifier.width(4.dp))
-                                Text(text = "Update", style = TextStyle(color = Color.White))
-                            }
-                        }
+
                     }
 
                     Column(
@@ -262,6 +233,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                 .padding(0.dp)
                                 .weight(column1Weight),
                             verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
                         ) {
                             IconButton(
                                 onClick = {
@@ -281,6 +253,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                         }
                     }
                     if (isExpanded) {
+                        Divider(modifier = Modifier.height(2.5.dp), color = Color.White)
                         Column {
                             Row(
                                 modifier = Modifier
@@ -291,7 +264,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                 SubTableCell(text = "Package ID", weight = column1Weight)
                                 SubTableCell(text = "Dimensions (LxWxH)", weight = column7Weight)
                                 SubTableCell(text = "Package Weight", weight = column1Weight)
-                                SubTableCell(text = "Add Pallet", weight = column1Weight)
+                                SubTableCell(text = "Add Pallet", weight = column1Weight,align = TextAlign.Center)
 
                             }
                             // Sub-table Rows
@@ -300,10 +273,9 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .height(50.dp)
-                                        .background(Color.White)
                                         .padding(8.dp),
                                     verticalAlignment = Alignment.CenterVertically,
-                                    horizontalArrangement = Arrangement.Center,
+                                    horizontalArrangement = Arrangement.Start,
                                 ) {
                                     SubTableCell(text = "${packageItem.packageRefNumber}", weight = column1Weight)
                                     SubTableCell(text = "${packageItem.length}x${packageItem.width}x${packageItem.height}", weight = column7Weight)
@@ -403,6 +375,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
 fun RowScope.SubTableCell(
     text: String,
     weight: Float,
+    align : TextAlign? = null,
 ) {
     Text(
         text = text,
@@ -410,7 +383,7 @@ fun RowScope.SubTableCell(
             .weight(weight)
             .padding(4.dp),
         style = typography.subtitle1.copy(fontSize = 13.sp),
-        textAlign = TextAlign.Start
+        textAlign = align ?: TextAlign.Start
     )
 }
 

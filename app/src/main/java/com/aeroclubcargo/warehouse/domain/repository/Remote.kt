@@ -6,6 +6,7 @@ import com.aeroclubcargo.warehouse.data.remote.dto.AuthenticateResponseDto
 import com.aeroclubcargo.warehouse.domain.model.*
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Query
 
 interface Remote {
     suspend fun authenticateUser(authenticateRequestDto: AuthenticateRequestDto): AuthenticateResponseDto
@@ -36,5 +37,6 @@ interface Remote {
     suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
     suspend fun removeAssignedULDFromSchedule(flightScheduleSectorDeleteRM:FlightScheduleSectorPalletDeleteRM) : Response<Any>
     suspend fun updatePackageULDContainerRM(bookingAssignmentRM: BookingAssignmentRM) : Response<Any>
+    suspend fun getAssignedCargoList(flightScheduleSectorId:String,uldId : String) : Response<List<BookingModel>>
 
 }

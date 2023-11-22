@@ -2,6 +2,7 @@ package com.aeroclubcargo.warehouse.presentation.cargo_assignment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,11 +13,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
@@ -26,26 +31,38 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
+import com.aeroclubcargo.warehouse.theme.Black
+import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.BlueLight3
 import com.aeroclubcargo.warehouse.theme.BlueLight5
 import com.aeroclubcargo.warehouse.theme.Gray4
+import com.aeroclubcargo.warehouse.theme.Gray5
 import com.aeroclubcargo.warehouse.theme.Gray6
 import com.aeroclubcargo.warehouse.theme.Green
+import com.aeroclubcargo.warehouse.theme.LightBlueBorderColor
+import com.aeroclubcargo.warehouse.theme.backgroundLightBlue
 import kotlinx.coroutines.launch
 
 
@@ -213,11 +230,123 @@ fun GetCargoList(
                             Text(text = "Add Cargo", style = TextStyle(color = Color.White))
                         }
                     }
-//                    FlightsTable(viewModel= viewModel, navController = navController)
+                    SummaryTable(viewModel= viewModel, navController = navController)
                 }
             }
 
         }
+    }
+}
+
+@Composable
+fun SummaryTable(viewModel: CargoAssignmentViewModel,navController: NavController) {
+    val mContext = LocalContext.current
+    val todoListState = viewModel.assignedBookingModels.collectAsState()
+    val headerStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Light)
+    val subDataStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
+    val uldPalletVMValue = viewModel.uldPalletVMValue.collectAsState()
+
+    LazyColumn(
+        Modifier
+            .fillMaxSize()
+            .padding(
+                start = 0.dp,
+                end = 0.dp,
+                top = 2.dp,
+                bottom = 0.dp
+            )
+    ) {
+        // header
+        item {
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = Gray5),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                TableCell(text = "AWB Number", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Booking ID", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Total Weight", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Total Volume", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Num of Pieces", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Actions", weight = column1Weight, style = headerStyle)
+            }
+        }
+
+        // data
+        if (todoListState.value != null) {
+            items(todoListState.value!!) { uldModel ->
+                var isExpanded by remember { mutableStateOf(false) }
+                Spacer(modifier = Modifier.height(8.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            width = 1.dp,
+                            color = LightBlueBorderColor,
+                            shape = RoundedCornerShape(8.dp) // Adjust the corner radius here
+                        )
+                ) {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .background(backgroundLightBlue)
+                            .clickable { isExpanded = !isExpanded },
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        TableCell(
+                            text = uldModel.awbNumber,
+                            weight = column6Weight,
+                            style = subDataStyle
+                        )
+                        TableCell(
+                            text = uldModel.bookingNumber,
+                            weight = column6Weight,
+                            style = subDataStyle
+                        )
+                        TableCell(
+                            text = "${uldModel.totalWeight}",
+                            weight = column6Weight,
+                            style = subDataStyle
+                        )
+                        TableCell(
+                            text = "${uldModel.totalVolume}",
+                            weight = column6Weight,
+                            style = subDataStyle
+                        )
+                        TableCell(
+                            text = "${uldModel.numberOfBoxes}",
+                            weight = column6Weight,
+                            style = subDataStyle
+                        )
+                        Row(
+                            modifier = Modifier
+                                .padding(0.dp)
+                                .weight(column1Weight),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            IconButton(
+                                onClick = {
+                                          // TODO
+                                },
+                                enabled = (uldModel.packageItems == null || uldModel.packageItems!!.isEmpty())
+                            ) {
+                                Icon(
+                                    painter = painterResource(  R.drawable.ic_delete),
+                                    contentDescription = "delete",
+                                    tint = BlueLight
+                                )
+                            }
+
+                        }
+                    }
+
+                }
+            }
+        }
+
     }
 }
 

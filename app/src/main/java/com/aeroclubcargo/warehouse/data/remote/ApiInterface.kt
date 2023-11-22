@@ -86,5 +86,8 @@ interface ApiInterface {
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/SaveBookingAssigment")
     suspend fun saveBookingAssignment(@Body bookingAssignmentRM: BookingAssignmentRM) : Response<Any>
 
+    @GET("api/${Constants.API_VERSION}/CargoBooking/GetAssignedCargoList")
+    suspend fun getAssignedCargoList(@Query("FlightScheduleSectorId") flightScheduleSectorId:String,@Query("UldId") uldId : String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
+
 
 }

@@ -26,6 +26,10 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
     }
 
     // container packages
+
+    private val _assignedBookingModels = MutableStateFlow<List<BookingModel>?>(null)
+    val assignedBookingModels = _assignedBookingModels.asStateFlow()
+
     private val _listOfPackages = MutableStateFlow<List<BookingModel>?>(null)
     val listOfPackages = _listOfPackages.asStateFlow()
 
@@ -41,6 +45,7 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
 
     fun setFlightSectorId(flightSectorId : String){
         _flightSectorId  = flightSectorId
+        getCargoBookingAssignedCargoList()
     }
 
     private val _packageNameValue = MutableStateFlow<String>("")
@@ -48,6 +53,17 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
 
     fun setFlightULDValue(value: String) {
         _packageNameValue.value = value
+    }
+
+    fun getCargoBookingAssignedCargoList() {
+        setLoading(true)
+        viewModelScope.launch {
+           var response = repository.getAssignedCargoList(flightScheduleSectorId = _flightSectorId, uldId = uldPalletVMValue.value!!.id)
+            if(response.isSuccessful){
+                _assignedBookingModels.value = response.body()
+            }
+            setLoading(false)
+        }
     }
 
     fun getBookingListForFlightScheduleSector(){
