@@ -90,8 +90,23 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                 setLoading(false)
             }
         }
-
     }
+
+    fun removeCargoFromUld(packageItemId: String){
+        if(uldPalletVMValue.value != null) {
+            setLoading(true)
+            viewModelScope.launch {
+                var response = repository.removeBookedAssignment(BookingAssignmentRM(packageId = packageItemId, uldId = uldPalletVMValue.value!!.id))
+                if(response.isSuccessful){
+                    setLoading(false)
+                    Log.e("assignCargoToUld() => ","${response.body()}")
+                }
+                setLoading(false)
+            }
+        }
+    }
+
+
 
 
 }

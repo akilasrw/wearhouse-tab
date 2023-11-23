@@ -26,6 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.theme.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -147,6 +151,8 @@ fun CheckPackageItemSheet(
 
 @Composable
 fun FlightsTable(viewModel: CargoAssignmentViewModel) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val mContext = LocalContext.current
     val todoListState = viewModel.listOfPackages.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Light)
@@ -305,7 +311,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
 
                                             IconButton(
                                                 onClick = {
-                                                    // TODO
+                                                    viewModel.removeCargoFromUld(packageItem.id)
                                                 },
                                             ) {
                                                 Icon(
@@ -348,7 +354,10 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                         ) {
                                             IconButton(
                                                 onClick = {
-                                                    // TODO
+                                                    CoroutineScope(Dispatchers.Default).launch {
+                                                        snackbarHostState.showSnackbar("This Item has been assigned to different ULD!")
+                                                    }
+
                                                 },
                                             ) {
                                                 Icon(

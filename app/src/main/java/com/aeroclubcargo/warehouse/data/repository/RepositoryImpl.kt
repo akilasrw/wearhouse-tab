@@ -126,6 +126,10 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.saveBookingAssignment(bookingAssignmentRM)
     }
 
+    override suspend fun removeBookedAssignment(bookingAssignmentRM: BookingAssignmentRM): Response<Any> {
+        return apiInterface.removeBookedAssignment(bookingAssignmentRM = bookingAssignmentRM)
+    }
+
     override suspend fun getAssignedCargoList(
         flightScheduleSectorId: String,
         uldId: String
