@@ -88,6 +88,8 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                     Log.e("assignCargoToUld() => ","${response.body()}")
                 }
                 setLoading(false)
+            }.invokeOnCompletion {
+                getBookingListForFlightScheduleSector()
             }
         }
     }
@@ -102,6 +104,8 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                     Log.e("assignCargoToUld() => ","${response.body()}")
                 }
                 setLoading(false)
+            }.invokeOnCompletion {
+                getBookingListForFlightScheduleSector()
             }
         }
     }

@@ -46,6 +46,7 @@ fun CheckPackageItemSheet(
     val coroutineScope = rememberCoroutineScope()
 
     val isLoading = viewModel.isLoading.collectAsState()
+    val uldPalletVMValue = viewModel.uldPalletVMValue.collectAsState()
 
     ModalBottomSheetLayout(
         sheetShape = RoundedCornerShape(
@@ -116,12 +117,13 @@ fun CheckPackageItemSheet(
                                 unfocusedBorderColor = Gray2
                             ),
                             label = { Text("AWB Number") }, // Replace with your label text
-                            modifier = Modifier.weight(0.4f),
+                            modifier = Modifier.weight(0.3f),
                             textStyle = TextStyle(color = Color.Black) // Optional: Customize text color
                         )
+                        Spacer(modifier = Modifier.width(3.dp))
                         Button(
                             modifier = Modifier
-                                .weight(0.1f)
+                                .weight(0.2f)
                                 .wrapContentSize(align = Alignment.Center),
                             onClick = {
                                 viewModel.setFlightULDValue(flightValue.value)
@@ -130,16 +132,62 @@ fun CheckPackageItemSheet(
                         ) {
                             Text(text = "Find", style = TextStyle(color = Color.White))
                         }
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Box(
+                            modifier = Modifier
+                                .weight(0.25f)
+
+                        ) {
+                            HeaderTile(
+                                title = "Max Weight",
+                                desctiption =  "${uldPalletVMValue.value?.maxWeight} kg"
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Box(
+                            modifier = Modifier
+                                .weight(0.25f)
+
+                        ) {
+                            HeaderTile(
+                                title = "Received Weight",
+                                desctiption =  "${uldPalletVMValue.value?.weight} kg",
+                                textColor = Green
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Box(
+                            modifier = Modifier
+                                .weight(0.25f)
+
+                        ) {
+                            HeaderTile(
+                                title = "Max Volume",
+                                desctiption = "${uldPalletVMValue.value?.maxVolume } m3"
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Box(
+                            modifier = Modifier
+                                .weight(0.25f)
+
+                        ) {
+                            HeaderTile(
+                                title = "Received Volume",
+                                desctiption = "${if(uldPalletVMValue.value != null) (uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height ) else 0 }  ", // TODO apply calculated volume
+                                textColor = Green
+                            )
+                        }
 
                     }
-
                     Column(
                         modifier = Modifier
                             .fillMaxHeight()
                             .padding(16.dp)
                     ) {
                         Divider(color = Gray4)
-                        FlightsTable(viewModel = viewModel)
+                        FlightsTable(viewModel = viewModel,modalSheetState = modalSheetState)
                         Spacer(modifier = Modifier.height(1.dp))
                     }
                 }
@@ -149,9 +197,11 @@ fun CheckPackageItemSheet(
 }
 
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun FlightsTable(viewModel: CargoAssignmentViewModel) {
+fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBottomSheetState) {
     val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
     val mContext = LocalContext.current
     val todoListState = viewModel.listOfPackages.collectAsState()
@@ -312,6 +362,10 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                             IconButton(
                                                 onClick = {
                                                     viewModel.removeCargoFromUld(packageItem.id)
+                                                    coroutineScope.launch {
+                                                        modalSheetState.hide()
+                                                        modalSheetState.show()
+                                                    }
                                                 },
                                             ) {
                                                 Icon(
@@ -335,6 +389,10 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                             IconButton(
                                                 onClick = {
                                                     viewModel.assignCargoToUld(packageItemId = packageItem.id)
+                                                    coroutineScope.launch {
+                                                        modalSheetState.hide()
+                                                        modalSheetState.show()
+                                                    }
                                                 },
                                             ) {
                                                 Icon(
@@ -354,7 +412,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel) {
                                         ) {
                                             IconButton(
                                                 onClick = {
-                                                    CoroutineScope(Dispatchers.Default).launch {
+                                                    coroutineScope.launch {
                                                         snackbarHostState.showSnackbar("This Item has been assigned to different ULD!")
                                                     }
 
