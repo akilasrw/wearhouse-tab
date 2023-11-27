@@ -241,7 +241,7 @@ fun GetCargoList(
 @Composable
 fun SummaryTable(viewModel: CargoAssignmentViewModel,navController: NavController) {
     val mContext = LocalContext.current
-    val todoListState = viewModel.assignedBookingModels.collectAsState()
+    val assignedBookingListState = viewModel.assignedBookingModels.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Light)
     val subDataStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
     val uldPalletVMValue = viewModel.uldPalletVMValue.collectAsState()
@@ -275,8 +275,8 @@ fun SummaryTable(viewModel: CargoAssignmentViewModel,navController: NavControlle
         }
 
         // data
-        if (todoListState.value != null) {
-            items(todoListState.value!!) { uldModel ->
+        if (assignedBookingListState.value != null) {
+            items(assignedBookingListState.value!!) { uldModel ->
                 var isExpanded by remember { mutableStateOf(false) }
                 Spacer(modifier = Modifier.height(8.dp))
                 Column(
