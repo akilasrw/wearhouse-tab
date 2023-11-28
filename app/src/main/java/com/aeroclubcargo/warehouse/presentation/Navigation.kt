@@ -22,6 +22,8 @@ import com.aeroclubcargo.warehouse.presentation.scan_cargo.ScanCargoScreen
 import com.aeroclubcargo.warehouse.presentation.splash.SplashScreen
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.ULDAssignmentScreen
 import com.aeroclubcargo.warehouse.presentation.uld_master.ULDMasterScreen
+import com.aeroclubcargo.warehouse.presentation.uld_position.FlightScheduleScreenForULD
+import com.aeroclubcargo.warehouse.presentation.uld_position.ULDPositionScreen
 import com.aeroclubcargo.warehouse.presentation.update_booking.UpdateBookingScreen
 import com.aeroclubcargo.warehouse.presentation.verify_booking.VerifyBookingScreen
 import com.squareup.moshi.Moshi
@@ -74,8 +76,19 @@ fun navigation() {
         ){
             ULDMasterScreen(navController)
         }
+        composable(route = Screen.ULDPositionScreen.route+"/{parameter}",
+            arguments = listOf(navArgument("parameter") { type = NavType.StringType }) ){
+                backStackEntry ->
+            val userJson =  backStackEntry.arguments?.getString("parameter")
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+            val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
+            val scheduleModel = jsonAdapter.fromJson(userJson)
+            ULDPositionScreen(navController = navController, scheduleModel = scheduleModel)
+        }
         composable(
-            route = Screen.FlightScheduleScreen.route
+            route = Screen.FlightScheduleScreen.route,
         ){
             FlightScheduleScreen(navController)
         }
@@ -132,6 +145,9 @@ fun navigation() {
                 navController = navController,
                 scheduleModel = userObject
             )
+        }
+        composable(route = Screen.FlightScheduleListForUldScreen.route){
+            FlightScheduleScreenForULD(navController = navController)
         }
         composable(
             route = Screen.CargoAssignmentScreen.route+"/{cargoModel}/{flightScheduleSector}",

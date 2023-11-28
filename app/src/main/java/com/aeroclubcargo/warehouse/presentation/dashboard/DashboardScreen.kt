@@ -105,14 +105,14 @@ fun GetDashboardMainUI(viewModel: DashBoardViewModel, navController: NavControll
                 id = R.drawable.ic_shelves_24, // TODO replace icon
                 text = stringResource(R.string.uld_master),
                 onClick = {
-
+                    navController.navigate(Screen.FlightScheduleListForUldScreen.route)
                 })
             Spacer(modifier = Modifier.width(8.dp))
             GetTileButton(
                 id = R.drawable.ic_outline_comment_24,
                 text = stringResource(R.string.special_package_handling),
                 onClick = {
-                   /** TODO */
+                    /** TODO */
                 })
             Spacer(modifier = Modifier.width(16.dp))
         }
@@ -192,7 +192,7 @@ fun TableScreen(viewModel: DashBoardViewModel) {
         }
         // data
         if (viewModel.cargoList.value != null)
-            items(viewModel.cargoList.value!!) {booking->
+            items(viewModel.cargoList.value!!) { booking ->
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -203,7 +203,7 @@ fun TableScreen(viewModel: DashBoardViewModel) {
 //                    TableCell(text = "N/A", weight = column3Weight)
                     TableCell(text = (booking.weight).toString(), weight = column4Weight)
                     TableStatusButton(text = booking.getStatusString(), weight = column5Weight)
-                    TableCell(text =  booking.bookingDate.split("T")[0], weight = column6Weight)
+                    TableCell(text = booking.bookingDate.split("T")[0], weight = column6Weight)
                 }
             }
     }
