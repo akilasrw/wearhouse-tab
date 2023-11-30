@@ -109,9 +109,10 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getPalletsByFlightScheduleId(
         flightScheduleId: String,
+        uldId : String?,
         uldLocateStatus: Int
     ): Response<List<ULDPalletVM>> {
-        return  apiInterface.getPalletsByFlightScheduleId(flightScheduleId, uldLocateStatus)
+        return  apiInterface.getPalletsByFlightScheduleId(flightScheduleId,uldId, uldLocateStatus)
     }
 
     override suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM): Response<Any> {

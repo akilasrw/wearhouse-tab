@@ -75,7 +75,7 @@ interface ApiInterface {
     suspend fun getSummaryCargoPositions(@Query ("AircraftLayoutId") aircraftLayoutId : String) : Response<List<FlightScheduleSectorUldPositionVM>>
 
     @GET("api/${Constants.API_VERSION}/ULDCargoBooking/GetPalletsByFlightScheduleId")
-    suspend fun getPalletsByFlightScheduleId(@Query ("FlightScheduleId") flightScheduleId : String,@Query("ULDLocateStatus") uldLocateStatus: Int) : Response<List<ULDPalletVM>>
+    suspend fun getPalletsByFlightScheduleId(@Query ("FlightScheduleId") flightScheduleId : String,@Query ("UldId") uldId : String?, @Query("ULDLocateStatus") uldLocateStatus: Int) : Response<List<ULDPalletVM>>
 
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/CreateRemovePalleteList")
     suspend fun addPalletListToFlight(@Body  flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>

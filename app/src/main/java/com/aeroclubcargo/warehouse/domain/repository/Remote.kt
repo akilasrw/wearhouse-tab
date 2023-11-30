@@ -33,7 +33,7 @@ interface Remote {
     suspend fun getULDFilteredList( pageIndex:Int, pageSize:Int): Response<Pagination<ULDModel>>
     suspend fun getBookingListPerFlightSchedule(flightScheduleSectorId:String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
     suspend fun getSummaryCargoPositions(aircraftLayoutId : String) : Response<List<FlightScheduleSectorUldPositionVM>>
-    suspend fun getPalletsByFlightScheduleId(flightScheduleId : String, uldLocateStatus: Int) : Response<List<ULDPalletVM>>
+    suspend fun getPalletsByFlightScheduleId(flightScheduleId : String,uldId : String?, uldLocateStatus: Int) : Response<List<ULDPalletVM>>
     suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
     suspend fun removeAssignedULDFromSchedule(flightScheduleSectorDeleteRM:FlightScheduleSectorPalletDeleteRM) : Response<Any>
     suspend fun updatePackageULDContainerRM(bookingAssignmentRM: BookingAssignmentRM) : Response<Any>

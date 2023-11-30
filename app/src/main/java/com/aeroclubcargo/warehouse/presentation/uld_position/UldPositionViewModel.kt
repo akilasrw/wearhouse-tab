@@ -32,6 +32,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
             try {
                 var response = repository.getPalletsByFlightScheduleId(
                     _flightScheduleValue!!.value!!.id!!,
+                    null,
                     Constants.ULDLocateStatus.OnGround.ordinal
                 )
                 if (response.isSuccessful) {

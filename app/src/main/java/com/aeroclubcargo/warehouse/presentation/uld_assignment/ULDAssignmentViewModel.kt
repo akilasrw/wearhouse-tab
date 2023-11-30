@@ -124,6 +124,7 @@ class ULDAssignmentViewModel @Inject constructor(private var repository: Reposit
             try {
                 var response = repository.getPalletsByFlightScheduleId(
                     _flightScheduleValue!!.value!!.id!!,
+                    null,
                     Constants.ULDLocateStatus.OnGround.ordinal
                 )
                 if (response.isSuccessful) {

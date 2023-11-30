@@ -3,6 +3,7 @@ package com.aeroclubcargo.warehouse.presentation.cargo_assignment
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.BookingModel
 import com.aeroclubcargo.warehouse.domain.model.BookingAssignmentRM
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
@@ -48,6 +49,17 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
         getCargoBookingAssignedCargoList()
     }
 
+    fun refreshUldPalletData(){
+        viewModelScope.launch {
+            var response = repository.getPalletsByFlightScheduleId(flightScheduleId = _flightSectorId,
+                uldLocateStatus =  Constants.ULDLocateStatus.OnGround.ordinal,
+                uldId = _uldPalletVMValue.value?.id)
+            if(response.isSuccessful){
+                _uldPalletVMValue.value = response.body()?.first()
+            }
+        }
+    }
+
     private val _packageNameValue = MutableStateFlow<String>("")
     val packageNameValue = _packageNameValue.asStateFlow()
 
@@ -90,6 +102,7 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                 setLoading(false)
             }.invokeOnCompletion {
                 getBookingListForFlightScheduleSector()
+                refreshUldPalletData()
             }
         }
     }
@@ -106,6 +119,7 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                 setLoading(false)
             }.invokeOnCompletion {
                 getBookingListForFlightScheduleSector()
+                refreshUldPalletData()
             }
         }
     }
