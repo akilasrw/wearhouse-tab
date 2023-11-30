@@ -175,7 +175,7 @@ fun CheckPackageItemSheet(
                         ) {
                             HeaderTile(
                                 title = "Received Volume",
-                                desctiption = "${if(uldPalletVMValue.value != null) (uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height ) else 0 }  ", // TODO apply calculated volume
+                                desctiption = "${if(uldPalletVMValue.value != null) uldPalletVMValue.value?.volume  else 0 }  ",
                                 textColor = Green
                             )
                         }

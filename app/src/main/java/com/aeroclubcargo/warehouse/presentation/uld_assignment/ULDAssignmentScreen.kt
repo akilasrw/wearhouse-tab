@@ -313,7 +313,7 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel,navController: NavController,
                     TableCell(text =  "${uldModel.maxWeight} Kg", weight =  column3Weight)
                     TableCell(text = "${uldModel.weight} kg", weight =  column10Weight)
                     TableCell(text = "${uldModel.maxVolume} m3", weight =  column5Weight)
-                    TableCell(text = "${uldModel.width* uldModel.height * uldModel.length} m3", weight =  column6Weight)
+                    TableCell(text = "${uldModel.volume} m3", weight =  column6Weight)
                     Row(Modifier.weight(column9Weight), horizontalArrangement = Arrangement.SpaceBetween) {
                         IconButton(
                             modifier = Modifier.size(24.dp),
