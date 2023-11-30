@@ -187,7 +187,9 @@ fun GetCutOffTimeList(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
-                    modifier = Modifier.focusRequester(focusRequester = filterButton).wrapContentSize(align = Alignment.Center),
+                    modifier = Modifier
+                        .focusRequester(focusRequester = filterButton)
+                        .wrapContentSize(align = Alignment.Center),
                     onClick = {
                         viewModel.getScheduleList()
                         keyboardController?.hide()
@@ -253,7 +255,9 @@ fun FlightsTable(viewModel: FlightScheduleScreenForULD,navController: NavControl
         // header
         item {
             Row(
-                Modifier.fillMaxWidth().background(color = Gray5),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = Gray5),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
@@ -266,7 +270,7 @@ fun FlightsTable(viewModel: FlightScheduleScreenForULD,navController: NavControl
                 TableCell(text = "Aircraft Type", weight = column7Weight, style = headerStyle)
                 TableCell(text = "ULD\nPositions", weight = column8Weight, style = headerStyle)
                 TableCell(text = "ULD\nCount", weight = column9Weight, style = headerStyle)
-                TableCell(text = "Add ULD", weight = column10Weight, style = headerStyle)
+                TableCell(text = "Add Positions", weight = column10Weight, style = headerStyle)
             }
         }
         // data
@@ -285,27 +289,27 @@ fun FlightsTable(viewModel: FlightScheduleScreenForULD,navController: NavControl
                 TableCell(text = flightScheduleModel.aircraftSubTypeName ?:"-", weight =  column7Weight)
                 TableCell(text = (flightScheduleModel.uldPositionCount.toString()), weight =  column8Weight)
                 TableCell(text = (flightScheduleModel.uldCount.toString()), weight =  column9Weight)
-                IconButton(
-                    onClick = {
-
-                        val moshi = Moshi.Builder()
-                            .add(KotlinJsonAdapterFactory())
-                            .build()
-                        val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
-                        val flightJson = jsonAdapter.toJson(flightScheduleModel)
-                        navController.navigate(Screen.ULDPositionScreen.route+"/${flightJson}")
+                Row (modifier = Modifier.weight(column10Weight), horizontalArrangement = Arrangement.Center){
+                    IconButton(
+                        onClick = {
+                            val moshi = Moshi.Builder()
+                                .add(KotlinJsonAdapterFactory())
+                                .build()
+                            val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
+                            val flightJson = jsonAdapter.toJson(flightScheduleModel)
+                            navController.navigate(Screen.ULDPositionScreen.route+"/${flightJson}")
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_add),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
                     }
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_add),
-                        contentDescription = "edit",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .padding(3.dp),
-                        tint = BlueLight
-                    )
                 }
-
             }
         }
     }

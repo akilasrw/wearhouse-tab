@@ -3,6 +3,8 @@ package com.aeroclubcargo.warehouse.presentation.uld_position
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,8 +12,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,8 +51,11 @@ import com.aeroclubcargo.warehouse.presentation.uld_master.ULDMasterVIewModel
 import com.aeroclubcargo.warehouse.theme.Black
 import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.BlueLight2
+import com.aeroclubcargo.warehouse.theme.BlueLight4
+import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray5
 import com.aeroclubcargo.warehouse.theme.Green
+import com.aeroclubcargo.warehouse.theme.hintLightGray
 import com.aeroclubcargo.warehouse.utils.ListState
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -98,7 +109,6 @@ fun MainUIPanel(
     viewModel: UldPositionViewModel,
 ) {
 //    val noOfPackagesValue =  viewModel.uldNumber.collectAsState()
-    val itemList = listOf("Item 1", "Item 2", "Item 3", "Item 4", "Item 5")
     val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
 
     Column(modifier = Modifier.background(color = Color.White)) {
@@ -236,7 +246,7 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
             ) {
                 TableCell(text = "ULD number", weight = column2Weight, style = headerStyle)
                 TableCell(text = "ULD Type", weight = column1Weight, style = headerStyle)
-                TableCell(text = "Dimensions", weight = column2Weight, style = headerStyle)
+                TableCell(text = "Dimensions", weight = column8Weight, style = headerStyle)
                 TableCell(text = "Max Weight", weight = column3Weight, style = headerStyle)
                 TableCell(text = "Received Weight", weight = column10Weight, style = headerStyle)
                 TableCell(text = "Max Volume", weight = column5Weight, style = headerStyle)
@@ -259,32 +269,88 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                     )
                     TableCell(
                         text = "${uldModel.width} x ${uldModel.height}x ${uldModel.length}",
-                        weight = column2Weight
+                        weight = column8Weight
                     )
                     TableCell(text = "${uldModel.maxWeight} Kg", weight = column3Weight)
                     TableCell(text = "${uldModel.weight} kg", weight = column10Weight)
                     TableCell(text = "${uldModel.maxVolume} m3", weight = column5Weight)
                     TableCell(
-                        text = "${uldModel.width * uldModel.height * uldModel.length} m3",
+                        text = "${uldModel.volume} m3",
                         weight = column6Weight
                     )
                     Row(
                         Modifier.weight(column9Weight),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
+
+                        var expanded = remember  { mutableStateOf(false) }
+                        var selectedOption = remember  { mutableStateOf("Option 1") }
+
+                        // Options for the dropdown
+                        val options = listOf("Option 1", "Option 2", "Option 3")
+                        DropdownMenu(
+                            expanded = expanded.value,
+                            onDismissRequest = { expanded.value = false },
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .wrapContentWidth()
+                        ) {
+                            options.forEach { option ->
+                                DropdownMenuItem(onClick = {
+                                    selectedOption.value = option
+                                    expanded.value = false
+                                }) {
+                                    Text(text = option)
+                                }
+                            }
+                        }
+                        TextField(value = selectedOption.value,
+                            onValueChange = {
+                            },
+                            modifier = Modifier
+                                .weight(0.7f)
+                                .height(55.dp)
+                                .padding(4.dp)
+                                .border(1.dp, Gray2, shape = MaterialTheme.shapes.small)
+                            .clickable {
+                                    expanded.value = true
+                                }
+                            ,
+                            colors = TextFieldDefaults.textFieldColors(
+                                focusedIndicatorColor = Color.Transparent,
+                                unfocusedIndicatorColor = Color.Transparent,
+                                disabledIndicatorColor = Color.Transparent
+                            ),
+                            textStyle = MaterialTheme.typography.subtitle2.copy(fontSize = 14.sp,),
+                            trailingIcon =  @Composable {
+                                IconButton(
+                                onClick = {
+                                    expanded.value = true
+                                }) {
+                                Icon(
+                                    modifier = Modifier.size(size = 18.dp),
+                                    imageVector = Icons.Rounded.KeyboardArrowDown,
+                                    contentDescription = "",
+                                    tint = Gray2
+                                )
+                            }
+                            },
+                            enabled = false
+                        )
                         IconButton(
-                            modifier = Modifier.size(24.dp),
+                            modifier = Modifier.size(20.dp),
                             onClick = {
 
                             }
                         ) {
                             Icon(
-                                painter = painterResource(R.drawable.ic_view),
+                                painter = painterResource(R.drawable.ic_accepted),
                                 contentDescription = "edit",
                                 modifier = Modifier
-                                    .size(18.dp)
+                                    .size(20.dp).weight(0.3f)
                                     .padding(1.dp),
-                                tint = BlueLight
+                                tint = hintLightGray // Green
                             )
                         }
 

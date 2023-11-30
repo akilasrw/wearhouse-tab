@@ -277,10 +277,10 @@ fun RowScope.TableCellEditText(
             modifier = Modifier
                 .weight(weight)
                 .padding(8.dp),
-            textStyle = style,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = LightBlueBorderColor
-            ),
+//            textStyle = style,
+//            colors = TextFieldDefaults.textFieldColors(
+//                backgroundColor = LightBlueBorderColor
+//            ),
             trailingIcon =  @Composable { IconButton(
                 modifier = Modifier.size(25.dp),
                 onClick = {
