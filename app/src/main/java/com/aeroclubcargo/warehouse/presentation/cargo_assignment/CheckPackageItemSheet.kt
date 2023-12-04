@@ -318,8 +318,9 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                     .padding(8.dp)
                             ) {
                                 SubTableCell(text = "Package ID", weight = column1Weight)
-                                SubTableCell(text = "Dimensions (LxWxH)", weight = column7Weight)
+                                SubTableCell(text = "Dimensions (LxWxH)", weight = column6Weight)
                                 SubTableCell(text = "Package Weight", weight = column1Weight)
+                                SubTableCell(text = "Package Volume", weight = column1Weight)
                                 SubTableCell(text = "Add Pallet", weight = column1Weight,align = TextAlign.Center)
 
                             }
@@ -334,8 +335,9 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                     horizontalArrangement = Arrangement.Start,
                                 ) {
                                     SubTableCell(text = "${packageItem.packageRefNumber}", weight = column1Weight)
-                                    SubTableCell(text = "${packageItem.length}x${packageItem.width}x${packageItem.height}", weight = column7Weight)
+                                    SubTableCell(text = "${packageItem.length}x${packageItem.width}x${packageItem.height}", weight = column6Weight)
                                     SubTableCell(text = "${packageItem.weight}kg", weight = column1Weight)
+                                    SubTableCell(text = "${packageItem.length * packageItem.width * packageItem.height}", weight = column1Weight)
                                     if((uldPalletVMValue.value != null) && (packageItem.assignedUldId == uldPalletVMValue.value?.id)) {
                                         Row(
                                             modifier = Modifier
@@ -450,7 +452,7 @@ fun RowScope.SubTableCell(
             .weight(weight)
             .padding(4.dp),
         style = typography.subtitle1.copy(fontSize = 13.sp),
-        textAlign = align ?: TextAlign.Start
+        textAlign = align ?: TextAlign.Center
     )
 }
 
@@ -477,7 +479,7 @@ val column3Weight = .12f
 val column4Weight = .1f
 val column5Weight = .1f
 val column6Weight = .2f
-val column7Weight = .24f
+val column7Weight = .23f
 val column8Weight = .125f
 val column9Weight = .125f
 val column10Weight = .09f
