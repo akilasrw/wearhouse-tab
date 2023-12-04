@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.BookingModel
 import com.aeroclubcargo.warehouse.domain.model.BookingAssignmentRM
+import com.aeroclubcargo.warehouse.domain.model.PackageItemModel
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -88,6 +89,18 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
             }
             setLoading(false)
         }
+    }
+
+    fun validatePackageAvailability(packageItem : PackageItemModel, messageCallback: (String) -> Unit) : Boolean {
+        if(_uldPalletVMValue.value?.maxWeight!! <= (packageItem.weight + _uldPalletVMValue.value?.weight!!) ){
+            messageCallback("ULD weight is exceeded!. You cannot add this package to ULD!")
+            return false
+        }
+        if(_uldPalletVMValue.value?.maxVolume!! <= ((packageItem.width * packageItem.length * packageItem.height) + _uldPalletVMValue.value?.volume!! ) ){
+            messageCallback("There is no space to add this item in this ULD!")
+            return false
+        }
+        return true
     }
 
     fun assignCargoToUld(packageItemId: String){
