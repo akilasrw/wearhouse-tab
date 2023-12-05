@@ -22,6 +22,13 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
     private val _flightScheduleValue = MutableStateFlow<FlightScheduleModel?>(null)
     val flightScheduleValue = _flightScheduleValue.asStateFlow()
 
+    val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
+
+    fun setLoading( isLoading: Boolean){
+        _isLoading.value= isLoading;
+    }
+
     fun setFlightSchedule(schedule: FlightScheduleModel?) {
         _flightScheduleValue.value = schedule
         getULDList()
@@ -34,8 +41,9 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
     var cargoPositionListFlow = _cargoPositionListFlow.asStateFlow()
 
 
-    private fun getCargoPositionList() {
+    fun getCargoPositionList() {
         viewModelScope.launch {
+            setLoading(true)
             try {
                 val response =
                     repository.getSummaryCargoPositionsBySector(flightScheduleSectorId = flightScheduleValue!!.value!!.id)
@@ -45,24 +53,24 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
             } catch (e: Exception) {
                 Log.e("ULDAssignment Model", e.message.toString())
             }
-
+            setLoading(false)
         }
     }
 
     fun addULDCargoPosition(uldId: String, cargoPositionId: String,onComplete :(String?,String?) -> Unit) {
         viewModelScope.launch {
-
             try {
-                var response =
+                val response =
                     repository.addULDCargoPosition(ULDCargoPositionRequest(uldId, cargoPositionId))
                 if (response.isSuccessful) {
                     var responseModel = response.body()
                     if(responseModel?.statusCode == ServiceResponseStatus.Failed.ordinal){
                         onComplete(null,responseModel.message)
                     }else{
-
+                        onComplete("ULD Updated Successfully", null)
                     }
                 }
+
             } catch (e: Exception) {
                 Log.e("ULDAssignment Model", e.message.toString())
             }
@@ -72,6 +80,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
 
     private fun getULDList() {
         viewModelScope.launch {
+            setLoading(false)
             try {
                 var response = repository.getPalletsByFlightScheduleId(
                     _flightScheduleValue!!.value!!.id!!,
@@ -87,8 +96,10 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                     }
                 }
             } catch (e: Exception) {
+                setLoading(false)
                 Log.e("ULDAssignment Model", e.message.toString())
             }
+            setLoading(false)
             getCargoPositionList()
         }
     }

@@ -113,9 +113,9 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel) {
 fun MainUIPanel(
     viewModel: UldPositionViewModel,
 ) {
-//    val noOfPackagesValue =  viewModel.uldNumber.collectAsState()
     val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
-
+    val isLoading = viewModel.isLoading.collectAsState()
+    
     Column(modifier = Modifier.background(color = Color.White)) {
         Spacer(modifier = Modifier.height(5.dp))
         Row(
@@ -227,7 +227,17 @@ fun MainUIPanel(
             }
 
         }
-        ULDDataTable(viewModel)
+        if (isLoading.value) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        } else {
+            ULDDataTable(viewModel)
+        }
+
     }
 }
 
@@ -235,16 +245,21 @@ fun MainUIPanel(
 fun ULDDataTable(viewModel: UldPositionViewModel) {
     val coroutineScope = rememberCoroutineScope()
     val showAlert = remember { mutableStateOf(false) }
+    val alertTitle = remember { mutableStateOf("") }
     var alertMessage = remember {
         mutableStateOf("")
     }
     if (showAlert.value) {
         AlertDialog(
             onDismissRequest = { showAlert.value = false },
+            title = { Text(text = alertTitle.value)},
             text = { Text(alertMessage.value) },
             confirmButton = {
                 Button(
-                    onClick = { showAlert.value = false }
+                    onClick = {
+                        showAlert.value = false
+                        viewModel.getCargoPositionList()
+                    }
                 ) {
                     Text(stringResource(R.string.ok), style = TextStyle(color = Color.White))
                 }
@@ -255,6 +270,8 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
 
     val todoListState = viewModel.assignedUldListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
+
+    viewModel.isLoading
     LazyColumn(
         Modifier
             .fillMaxSize()
@@ -330,19 +347,27 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                                         cargoPositionId = position.id,
                                         onComplete = { message, error ->
                                             run {
+                                                if (message != null)
+                                                    coroutineScope.launch {
+                                                        alertMessage.value = message
+                                                        showAlert.value = true
+                                                        alertTitle.value = "ULD Updated!"
+                                                    }
+
                                                 if (error != null)
                                                     coroutineScope.launch {
                                                         alertMessage.value = error
                                                         showAlert.value = true
+                                                        alertTitle.value = "Failed!"
                                                     }
                                             }
                                         })
                                 }) {
-                                    Text(text = position.name)
+                                    Text(text = position.id)
                                 }
                             }
                         }
-                        TextField(value = selectedOption.value?.name ?: "-",
+                        TextField(value = selectedOption.value?.id ?: "-",
                             onValueChange = {
                             },
                             modifier = Modifier
