@@ -126,3 +126,10 @@ object Constants {
         }
     }
 }
+
+enum class ServiceResponseStatus
+{
+    Success ,
+    ValidationError,
+    Failed,
+}

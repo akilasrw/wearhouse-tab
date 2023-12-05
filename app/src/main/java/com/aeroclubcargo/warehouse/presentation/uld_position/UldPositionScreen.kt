@@ -20,10 +20,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
+import com.aeroclubcargo.warehouse.domain.model.CargoPositionVM
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.presentation.Screen
@@ -59,6 +63,7 @@ import com.aeroclubcargo.warehouse.theme.hintLightGray
 import com.aeroclubcargo.warehouse.utils.ListState
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.launch
 
 @Composable
 fun ULDPositionScreen(
@@ -228,6 +233,26 @@ fun MainUIPanel(
 
 @Composable
 fun ULDDataTable(viewModel: UldPositionViewModel) {
+    val coroutineScope = rememberCoroutineScope()
+    val showAlert = remember { mutableStateOf(false) }
+    var alertMessage = remember {
+        mutableStateOf("")
+    }
+    if (showAlert.value) {
+        AlertDialog(
+            onDismissRequest = { showAlert.value = false },
+            text = { Text(alertMessage.value) },
+            confirmButton = {
+                Button(
+                    onClick = { showAlert.value = false }
+                ) {
+                    Text(stringResource(R.string.ok), style = TextStyle(color = Color.White))
+                }
+            },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+
     val todoListState = viewModel.assignedUldListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
     LazyColumn(
@@ -284,11 +309,11 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
-                        var expanded = remember  { mutableStateOf(false) }
-                        var selectedOption = remember  { mutableStateOf("Option 1") }
+                        var expanded = remember { mutableStateOf(false) }
+                        var selectedOption = remember { mutableStateOf<CargoPositionVM?>(null) }
 
                         // Options for the dropdown
-                        val options = listOf("Option 1", "Option 2", "Option 3")
+                        val cargoPositionListFlow = viewModel.cargoPositionListFlow.collectAsState()
                         DropdownMenu(
                             expanded = expanded.value,
                             onDismissRequest = { expanded.value = false },
@@ -296,16 +321,28 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                                 .padding(16.dp)
                                 .wrapContentWidth()
                         ) {
-                            options.forEach { option ->
+                            cargoPositionListFlow.value?.forEach { position ->
                                 DropdownMenuItem(onClick = {
-                                    selectedOption.value = option
+                                    selectedOption.value = position
                                     expanded.value = false
+                                    viewModel.addULDCargoPosition(
+                                        uldId = uldModel.id,
+                                        cargoPositionId = position.id,
+                                        onComplete = { message, error ->
+                                            run {
+                                                if (error != null)
+                                                    coroutineScope.launch {
+                                                        alertMessage.value = error
+                                                        showAlert.value = true
+                                                    }
+                                            }
+                                        })
                                 }) {
-                                    Text(text = option)
+                                    Text(text = position.name)
                                 }
                             }
                         }
-                        TextField(value = selectedOption.value,
+                        TextField(value = selectedOption.value?.name ?: "-",
                             onValueChange = {
                             },
                             modifier = Modifier
@@ -313,28 +350,27 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                                 .height(55.dp)
                                 .padding(4.dp)
                                 .border(1.dp, Gray2, shape = MaterialTheme.shapes.small)
-                            .clickable {
+                                .clickable {
                                     expanded.value = true
-                                }
-                            ,
+                                },
                             colors = TextFieldDefaults.textFieldColors(
                                 focusedIndicatorColor = Color.Transparent,
                                 unfocusedIndicatorColor = Color.Transparent,
                                 disabledIndicatorColor = Color.Transparent
                             ),
-                            textStyle = MaterialTheme.typography.subtitle2.copy(fontSize = 14.sp,),
-                            trailingIcon =  @Composable {
+                            textStyle = MaterialTheme.typography.subtitle2.copy(fontSize = 14.sp),
+                            trailingIcon = @Composable {
                                 IconButton(
-                                onClick = {
-                                    expanded.value = true
-                                }) {
-                                Icon(
-                                    modifier = Modifier.size(size = 18.dp),
-                                    imageVector = Icons.Rounded.KeyboardArrowDown,
-                                    contentDescription = "",
-                                    tint = Gray2
-                                )
-                            }
+                                    onClick = {
+                                        expanded.value = true
+                                    }) {
+                                    Icon(
+                                        modifier = Modifier.size(size = 18.dp),
+                                        imageVector = Icons.Rounded.KeyboardArrowDown,
+                                        contentDescription = "",
+                                        tint = Gray2
+                                    )
+                                }
                             },
                             enabled = false
                         )
@@ -348,7 +384,8 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                                 painter = painterResource(R.drawable.ic_accepted),
                                 contentDescription = "edit",
                                 modifier = Modifier
-                                    .size(20.dp).weight(0.3f)
+                                    .size(20.dp)
+                                    .weight(0.3f)
                                     .padding(1.dp),
                                 tint = hintLightGray // Green
                             )

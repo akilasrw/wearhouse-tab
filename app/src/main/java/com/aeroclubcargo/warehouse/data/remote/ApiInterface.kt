@@ -89,9 +89,13 @@ interface ApiInterface {
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/RemoveBookedAssigment")
     suspend fun removeBookedAssignment(@Body bookingAssignmentRM: BookingAssignmentRM) : Response<Any>
 
-
     @GET("api/${Constants.API_VERSION}/CargoBooking/GetAssignedCargoList")
     suspend fun getAssignedCargoList(@Query("FlightScheduleSectorId") flightScheduleSectorId:String,@Query("UldId") uldId : String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
 
+    @GET("api/${Constants.API_VERSION}/CargoPosition/GetSummaryCargoPositionsBySector")
+    suspend fun getSummaryCargoPositionsBySector(@Query("FlightScheduleSectorId") flightScheduleSectorId:String) : Response<List<CargoPositionVM>>
+
+    @POST("api/${Constants.API_VERSION}/ULDCargoPosition/create")
+    suspend fun addULDCargoPosition(@Body uldCargoPositionRequest: ULDCargoPositionRequest) : Response<ULDCargoPositionResponse>
 
 }
