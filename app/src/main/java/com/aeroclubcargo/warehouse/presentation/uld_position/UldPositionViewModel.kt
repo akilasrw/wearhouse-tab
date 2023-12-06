@@ -49,12 +49,22 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                     repository.getSummaryCargoPositionsBySector(flightScheduleSectorId = flightScheduleValue!!.value!!.id)
                 if (response.isSuccessful) {
                     _cargoPositionListFlow.emit(response.body())
+                    updateULDListValues()
                 }
             } catch (e: Exception) {
                 Log.e("ULDAssignment Model", e.message.toString())
             }
             setLoading(false)
         }
+    }
+
+    private fun updateULDListValues() {
+        var assignList = _assignedULDListFlow.value
+        assignList?.forEach { item ->
+            if(item.cargoPositionID != null)
+                item.cargoPositionVM = _cargoPositionListFlow.value?.toList()?.filter { it.id == item.cargoPositionID }?.first()
+        }
+
     }
 
     fun addULDCargoPosition(uldId: String, cargoPositionId: String,onComplete :(String?,String?) -> Unit) {
@@ -78,7 +88,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
 
     }
 
-    private fun getULDList() {
+    fun getULDList() {
         viewModelScope.launch {
             setLoading(false)
             try {

@@ -21,5 +21,6 @@ data class ULDPalletVM (
     val maxWeight:Double = 0.0,
     val maxVolume:Double = 0.0,
     val volume:Double = 0.0,
-
+    var cargoPositionID: String?,
+    var cargoPositionVM : CargoPositionVM?,
 )

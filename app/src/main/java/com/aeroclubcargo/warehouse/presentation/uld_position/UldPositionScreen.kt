@@ -258,7 +258,7 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                 Button(
                     onClick = {
                         showAlert.value = false
-                        viewModel.getCargoPositionList()
+                        viewModel.getULDList()
                     }
                 ) {
                     Text(stringResource(R.string.ok), style = TextStyle(color = Color.White))
@@ -327,7 +327,7 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                     ) {
 
                         var expanded = remember { mutableStateOf(false) }
-                        var selectedOption = remember { mutableStateOf<CargoPositionVM?>(null) }
+                        var selectedOption = remember { mutableStateOf<CargoPositionVM?>(uldModel.cargoPositionVM) }
 
                         // Options for the dropdown
                         val cargoPositionListFlow = viewModel.cargoPositionListFlow.collectAsState()
@@ -363,11 +363,16 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                                             }
                                         })
                                 }) {
-                                    Text(text = position.id)
+                                    Row (modifier = Modifier.size(20.dp)){
+                                        Text(text = position.name+" ")
+                                        if(selectedOption.value?.id == position.id)
+                                            Icon(painter = painterResource(id = R.drawable.ic_accepted), contentDescription = "",)
+                                    }
+
                                 }
                             }
                         }
-                        TextField(value = selectedOption.value?.id ?: "-",
+                        TextField(value = selectedOption.value?.name ?: "-",
                             onValueChange = {
                             },
                             modifier = Modifier
