@@ -40,7 +40,7 @@ interface Remote {
     suspend fun removeBookedAssignment(bookingAssignmentRM: BookingAssignmentRM) : Response<Any>
     suspend fun getAssignedCargoList(flightScheduleSectorId:String,uldId : String) : Response<List<BookingModel>>
     suspend fun getSummaryCargoPositionsBySector(flightScheduleSectorId: String) : Response<List<CargoPositionVM>>
-    suspend fun addULDCargoPosition(uldCargoPositionRequest: ULDCargoPositionRequest) : Response<ULDCargoPositionResponse>
+    suspend fun addULDCargoPosition(uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<ULDCargoPositionResponse>
 
 
 }

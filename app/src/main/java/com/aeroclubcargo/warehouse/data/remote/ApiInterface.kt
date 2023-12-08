@@ -96,6 +96,6 @@ interface ApiInterface {
     suspend fun getSummaryCargoPositionsBySector(@Query("FlightScheduleSectorId") flightScheduleSectorId:String) : Response<List<CargoPositionVM>>
 
     @POST("api/${Constants.API_VERSION}/ULDCargoPosition/create")
-    suspend fun addULDCargoPosition(@Body uldCargoPositionRequest: ULDCargoPositionRequest) : Response<ULDCargoPositionResponse>
+    suspend fun addULDCargoPosition(@Body uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<ULDCargoPositionResponse>
 
 }

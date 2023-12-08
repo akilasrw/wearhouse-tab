@@ -82,6 +82,32 @@ fun ULDPositionScreen(
 
 @Composable
 fun GetULTMasterUI(viewModel: UldPositionViewModel) {
+
+    val coroutineScope = rememberCoroutineScope()
+    val showAlert = remember { mutableStateOf(false) }
+    val alertTitle = remember { mutableStateOf("") }
+    var alertMessage = remember {
+        mutableStateOf("")
+    }
+    if (showAlert.value) {
+        AlertDialog(
+            onDismissRequest = { showAlert.value = false },
+            title = { Text(text = alertTitle.value) },
+            text = { Text(alertMessage.value) },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showAlert.value = false
+                        viewModel.getULDList()
+                    }
+                ) {
+                    Text(stringResource(R.string.ok), style = TextStyle(color = Color.White))
+                }
+            },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -92,10 +118,34 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel) {
                 .fillMaxWidth()
                 .padding(horizontal = 0.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "Add ULD Position", style = MaterialTheme.typography.subtitle1)
+            Button(onClick = {
+                viewModel.saveALl(onComplete = { msg, error ->
 
+                    if (!error.isNullOrEmpty()) {
+                        coroutineScope.launch {
+                            alertMessage.value = error
+                            showAlert.value = true
+                            alertTitle.value = "ULD Updated Error!"
+                        }
+                    }
+
+                    if (!msg.isNullOrEmpty()) {
+                        coroutineScope.launch {
+                            alertMessage.value = msg
+                            showAlert.value = true
+                            alertTitle.value = "ULD Updated!"
+                        }
+                    }
+                })
+            }, colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
+                Text(
+                    text = "Save",
+                    style = MaterialTheme.typography.button.copy(color = Color.White)
+                )
+            }
         }
         Spacer(modifier = Modifier.height(8.dp))
         Column(
@@ -115,7 +165,7 @@ fun MainUIPanel(
 ) {
     val flightScheduleValue = viewModel.flightScheduleValue.collectAsState()
     val isLoading = viewModel.isLoading.collectAsState()
-    
+
     Column(modifier = Modifier.background(color = Color.White)) {
         Spacer(modifier = Modifier.height(5.dp))
         Row(
@@ -252,7 +302,7 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
     if (showAlert.value) {
         AlertDialog(
             onDismissRequest = { showAlert.value = false },
-            title = { Text(text = alertTitle.value)},
+            title = { Text(text = alertTitle.value) },
             text = { Text(alertMessage.value) },
             confirmButton = {
                 Button(
@@ -327,7 +377,8 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                     ) {
 
                         var expanded = remember { mutableStateOf(false) }
-                        var selectedOption = remember { mutableStateOf<CargoPositionVM?>(uldModel.cargoPositionVM) }
+                        var selectedOption =
+                            remember { mutableStateOf<CargoPositionVM?>(uldModel.cargoPositionVM) }
 
                         // Options for the dropdown
                         val cargoPositionListFlow = viewModel.cargoPositionListFlow.collectAsState()
@@ -338,41 +389,26 @@ fun ULDDataTable(viewModel: UldPositionViewModel) {
                                 .padding(16.dp)
                                 .wrapContentWidth()
                         ) {
-                            cargoPositionListFlow.value?.forEach { position ->
+                            cargoPositionListFlow.value?.filter { !it.isAssigned }?.forEach { position ->
                                 DropdownMenuItem(onClick = {
                                     selectedOption.value = position
                                     expanded.value = false
-                                    viewModel.addULDCargoPosition(
-                                        uldId = uldModel.id,
-                                        cargoPositionId = position.id,
-                                        onComplete = { message, error ->
-                                            run {
-                                                if (message != null)
-                                                    coroutineScope.launch {
-                                                        alertMessage.value = message
-                                                        showAlert.value = true
-                                                        alertTitle.value = "ULD Updated!"
-                                                    }
-
-                                                if (error != null)
-                                                    coroutineScope.launch {
-                                                        alertMessage.value = error
-                                                        showAlert.value = true
-                                                        alertTitle.value = "Failed!"
-                                                    }
-                                            }
-                                        })
+                                    viewModel.addPosition(uldModel, position)
                                 }) {
-                                    Row (modifier = Modifier.size(20.dp)){
-                                        Text(text = position.name+" ")
-                                        if(selectedOption.value?.id == position.id)
-                                            Icon(painter = painterResource(id = R.drawable.ic_accepted), contentDescription = "",)
+                                    Row(modifier = Modifier.size(20.dp)) {
+                                        Text(text = position.name + " ")
+                                        if (selectedOption.value?.id == position.id)
+                                            Icon(
+                                                painter = painterResource(id = R.drawable.ic_accepted),
+                                                contentDescription = "",
+                                            )
                                     }
 
                                 }
                             }
                         }
-                        TextField(value = selectedOption.value?.name ?: "-",
+                        TextField(
+                            value = selectedOption.value?.name ?: "-",
                             onValueChange = {
                             },
                             modifier = Modifier

@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,8 +26,8 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
     val _isLoading = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
-    fun setLoading( isLoading: Boolean){
-        _isLoading.value= isLoading;
+    fun setLoading(isLoading: Boolean) {
+        _isLoading.value = isLoading;
     }
 
     fun setFlightSchedule(schedule: FlightScheduleModel?) {
@@ -61,22 +62,49 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
     private fun updateULDListValues() {
         var assignList = _assignedULDListFlow.value
         assignList?.forEach { item ->
-            if(item.cargoPositionID != null)
-                item.cargoPositionVM = _cargoPositionListFlow.value?.toList()?.filter { it.id == item.cargoPositionID }?.first()
+            if (item.cargoPositionID != null)
+                item.cargoPositionVM =
+                    _cargoPositionListFlow.value?.toList()?.first { it.id == item.cargoPositionID }
+
+            cargoPositionListFlow.value?.first { it.id == item.cargoPositionID }?.isAssigned = true
+
         }
+    }
+
+    fun addPosition(uldPalletVM: ULDPalletVM, cargoPosition: CargoPositionVM) {
+        viewModelScope.launch {
+            if(uldPalletVM.cargoPositionVM != null){
+                val lastCargoPosition = uldPalletVM.cargoPositionVM
+                cargoPositionListFlow.value?.first { it.id == lastCargoPosition!!.id }?.isAssigned = false
+            }
+            _cargoPositionListFlow.value?.first { it.id == cargoPosition.id }?.isAssigned = true
+
+            _assignedULDListFlow.value?.first { it.id == uldPalletVM.id }?.apply {
+                cargoPositionVM = cargoPosition
+            }
+        }
+
+
 
     }
 
-    fun addULDCargoPosition(uldId: String, cargoPositionId: String,onComplete :(String?,String?) -> Unit) {
+    fun saveALl(onComplete: (String?, String?) -> Unit) {
         viewModelScope.launch {
             try {
+                val request = mutableListOf<ULDCargoPositionRequest>()
+                _assignedULDListFlow.value?.forEach {
+                    if (it.cargoPositionVM != null)
+                        request.add(ULDCargoPositionRequest(it.id, it.cargoPositionVM!!.id))
+                }
                 val response =
-                    repository.addULDCargoPosition(ULDCargoPositionRequest(uldId, cargoPositionId))
+                    repository.addULDCargoPosition(
+                        (request)
+                    )
                 if (response.isSuccessful) {
                     var responseModel = response.body()
-                    if(responseModel?.statusCode == ServiceResponseStatus.Failed.ordinal){
-                        onComplete(null,responseModel.message)
-                    }else{
+                    if (responseModel?.statusCode == ServiceResponseStatus.Failed.ordinal) {
+                        onComplete(null, responseModel.message)
+                    } else {
                         onComplete("ULD Updated Successfully", null)
                     }
                 }
@@ -85,8 +113,29 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                 Log.e("ULDAssignment Model", e.message.toString())
             }
         }
-
     }
+
+
+//    fun addULDCargoPosition(uldId: String, cargoPositionId: String,onComplete :(String?,String?) -> Unit) {
+//        viewModelScope.launch {
+//            try {
+//                val response =
+//                    repository.addULDCargoPosition((listOf(ULDCargoPositionRequest(uldId, cargoPositionId))))
+//                if (response.isSuccessful) {
+//                    var responseModel = response.body()
+//                    if(responseModel?.statusCode == ServiceResponseStatus.Failed.ordinal){
+//                        onComplete(null,responseModel.message)
+//                    }else{
+//                        onComplete("ULD Updated Successfully", null)
+//                    }
+//                }
+//
+//            } catch (e: Exception) {
+//                Log.e("ULDAssignment Model", e.message.toString())
+//            }
+//        }
+//
+//    }
 
     fun getULDList() {
         viewModelScope.launch {

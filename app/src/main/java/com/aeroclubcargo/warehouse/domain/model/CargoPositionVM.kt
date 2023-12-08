@@ -16,4 +16,5 @@ data class CargoPositionVM(
     var breadth: Double,
     var priority: Double,
     var flightLeg: Double,
+    var isAssigned: Boolean = false
 )

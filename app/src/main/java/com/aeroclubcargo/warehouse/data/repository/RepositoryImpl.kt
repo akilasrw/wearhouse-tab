@@ -142,8 +142,8 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.getSummaryCargoPositionsBySector(flightScheduleSectorId)
     }
 
-    override suspend fun addULDCargoPosition(uldCargoPositionRequest: ULDCargoPositionRequest): Response<ULDCargoPositionResponse> {
-        return apiInterface.addULDCargoPosition(uldCargoPositionRequest)
+    override suspend fun addULDCargoPosition(uldCargoPositionList: List<ULDCargoPositionRequest>): Response<ULDCargoPositionResponse> {
+        return apiInterface.addULDCargoPosition(uldCargoPositionList)
     }
 
     override suspend fun saveCredential(credentialDto: CredentialDto) {
