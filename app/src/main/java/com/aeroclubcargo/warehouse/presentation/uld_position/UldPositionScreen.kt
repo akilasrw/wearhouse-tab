@@ -56,6 +56,7 @@ import com.aeroclubcargo.warehouse.theme.Black
 import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.BlueLight2
 import com.aeroclubcargo.warehouse.theme.BlueLight4
+import com.aeroclubcargo.warehouse.theme.BlueLight5
 import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray5
 import com.aeroclubcargo.warehouse.theme.Green
@@ -121,30 +122,56 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "Add ULD Position", style = MaterialTheme.typography.subtitle1)
-            Button(onClick = {
-                viewModel.saveALl(onComplete = { msg, error ->
+            Row {
+                Button(onClick = {
+                    viewModel.saveALl(onComplete = { msg, error ->
 
-                    if (!error.isNullOrEmpty()) {
-                        coroutineScope.launch {
-                            alertMessage.value = error
-                            showAlert.value = true
-                            alertTitle.value = "ULD Updated Error!"
+                        if (!error.isNullOrEmpty()) {
+                            coroutineScope.launch {
+                                alertMessage.value = error
+                                showAlert.value = true
+                                alertTitle.value = "ULD Updated Error!"
+                            }
                         }
-                    }
 
-                    if (!msg.isNullOrEmpty()) {
-                        coroutineScope.launch {
-                            alertMessage.value = msg
-                            showAlert.value = true
-                            alertTitle.value = "ULD Updated!"
+                        if (!msg.isNullOrEmpty()) {
+                            coroutineScope.launch {
+                                alertMessage.value = msg
+                                showAlert.value = true
+                                alertTitle.value = "ULD Updated!"
+                            }
                         }
-                    }
-                })
-            }, colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
-                Text(
-                    text = "Save",
-                    style = MaterialTheme.typography.button.copy(color = Color.White)
-                )
+                    })
+                }, modifier = Modifier.padding(end = 10.dp) , colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
+                    Text(
+                        text = "Save",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
+                }
+                Button(onClick = {
+                    viewModel.clear(onComplete = { msg, error ->
+                        if (!error.isNullOrEmpty()) {
+                            coroutineScope.launch {
+                                alertMessage.value = error
+                                showAlert.value = true
+                                alertTitle.value = "ULD Clear Error!"
+                            }
+                        }
+
+                        if (!msg.isNullOrEmpty()) {
+                            coroutineScope.launch {
+                                alertMessage.value = msg
+                                showAlert.value = true
+                                alertTitle.value = "ULD Cleared!"
+                            }
+                        }
+                    })
+                }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.White)) {
+                    Text(
+                        text = "Clear",
+                        style = MaterialTheme.typography.button.copy(color = BlueLight2)
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(8.dp))

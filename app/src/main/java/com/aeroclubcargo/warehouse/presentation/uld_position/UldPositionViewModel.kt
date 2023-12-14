@@ -73,9 +73,10 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
 
     fun addPosition(uldPalletVM: ULDPalletVM, cargoPosition: CargoPositionVM) {
         viewModelScope.launch {
-            if(uldPalletVM.cargoPositionVM != null){
+            if (uldPalletVM.cargoPositionVM != null) {
                 val lastCargoPosition = uldPalletVM.cargoPositionVM
-                cargoPositionListFlow.value?.first { it.id == lastCargoPosition!!.id }?.isAssigned = false
+                cargoPositionListFlow.value?.first { it.id == lastCargoPosition!!.id }?.isAssigned =
+                    false
             }
             _cargoPositionListFlow.value?.first { it.id == cargoPosition.id }?.isAssigned = true
 
@@ -85,7 +86,30 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
         }
 
 
+    }
 
+    fun clear(onComplete: (String?, String?) -> Unit) {
+        viewModelScope.launch {
+            try {
+                val request = mutableListOf<ULDCargoPositionRequest>()
+                _assignedULDListFlow.value?.forEach {
+                    if (it.cargoPositionVM != null)
+                        request.add(ULDCargoPositionRequest(it.id, it.cargoPositionVM!!.id))
+                }
+                val response = repository.clearCargoPositions((request))
+                if (response.isSuccessful) {
+                    var responseModel = response.body()
+                    if (responseModel?.statusCode == ServiceResponseStatus.Failed.ordinal) {
+                        onComplete(null, responseModel.message)
+                    } else {
+                        onComplete("ULD Cleared Successfully", null)
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.e("ULDAssignment Model", e.message.toString())
+            }
+        }
     }
 
     fun saveALl(onComplete: (String?, String?) -> Unit) {

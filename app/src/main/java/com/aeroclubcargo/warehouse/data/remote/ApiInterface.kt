@@ -98,4 +98,6 @@ interface ApiInterface {
     @POST("api/${Constants.API_VERSION}/ULDCargoPosition/create")
     suspend fun addULDCargoPosition(@Body uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<ULDCargoPositionResponse>
 
+    @POST("api/${Constants.API_VERSION}/ULDCargoPosition/clear")
+    suspend fun clearCargoPositions(@Body uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<BaseResponse>
 }

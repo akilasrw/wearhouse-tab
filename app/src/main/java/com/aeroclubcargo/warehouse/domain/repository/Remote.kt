@@ -41,6 +41,6 @@ interface Remote {
     suspend fun getAssignedCargoList(flightScheduleSectorId:String,uldId : String) : Response<List<BookingModel>>
     suspend fun getSummaryCargoPositionsBySector(flightScheduleSectorId: String) : Response<List<CargoPositionVM>>
     suspend fun addULDCargoPosition(uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<ULDCargoPositionResponse>
-
+    suspend fun clearCargoPositions(uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<BaseResponse>
 
 }

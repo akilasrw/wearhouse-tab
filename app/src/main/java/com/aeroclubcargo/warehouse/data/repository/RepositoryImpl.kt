@@ -146,6 +146,10 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.addULDCargoPosition(uldCargoPositionList)
     }
 
+    override suspend fun clearCargoPositions(uldCargoPositionList: List<ULDCargoPositionRequest>): Response<BaseResponse> {
+        return apiInterface.clearCargoPositions(uldCargoPositionList)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }
