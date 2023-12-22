@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.theme.*
+import com.aeroclubcargo.warehouse.utils.toMultiDecimalString
 import kotlinx.coroutines.launch
 
 
@@ -172,7 +173,7 @@ fun CheckPackageItemSheet(
                         ) {
                             HeaderTile(
                                 title = "Received Volume",
-                                desctiption = "${if (uldPalletVMValue.value != null) uldPalletVMValue.value?.volume else 0}  ",
+                                desctiption = "${(if (uldPalletVMValue.value != null) ((uldPalletVMValue.value!!.volume)/1000000).toMultiDecimalString() else 0)}  ",
                                 textColor = Green
                             )
                         }

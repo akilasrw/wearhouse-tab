@@ -96,7 +96,7 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
             messageCallback("ULD weight is exceeded!. You cannot add this package to ULD!")
             return false
         }
-        if(_uldPalletVMValue.value?.maxVolume!! <= ((packageItem.width * packageItem.length * packageItem.height) + _uldPalletVMValue.value?.volume!! ) ){
+        if(_uldPalletVMValue.value?.maxVolume!! <= (((packageItem.width * packageItem.length * packageItem.height)/1000000)) ){
             messageCallback("There is no space to add this item in this ULD!")
             return false
         }

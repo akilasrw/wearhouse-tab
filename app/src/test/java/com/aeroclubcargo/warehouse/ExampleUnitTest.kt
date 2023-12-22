@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse
 
+import com.aeroclubcargo.warehouse.utils.toMultiDecimalString
 import com.aeroclubcargo.warehouse.utils.updateTimeOnly
 import org.junit.Test
 
@@ -16,5 +17,12 @@ class ExampleUnitTest {
         var dateTime = "2023-07-02T10:30:00"
         var updateTime =  dateTime.updateTimeOnly(3,45)
         assertEquals("2023-07-02T03:45:00", updateTime)
+    }
+
+    @Test
+    fun DecimalTest() {
+        var d = 0.000000002232323
+        var updateTime =  d.toMultiDecimalString()
+        assertEquals("0.000000002", updateTime)
     }
 }
