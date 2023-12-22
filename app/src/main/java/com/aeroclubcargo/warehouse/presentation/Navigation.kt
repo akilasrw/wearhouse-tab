@@ -16,6 +16,7 @@ import com.aeroclubcargo.warehouse.presentation.cutoff_time.CutOffTimeScreen
 import com.aeroclubcargo.warehouse.presentation.dashboard.DashboardScreen
 import com.aeroclubcargo.warehouse.presentation.flight_schedule.FlightScheduleScreen
 import com.aeroclubcargo.warehouse.presentation.login.LoginScreen
+import com.aeroclubcargo.warehouse.presentation.pdf_viewer.RenderHTMLInWebView
 import com.aeroclubcargo.warehouse.presentation.receive_cargo.ReceiveCargoListScreen
 import com.aeroclubcargo.warehouse.presentation.recieved_cargo_details.ReceivedCargoDetailScreen
 import com.aeroclubcargo.warehouse.presentation.scan_cargo.ScanCargoScreen
@@ -58,9 +59,14 @@ fun navigation() {
             ScanCargoScreen(navController)
         }
         composable(
-            route = Screen.VerifyBookingScreen.route+"/{parameter}",
+            route = Screen.VerifyBookingScreen.route + "/{parameter}",
             arguments = listOf(navArgument("parameter") { type = NavType.StringType })
-        ) { backStackEntry -> VerifyBookingScreen(navController,backStackEntry.arguments?.getString("parameter")) }
+        ) { backStackEntry ->
+            VerifyBookingScreen(
+                navController,
+                backStackEntry.arguments?.getString("parameter")
+            )
+        }
         composable(
             route = Screen.UpdateBookingScreen.route
         ) {
@@ -73,13 +79,13 @@ fun navigation() {
         }
         composable(
             route = Screen.ULDMasterScreen.route
-        ){
+        ) {
             ULDMasterScreen(navController)
         }
-        composable(route = Screen.ULDPositionScreen.route+"/{parameter}",
-            arguments = listOf(navArgument("parameter") { type = NavType.StringType }) ){
-                backStackEntry ->
-            val userJson =  backStackEntry.arguments?.getString("parameter")
+        composable(route = Screen.ULDPositionScreen.route + "/{parameter}",
+            arguments = listOf(navArgument("parameter") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val userJson = backStackEntry.arguments?.getString("parameter")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
@@ -89,53 +95,53 @@ fun navigation() {
         }
         composable(
             route = Screen.FlightScheduleScreen.route,
-        ){
+        ) {
             FlightScheduleScreen(navController)
         }
         composable(
             route = Screen.ReceiveCargoListScreen.route
-        ){
+        ) {
             ReceiveCargoListScreen(navController)
         }
         composable(
-            route = Screen.ReceivedCargoDetailScreen.route+"/{parameter}",
+            route = Screen.ReceivedCargoDetailScreen.route + "/{parameter}",
             arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
-            ){ backStackEntry ->
-            val userJson =  backStackEntry.arguments?.getString("parameter")
+        ) { backStackEntry ->
+            val userJson = backStackEntry.arguments?.getString("parameter")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
             val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
             val userObject = jsonAdapter.fromJson(userJson)
-            ReceivedCargoDetailScreen(navController,userObject)
+            ReceivedCargoDetailScreen(navController, userObject)
         }
         composable(
-            route = Screen.ULDAssignmentScreen.route+"/{parameter}",
+            route = Screen.ULDAssignmentScreen.route + "/{parameter}",
             arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
-        ){ backStackEntry ->
-            val userJson =  backStackEntry.arguments?.getString("parameter")
-             val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
+        ) { backStackEntry ->
+            val userJson = backStackEntry.arguments?.getString("parameter")
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
             val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
             val userObject = jsonAdapter.fromJson(userJson)
-            ULDAssignmentScreen(navController,userObject)
+            ULDAssignmentScreen(navController, userObject)
         }
-        composable(route = Screen.ChatScreen.route){
+        composable(route = Screen.ChatScreen.route) {
             ChatScreen(
                 navController = navController
             )
         }
-        composable(route = Screen.LirScheduleListScreen.route){
+        composable(route = Screen.LirScheduleListScreen.route) {
             LirScheduleListScreen(
                 navController = navController
             )
         }
         composable(
-            route = Screen.LirDetailScreen.route+"/{parameter}",
+            route = Screen.LirDetailScreen.route + "/{parameter}",
             arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
-            ){ backStackEntry ->
-            val userJson =  backStackEntry.arguments?.getString("parameter")
+        ) { backStackEntry ->
+            val userJson = backStackEntry.arguments?.getString("parameter")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
@@ -146,15 +152,17 @@ fun navigation() {
                 scheduleModel = userObject
             )
         }
-        composable(route = Screen.FlightScheduleListForUldScreen.route){
+        composable(route = Screen.FlightScheduleListForUldScreen.route) {
             FlightScheduleScreenForULD(navController = navController)
         }
         composable(
-            route = Screen.CargoAssignmentScreen.route+"/{cargoModel}/{flightScheduleSector}",
-            arguments = listOf(navArgument("cargoModel"){type = NavType.StringType},navArgument("flightScheduleSector"){type = NavType.StringType})
-            ){ backStack ->
-            val flightScheduleSector =  backStack.arguments?.getString("flightScheduleSector")
-            val cargoModel =  backStack.arguments?.getString("cargoModel")
+            route = Screen.CargoAssignmentScreen.route + "/{cargoModel}/{flightScheduleSector}",
+            arguments = listOf(
+                navArgument("cargoModel") { type = NavType.StringType },
+                navArgument("flightScheduleSector") { type = NavType.StringType })
+        ) { backStack ->
+            val flightScheduleSector = backStack.arguments?.getString("flightScheduleSector")
+            val cargoModel = backStack.arguments?.getString("cargoModel")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
@@ -165,6 +173,15 @@ fun navigation() {
                 uldPalletVM = userObject,
                 flightScheduleSector = flightScheduleSector,
             )
+        }
+        composable(
+            route = Screen.PDFViewScreen.route,
+//            route = Screen.PDFViewScreen.route + "/{parameter}",
+//            arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
+        ) {
+//                backStackEntry ->
+//            val htmlContent = backStackEntry.arguments?.getString("parameter")
+            RenderHTMLInWebView(navController = navController)
         }
     }
 }

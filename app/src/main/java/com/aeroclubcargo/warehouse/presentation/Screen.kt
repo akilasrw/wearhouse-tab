@@ -19,4 +19,5 @@ sealed class Screen(val route: String) {
     object CargoAssignmentScreen: Screen("cargo_assignment_screen")
     object FlightScheduleListForUldScreen: Screen("flight_schedule_list_for_uld_screen")
     object ULDPositionScreen: Screen("uld_position_screen")
+    object PDFViewScreen: Screen("pdf_viewer")
 }

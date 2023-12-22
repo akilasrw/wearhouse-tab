@@ -1,20 +1,14 @@
 package com.aeroclubcargo.warehouse.presentation.uld_position
 
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,9 +21,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -38,9 +29,7 @@ import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.CargoPositionVM
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
-import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.presentation.Screen
-import com.aeroclubcargo.warehouse.presentation.components.CommonTextField
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.HeaderTile
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.TableCell
@@ -51,19 +40,12 @@ import com.aeroclubcargo.warehouse.presentation.uld_assignment.column3Weight
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.column5Weight
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.column6Weight
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.column9Weight
-import com.aeroclubcargo.warehouse.presentation.uld_master.ULDMasterVIewModel
 import com.aeroclubcargo.warehouse.theme.Black
-import com.aeroclubcargo.warehouse.theme.BlueLight
 import com.aeroclubcargo.warehouse.theme.BlueLight2
-import com.aeroclubcargo.warehouse.theme.BlueLight4
-import com.aeroclubcargo.warehouse.theme.BlueLight5
 import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray5
 import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.hintLightGray
-import com.aeroclubcargo.warehouse.utils.ListState
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -76,13 +58,13 @@ fun ULDPositionScreen(
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
-        GetULTMasterUI(viewModel)
+        GetULTMasterUI(viewModel,navController)
     }
 }
 
 
 @Composable
-fun GetULTMasterUI(viewModel: UldPositionViewModel) {
+fun GetULTMasterUI(viewModel: UldPositionViewModel, navController: NavController,) {
 
     val coroutineScope = rememberCoroutineScope()
     val showAlert = remember { mutableStateOf(false) }
@@ -123,6 +105,14 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel) {
         ) {
             Text(text = "Add ULD Position", style = MaterialTheme.typography.subtitle1)
             Row {
+                Button(onClick = {
+                    navController.navigate(Screen.PDFViewScreen.route)
+                }, modifier = Modifier.padding(end = 10.dp) , colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
+                    Text(
+                        text = "Print",
+                        style = MaterialTheme.typography.button.copy(color = Color.White)
+                    )
+                }
                 Button(onClick = {
                     viewModel.saveALl(onComplete = { msg, error ->
 
