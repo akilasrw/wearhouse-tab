@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
+import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.presentation.add_lir_data.lir_detail.LirDetailScreen
 import com.aeroclubcargo.warehouse.presentation.add_lir_data.schedule_list.LirScheduleListScreen
@@ -175,13 +176,17 @@ fun navigation() {
             )
         }
         composable(
-            route = Screen.PDFViewScreen.route,
-//            route = Screen.PDFViewScreen.route + "/{parameter}",
-//            arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
+            route = Screen.PDFViewScreen.route + "/{parameter}",
+            arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
         ) {
-//                backStackEntry ->
-//            val htmlContent = backStackEntry.arguments?.getString("parameter")
-            RenderHTMLInWebView(navController = navController)
+                backStackEntry ->
+            val packageContent = backStackEntry.arguments?.getString("parameter")
+//            val moshi = Moshi.Builder()
+//                .add(KotlinJsonAdapterFactory())
+//                .build()
+//            val jsonAdapter = moshi.adapter(PackageDetails::class.java).lenient()
+//            val userObject = jsonAdapter.fromJson(packageContent)
+            RenderHTMLInWebView(navController = navController, awbId = packageContent)
         }
     }
 }

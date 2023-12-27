@@ -7,12 +7,16 @@ import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.ServiceResponseStatus
 import com.aeroclubcargo.warehouse.domain.model.CargoPositionVM
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
+import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.ULDCargoPositionRequest
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
 import javax.inject.Inject
@@ -130,6 +134,34 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                         onComplete(null, responseModel.message)
                     } else {
                         onComplete("ULD Updated Successfully", null)
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.e("ULDAssignment Model", e.message.toString())
+            }
+        }
+    }
+
+    fun getCargoPackageDetails(onComplete: (PackageDetails?, String?) -> Unit) {
+
+        viewModelScope.launch {
+            try {
+                var user = repository.getLoggedInUser().first()
+                val response =
+                    repository.getCargoLookupDetails(
+                        user!!.id!!,
+                        "99953729081", // flightScheduleValue replace from this model
+                        issIncludeFlightDetail = true,
+                        isIncludeAWBDetail = true,
+                        isIncludePackageDetail = true
+                    )
+                if (response.isSuccessful) {
+                    var responseModel = response.body()
+                    if (responseModel == null) {
+                        onComplete(null, "failed to get awb data")
+                    } else {
+                        onComplete(responseModel, null)
                     }
                 }
 

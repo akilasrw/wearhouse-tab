@@ -150,6 +150,16 @@ class RepositoryImpl @Inject constructor(
         return apiInterface.clearCargoPositions(uldCargoPositionList)
     }
 
+    override suspend fun getCargoLookupDetails(
+        userId: String,
+        awbNumber: String,
+        issIncludeFlightDetail: Boolean,
+        isIncludeAWBDetail: Boolean,
+        isIncludePackageDetail: Boolean
+    ): Response<PackageDetails> {
+        return  apiInterface.getCargoLookupDetails(userId, awbNumber, issIncludeFlightDetail, isIncludeAWBDetail, isIncludePackageDetail)
+    }
+
     override suspend fun saveCredential(credentialDto: CredentialDto) {
         datastore.saveCredential(credentialDto = credentialDto)
     }

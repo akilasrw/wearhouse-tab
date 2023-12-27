@@ -29,6 +29,8 @@ import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.CargoPositionVM
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
+import com.aeroclubcargo.warehouse.domain.model.PackageDetails
+import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.presentation.uld_assignment.HeaderTile
@@ -46,6 +48,8 @@ import com.aeroclubcargo.warehouse.theme.Gray2
 import com.aeroclubcargo.warehouse.theme.Gray5
 import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.hintLightGray
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.launch
 
 @Composable
@@ -106,7 +110,23 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel, navController: NavController
             Text(text = "Add ULD Position", style = MaterialTheme.typography.subtitle1)
             Row {
                 Button(onClick = {
-                    navController.navigate(Screen.PDFViewScreen.route)
+                    navController.navigate(Screen.PDFViewScreen.route+"/99953729081")
+//                    viewModel.getCargoPackageDetails(onComplete = { packageModel, error ->
+//                        if(error != null) {
+//                            coroutineScope.launch {
+//                                alertMessage.value = error
+//                                showAlert.value = true
+//                                alertTitle.value = "PACKAGE DETAIL ERROR!"
+//                            }
+//                        }else{
+////                            val moshi = Moshi.Builder()
+////                                .add(KotlinJsonAdapterFactory())
+////                                .build()
+////                            val jsonAdapter = moshi.adapter(PackageDetails::class.java).lenient()
+////                            val packageJson = jsonAdapter.toJson(packageModel)
+//                            navController.navigate(Screen.PDFViewScreen.route+"/${packageJson}")
+//                        }
+//                    })
                 }, modifier = Modifier.padding(end = 10.dp) , colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
                     Text(
                         text = "Print",

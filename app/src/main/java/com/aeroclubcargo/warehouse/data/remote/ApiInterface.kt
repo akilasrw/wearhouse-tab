@@ -100,4 +100,11 @@ interface ApiInterface {
 
     @POST("api/${Constants.API_VERSION}/ULDCargoPosition/clear")
     suspend fun clearCargoPositions(@Body uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<BaseResponse>
+
+    @GET("api/${Constants.API_VERSION}/CargoBookingLookup")
+    suspend fun getCargoLookupDetails(@Query("UserId") userId:String,@Query("AWBNumber") awbNumber:String,
+                                      @Query("IsIncludeFlightDetail") issIncludeFlightDetail:Boolean,
+                                      @Query("IsIncludeAWBDetail") isIncludeAWBDetail:Boolean,
+                                      @Query("IsIncludePackageDetail") isIncludePackageDetail:Boolean,
+                                      ) : Response<PackageDetails>
 }
