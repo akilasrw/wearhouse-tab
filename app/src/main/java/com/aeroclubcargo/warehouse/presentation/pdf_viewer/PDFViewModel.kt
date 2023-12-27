@@ -31,34 +31,39 @@ class PDFViewModel @Inject constructor(private var repository: Repository) : Vie
     }
 
     fun getCargoPackageDetails(awbNumber: String, onError: (String?) -> Unit) {
-        viewModelScope.launch {
-            setLoading(true)
-            try {
-                var user = repository.getLoggedInUser().first()
-                val response =
-                    repository.getCargoLookupDetails(
-                        user!!.id,
-                        awbNumber,
-                        issIncludeFlightDetail = true,
-                        isIncludeAWBDetail = true,
-                        isIncludePackageDetail = true
-                    )
-                setLoading(false)
-                if (response.isSuccessful) {
-                    var responseModel = response.body()
-                    if (responseModel == null) {
-                        onError("failed to get awb data")
-                    } else {
-                        _packageDetails.value = responseModel
-                        _PDFHTMKDetails.value = generateContent()
+        if(_PDFHTMKDetails.value != null){
+            return
+        }else{
+            viewModelScope.launch {
+                setLoading(true)
+                try {
+                    var user = repository.getLoggedInUser().first()
+                    val response =
+                        repository.getCargoLookupDetails(
+                            user!!.id,
+                            awbNumber,
+                            issIncludeFlightDetail = true,
+                            isIncludeAWBDetail = true,
+                            isIncludePackageDetail = true
+                        )
+                    setLoading(false)
+                    if (response.isSuccessful) {
+                        var responseModel = response.body()
+                        if (responseModel == null) {
+                            onError("failed to get awb data")
+                        } else {
+                            _packageDetails.value = responseModel
+                            _PDFHTMKDetails.value = generateContent()
+                        }
                     }
-                }
 
-            } catch (e: Exception) {
-                setLoading(false)
-                Log.e("ULDAssignment Model", e.message.toString())
+                } catch (e: Exception) {
+                    setLoading(false)
+                    Log.e("ULDAssignment Model", e.message.toString())
+                }
             }
         }
+
     }
 
     private fun generateContent(): String {
