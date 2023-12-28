@@ -108,6 +108,7 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel, navController: NavController
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(text = "Add ULD Position", style = MaterialTheme.typography.subtitle1)
+           // TODO enable only after all positions allocated
             Row {
                 Button(onClick = {
                     navController.navigate(Screen.PDFViewScreen.route+"/99953729081")
@@ -286,7 +287,9 @@ fun MainUIPanel(
             ) {
                 HeaderTile(
                     title = "Act Type",
-                    desctiption = flightScheduleValue.value?.aircraftSubTypeName ?: "-"
+                    desctiption =Constants.AircraftTypes.getAirCraftType(
+                        flightScheduleValue.value?.aircraftType
+                    )
                 )
             }
             Spacer(modifier = Modifier.width(6.dp))

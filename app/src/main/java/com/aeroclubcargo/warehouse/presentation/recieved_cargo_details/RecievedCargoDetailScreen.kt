@@ -185,7 +185,9 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Act Type",
-                            description = flightScheduleValue.value?.aircraftSubTypeName?: "-",
+                            description = Constants.AircraftTypes.getAirCraftType(
+                                flightScheduleValue.value?.aircraftType
+                            ),
                             textColor = Green
                         )
                     }

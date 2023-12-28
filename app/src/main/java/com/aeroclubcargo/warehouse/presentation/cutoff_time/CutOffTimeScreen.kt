@@ -38,6 +38,8 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.aeroclubcargo.warehouse.common.Constants
+import com.aeroclubcargo.warehouse.common.Constants.AircraftTypes.Companion.getAirCraftType
 import com.aeroclubcargo.warehouse.utils.toDateTimeHour
 import com.aeroclubcargo.warehouse.utils.toDateTimeMin
 import com.aeroclubcargo.warehouse.utils.toDurationTime
@@ -271,7 +273,7 @@ fun CutOffTimeTable(viewModel: CutOffTimeViewModel) {
                 TableCell(text = booking.cutoffTimeMin?.toDurationTime() ?: "-", weight = column4Weight)
                 TableCell(text = "${booking.originAirportCode}", weight = column5Weight)
                 TableCell(text = "${booking.destinationAirportCode}", weight = column6Weight)
-                TableCell(text = booking.aircraftRegNo ?:"-", weight = column7Weight)
+                TableCell(text = getAirCraftType(booking.aircraftType), weight = column7Weight)
                 TableCell(text = (booking.totalBookedWeight.toString()), weight = column8Weight)
                 TableCell(text = (booking.totalBookedVolume.toString()), weight = column9Weight)
                 IconButton(

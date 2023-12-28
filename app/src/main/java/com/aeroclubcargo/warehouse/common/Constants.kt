@@ -30,6 +30,35 @@ object Constants {
     const val Exported = 60
 
 
+    @IntDef(None, Pending, Accepted, Loading, Invoiced, Dispatched, Exported)
+    @Retention(AnnotationRetention.SOURCE)
+    annotation class AircraftTypes {
+        companion object {
+            val None = 0
+            val B7879 = 1
+            val A320200 = 2
+            val B737400 = 3
+            val B737800 = 4
+            val B737300 = 5
+
+            fun getAirCraftType(aircraftTypes: Int?): String {
+                if (aircraftTypes == null) {
+                    return "-"
+                }
+                return when (aircraftTypes) {
+                    None -> "None"
+                    B7879 -> "Boeing 787-9"
+                    A320200 -> "Airbus A320-200"
+                    B737400 -> "Boeing 737-400"
+                    B737800 -> "Boeing 737-800"
+                    B737300 -> "Boeing 737-300"
+                    else -> "Unknown Aircraft Type"
+                }
+            }
+        }
+    }
+
+
     enum class PackageItemStatus {
         None,
         Booked,
@@ -51,10 +80,9 @@ object Constants {
         Dgr
     }
 
-    enum class ULDType
-    {
+    enum class ULDType {
         None,
-        Pallet ,
+        Pallet,
         Container
     }
 
@@ -66,9 +94,11 @@ object Constants {
             ULDType.None -> {
                 return "None"
             }
+
             ULDType.Pallet -> {
                 return "Pallet"
             }
+
             ULDType.Container -> {
                 return "Container"
             }
@@ -76,9 +106,8 @@ object Constants {
     }
 
 
-
-    fun getPackageItemCategory(packageType : Int) : String{
-        return when(PackageItemCategory.values()[packageType]){
+    fun getPackageItemCategory(packageType: Int): String {
+        return when (PackageItemCategory.values()[packageType]) {
             PackageItemCategory.None -> "None"
             PackageItemCategory.General -> "General"
             PackageItemCategory.Animal -> "Animal"
@@ -96,10 +125,10 @@ object Constants {
     }
 
     enum class ULDLocateStatus {
-        None ,
+        None,
         OnGround,
         OnBoard,
-        Maintenance ,
+        Maintenance,
         Lend,
     }
 
@@ -111,15 +140,19 @@ object Constants {
             CargoPositionType.None -> {
                 return "None"
             }
+
             CargoPositionType.OnFloor -> {
                 return "On Floor"
             }
+
             CargoPositionType.OnSeat -> {
                 return "On Seat"
             }
+
             CargoPositionType.UnderSeat -> {
                 return "UnderSeat"
             }
+
             CargoPositionType.Overhead -> {
                 return "Overhead"
             }
@@ -127,9 +160,8 @@ object Constants {
     }
 }
 
-enum class ServiceResponseStatus
-{
-    Success ,
+enum class ServiceResponseStatus {
+    Success,
     ValidationError,
     Failed,
 }

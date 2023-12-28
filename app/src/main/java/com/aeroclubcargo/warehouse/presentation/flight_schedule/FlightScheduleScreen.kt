@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.common.Constants.AircraftTypes.Companion.getAirCraftType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
@@ -283,7 +284,7 @@ fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController
                 TableCell(text = flightScheduleModel.cutoffTime?.split("T")?.last() ?: "-", weight =  column4Weight)
                 TableCell(text = "${flightScheduleModel.originAirportCode}", weight =  column5Weight)
                 TableCell(text = "${flightScheduleModel.destinationAirportCode}", weight =  column6Weight)
-                TableCell(text = flightScheduleModel.aircraftSubTypeName ?:"-", weight =  column7Weight)
+                TableCell(text = getAirCraftType(flightScheduleModel.aircraftType), weight =  column7Weight)
                 TableCell(text = (flightScheduleModel.uldPositionCount.toString()), weight =  column8Weight)
                 TableCell(text = (flightScheduleModel.uldCount.toString()), weight =  column9Weight)
                 IconButton(

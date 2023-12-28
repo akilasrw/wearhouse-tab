@@ -1,5 +1,6 @@
 package com.aeroclubcargo.warehouse.domain.model
 
+import com.aeroclubcargo.warehouse.common.Constants
 import com.squareup.moshi.JsonClass
 
 
@@ -14,5 +15,6 @@ data class FlightScheduleModel(
     var cutoffTime: String?,
     var uldPositionCount: Int = 0,
     var uldCount: Int = 0,
+    @Constants.AircraftTypes var aircraftType: Int? = null,
     var aircraftLayoutId : String?,
 )
