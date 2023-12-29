@@ -12,6 +12,7 @@ data class ULDCargoPositionMap(
     var totalWeight: Double,
     var maxWeight : Double,
     var cargoPositionName: String,
+    var destination: String? = null,
 )
 
 data class ULDCargoPositionResponse(

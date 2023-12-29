@@ -212,7 +212,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                 try {
                     setLoading(false)
                     _PDFHTMKDetails.value = generateContent()
-                    Log.e("HTML CONTENT ::::","${_PDFHTMKDetails.value}")
+                    Log.e("HTML CONTENT ::::", "${_PDFHTMKDetails.value}")
                 } catch (e: Exception) {
                     setLoading(false)
                     Log.e("ULDAssignment Model", e.message.toString())
@@ -224,16 +224,19 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
 
     private fun generateContent(): String {
         val uldPositionMap = mutableListOf<ULDCargoPositionMap>()
+        var totalWeight = 0.0
         _assignedULDListFlow.value?.forEach { uld ->
             if (uld.cargoPositionID != null) {
-                var cargoPosition = _cargoPositionListFlow.value?.any { it.id == uld.cargoPositionID  }
+//                var cargoPosition =
+//                    _cargoPositionListFlow.value?.any { it.id == uld.cargoPositionID }
+                totalWeight += uld.weight
                 uldPositionMap.add(
                     ULDCargoPositionMap(
                         uldId = uld.cargoPositionVM!!.id,
                         cargoPositionName = uld.cargoPositionVM!!.name,
                         totalWeight = uld.weight,
                         maxWeight = uld.cargoPositionVM!!.maxWeight,
-                        uldNumber = uld.serialNumber
+                        uldNumber = uld.serialNumber,
                     )
                 )
             }
@@ -308,13 +311,18 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
           </head>
 
           <body>
+          <div class="text-center">
+              <div style="display: flex; flex-direction: column; align-items: center">
+                  <h1 style="margin-bottom: -1px;margin-top: 0px;">Loading Instruction Report</h1>
+                  <h3 style="margin-top: 1px;">${
+            Constants.AircraftTypes.getAirCraftType(
+                flightScheduleValue?.value?.aircraftType
+            )
+        }</h3>
+              </div>
+          </div>
               <div class="lir-info">
                   <div class="table-content">
-                      <div style="margin-left: 42%; display: flex; flex-direction: column; align-items: center">
-                          <h1 style="margin-bottom: -1px;margin-top: 0px;">Loading Instruction Report</h1>
-                          <h3 style="margin-top: 1px;">Boeing 737-400 / PK-MYJ</h3>
-                      </div>
-
                       <table>
                           <tbody>
                               <tr>
@@ -378,16 +386,45 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                                   <td></td>
                                   <td></td>
                               </tr>
+                              <tr>
+                                <td class="lable">CART NO</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td class="lable">WEIGHT in Kgs</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td class="lable">DESTINATION</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td class="lable">REMARKS</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                             </tr>
                               <!-- Add more rows with forward hold data if needed -->
                           </tbody>
                       </table>
                   </div>
                   <div>
                       <div class="disclaimer">
-                          <p>
-                              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the.
+                          <p style = "border: 1px solid #f2f2f2;padding: 10px;">
+                              Aircraft has been loaded by excetute.  
                           </p>
                       </div>
+                      <div class="disclaimer">
+                            <p style = "border: 1px solid #f2f2f2;padding: 10px;">
+                               Total Gross : ${totalWeight} kg
+                            </p>
+                       </div>
                   </div>
               </div>
 
@@ -410,14 +447,38 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                                   <td></td>
                                   <td></td>
                               </tr>
+                              <tr>
+                                <td class="lable">CART NO</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td class="lable">WEIGHT in Kgs</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td class="lable">DESTINATION</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                              </tr>
+                              <tr>
+                                <td class="lable">REMARKS</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                             </tr>
                               <!-- Add more rows with AFT hold data if needed -->
                           </tbody>
                       </table>
                   </div>
                   <div>
                       <div class="disclaimer">
-                          <p>
-                              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the.
+                          <p style = "border: 1px solid #f2f2f2;padding: 10px;">
+                            Aircraft has been loaded by excetute.  
                           </p>
                       </div>
                   </div>
@@ -451,7 +512,7 @@ fun getTableContent(uldPositionMap: List<ULDCargoPositionMap>): String {
     // Add Max Weight Limit row
     tableContent.append("<tr>\n<td class=\"label\">Max Weight Limit</td>\n")
     for (uldPosition in uldPositionMap) {
-        tableContent.append("<td>${uldPosition.maxWeight} Kgs</td>\n")
+        tableContent.append("<td>${uldPosition.maxWeight} Kg</td>\n")
     }
     // Add more max weight data if needed
     tableContent.append("</tr>\n")
@@ -464,6 +525,30 @@ fun getTableContent(uldPositionMap: List<ULDCargoPositionMap>): String {
     // Add more ULD numbers if needed
     tableContent.append("</tr>\n")
 
+    // Add ULD Number row
+    tableContent.append("<tr>\n<td>GROSS WEIGHT</td>\n")
+    for (uldPosition in uldPositionMap) {
+        tableContent.append("<td> ${uldPosition.totalWeight} Kg</td>\n")
+    }
+    // Add more ULD numbers if needed
+    tableContent.append("</tr>\n")
+
+    // Add ULD Number row
+    tableContent.append("<tr>\n<td>DESTINATION</td>\n")
+    for (uldPosition in uldPositionMap) {
+        tableContent.append("<td> ${uldPosition.destination ?: ""}</td>\n")
+    }
+    // Add more ULD numbers if needed
+    tableContent.append("</tr>\n")
+
+    // Add ULD Number row
+    tableContent.append("<tr>\n<td>REMARKS</td>\n")
+    for (uldPosition in uldPositionMap) {
+        tableContent.append("<td></td>\n")
+    }
+    // Add more ULD numbers if needed
+    tableContent.append("</tr>\n")
+
     // Add more rows with cargo data if needed
 
     // Add table end
@@ -471,6 +556,16 @@ fun getTableContent(uldPositionMap: List<ULDCargoPositionMap>): String {
 
     return tableContent.toString()
 }
+// TODO add
+// add layout type
+
+//ULD NUMBER
+//GROSS WEIGHT
+//DESTINATION
+// REMARKS
+
+// add separate box for total gross weight
+
 //returns
 //              <div class="table-content">
 //                  <table>
