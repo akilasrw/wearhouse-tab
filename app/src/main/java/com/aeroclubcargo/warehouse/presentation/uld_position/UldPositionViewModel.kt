@@ -225,10 +225,10 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
     private fun generateContent(): String {
         val uldPositionMap = mutableListOf<ULDCargoPositionMap>()
         var totalWeight = 0.0
-        _assignedULDListFlow.value?.forEach { uld ->
-            if (uld.cargoPositionID != null) {
-//                var cargoPosition =
-//                    _cargoPositionListFlow.value?.any { it.id == uld.cargoPositionID }
+
+        _cargoPositionListFlow.value?.sortedBy { cargoPositionVM -> cargoPositionVM.name }?.forEach {cargoPosition ->
+            var uld = _assignedULDListFlow.value?.firstOrNull { it.cargoPositionVM?.id == cargoPosition.id  }
+            if(uld != null){
                 totalWeight += uld.weight
                 uldPositionMap.add(
                     ULDCargoPositionMap(
@@ -237,6 +237,16 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                         totalWeight = uld.weight,
                         maxWeight = uld.cargoPositionVM!!.maxWeight,
                         uldNumber = uld.serialNumber,
+                    )
+                )
+            } else {
+                uldPositionMap.add(
+                    ULDCargoPositionMap(
+                        uldId = "",
+                        cargoPositionName = cargoPosition!!.name,
+                        totalWeight = 0.0,
+                        maxWeight = cargoPosition!!.maxWeight,
+                        uldNumber = "",
                     )
                 )
             }
