@@ -41,6 +41,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.domain.model.CargoPositionVM
+import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.presentation.uld_position.GetULTMasterUI
@@ -51,22 +53,20 @@ import com.aeroclubcargo.warehouse.theme.BlueLight3
 @Composable
 fun RenderHTMLInWebView(
     navController: NavController,
-    awbId: String?,
-    viewModel: PDFViewModel = hiltViewModel()
+    scheduleModel: FlightScheduleModel?,
+    viewModel: UldPositionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     var webView: WebView? = null
 
     LaunchedEffect(key1 = true) {
-        awbId?.let {
-            viewModel.getCargoPackageDetails(awbId, onError = { error ->
-                // TODO
-            })
+        scheduleModel?.let {
+            viewModel.setFlightSchedule(it)
         }
     }
 
-    var PDFHTMKDetails = viewModel.PDFHTMKDetails?.collectAsState()
-    var isLoading = viewModel.isLoading.collectAsState()
+    val PDFHTMKDetails = viewModel.PDFHTMKDetails.collectAsState()
+    val isLoading = viewModel.isLoading.collectAsState()
 
 
 
@@ -87,15 +87,7 @@ fun RenderHTMLInWebView(
             )
         }
     }) {
-        if (awbId == null) {
-            Column(
-                Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "No Details Available!")
-            }
-        } else if (isLoading.value) {
+        if (isLoading.value) {
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -103,7 +95,15 @@ fun RenderHTMLInWebView(
             ) {
                 CircularProgressIndicator()
             }
-        } else if (PDFHTMKDetails.value != null) {
+        } else if (PDFHTMKDetails.value == null) {
+            Column(
+                Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = "No Details Available!")
+            }
+        } else {
             Column(
                 Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -50,6 +50,7 @@ import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.hintLightGray
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
@@ -62,13 +63,13 @@ fun ULDPositionScreen(
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
-        GetULTMasterUI(viewModel,navController)
+        GetULTMasterUI(viewModel,navController, flightScheduleModel = scheduleModel)
     }
 }
 
 
 @Composable
-fun GetULTMasterUI(viewModel: UldPositionViewModel, navController: NavController,) {
+fun GetULTMasterUI(viewModel: UldPositionViewModel, navController: NavController,flightScheduleModel: FlightScheduleModel?) {
 
     val coroutineScope = rememberCoroutineScope()
     val showAlert = remember { mutableStateOf(false) }
@@ -111,23 +112,15 @@ fun GetULTMasterUI(viewModel: UldPositionViewModel, navController: NavController
            // TODO enable only after all positions allocated
             Row {
                 Button(onClick = {
-                    navController.navigate(Screen.PDFViewScreen.route+"/99953729081")
-//                    viewModel.getCargoPackageDetails(onComplete = { packageModel, error ->
-//                        if(error != null) {
-//                            coroutineScope.launch {
-//                                alertMessage.value = error
-//                                showAlert.value = true
-//                                alertTitle.value = "PACKAGE DETAIL ERROR!"
-//                            }
-//                        }else{
-////                            val moshi = Moshi.Builder()
-////                                .add(KotlinJsonAdapterFactory())
-////                                .build()
-////                            val jsonAdapter = moshi.adapter(PackageDetails::class.java).lenient()
-////                            val packageJson = jsonAdapter.toJson(packageModel)
-//                            navController.navigate(Screen.PDFViewScreen.route+"/${packageJson}")
-//                        }
-//                    })
+                    coroutineScope.launch {
+                        val moshi = Moshi.Builder()
+                            .add(KotlinJsonAdapterFactory())
+                            .build()
+                        val jsonAdapter =
+                            moshi.adapter(FlightScheduleModel::class.java).lenient()
+                        val flightJson = jsonAdapter.toJson(flightScheduleModel)
+                        navController.navigate(Screen.PDFViewScreen.route+"/${flightJson}")
+                    }
                 }, modifier = Modifier.padding(end = 10.dp) , colors = ButtonDefaults.buttonColors(backgroundColor = BlueLight2)) {
                     Text(
                         text = "Print",

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.aeroclubcargo.warehouse.domain.model.CargoPositionVM
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.domain.model.PackageDetails
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
@@ -163,7 +164,7 @@ fun navigation() {
                 navArgument("flightScheduleSector") { type = NavType.StringType })
         ) { backStack ->
             val flightScheduleSector = backStack.arguments?.getString("flightScheduleSector")
-            val cargoModel = backStack.arguments?.getString("cargoModel")
+            val cargoModel = backStack.arguments?.getString("positionMap")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
@@ -178,15 +179,14 @@ fun navigation() {
         composable(
             route = Screen.PDFViewScreen.route + "/{parameter}",
             arguments = listOf(navArgument("parameter") { type = NavType.StringType }),
-        ) {
-                backStackEntry ->
-            val packageContent = backStackEntry.arguments?.getString("parameter")
-//            val moshi = Moshi.Builder()
-//                .add(KotlinJsonAdapterFactory())
-//                .build()
-//            val jsonAdapter = moshi.adapter(PackageDetails::class.java).lenient()
-//            val userObject = jsonAdapter.fromJson(packageContent)
-            RenderHTMLInWebView(navController = navController, awbId = packageContent)
+        ) {backStackEntry ->
+            val userJson = backStackEntry.arguments?.getString("parameter")
+            val moshi = Moshi.Builder()
+                .add(KotlinJsonAdapterFactory())
+                .build()
+            val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
+            val scheduleModel = jsonAdapter.fromJson(userJson)
+            RenderHTMLInWebView(navController = navController, scheduleModel = scheduleModel)
         }
     }
 }

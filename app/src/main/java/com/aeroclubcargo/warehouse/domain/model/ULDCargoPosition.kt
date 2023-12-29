@@ -5,6 +5,15 @@ data class ULDCargoPositionRequest(
     var cargoPositionId: String,
 )
 
+
+data class ULDCargoPositionMap(
+    var uldId: String,
+    var uldNumber: String,
+    var totalWeight: Double,
+    var maxWeight : Double,
+    var cargoPositionName: String,
+)
+
 data class ULDCargoPositionResponse(
     var id:String,
     var statusCode: Int,
