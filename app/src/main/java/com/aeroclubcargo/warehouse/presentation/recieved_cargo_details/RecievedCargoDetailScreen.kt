@@ -185,7 +185,9 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Act Type",
-                            description = flightScheduleValue.value?.aircraftSubTypeName?: "-",
+                            description = Constants.AircraftTypes.getAirCraftType(
+                                flightScheduleValue.value?.aircraftType
+                            ),
                             textColor = Green
                         )
                     }
@@ -266,7 +268,7 @@ fun FlightsTable(viewModel: ReceivedCargoDetailVM) {
                 TableCell(text = "Total Weight", weight =  .2f, style = headerStyle)
                 TableCell(text = "Total Volume", weight =  .2f, style = headerStyle)
                 TableCell(text = "Received Date and Time", weight =  .4f, style = headerStyle)
-                TableCell(text = "Action", weight = column1Weight, style = headerStyle)
+                TableCell(text = "Positions", weight = column1Weight, style = headerStyle)
             }
         }
         

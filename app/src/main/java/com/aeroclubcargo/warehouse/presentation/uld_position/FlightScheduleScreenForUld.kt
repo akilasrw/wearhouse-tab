@@ -1,4 +1,4 @@
-package com.aeroclubcargo.warehouse.presentation.flight_schedule
+package com.aeroclubcargo.warehouse.presentation.uld_position
 
 import android.app.DatePickerDialog
 import android.widget.DatePicker
@@ -33,12 +33,11 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
-import com.aeroclubcargo.warehouse.common.Constants.AircraftTypes.Companion.getAirCraftType
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.Screen
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.theme.*
-import com.aeroclubcargo.warehouse.utils.toDurationTime
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.CoroutineScope
@@ -49,7 +48,10 @@ import java.util.*
 
 
 @Composable
-fun FlightScheduleScreen(navController: NavController, viewModel: FlightScheduleViewModel = hiltViewModel()){
+fun FlightScheduleScreenForULD(
+    navController: NavController,
+    viewModel: FlightScheduleScreenForULD = hiltViewModel()
+) {
     Scaffold(topBar = {
         GetTopBar(navController = navController, isDashBoard = false)
     }) {
@@ -60,7 +62,7 @@ fun FlightScheduleScreen(navController: NavController, viewModel: FlightSchedule
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun GetCutOffTimeList(
-    viewModel: FlightScheduleViewModel,
+    viewModel: FlightScheduleScreenForULD,
     navController: NavController,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -73,26 +75,33 @@ fun GetCutOffTimeList(
     val dateFromValue = viewModel.flightDateFromValue.collectAsState()
     val dateToValue = viewModel.flightDateToValue.collectAsState()
 
-    val isLoading  = viewModel.isLoading.collectAsState()
+    val isLoading = viewModel.isLoading.collectAsState()
     var calendar = Calendar.getInstance()
 
     val datePickerDialogFrom = DatePickerDialog(
         mContext,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            viewModel.onFlightFromDateChange("$year-${1+month}-$dayOfMonth")
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+            viewModel.onFlightFromDateChange("$year-${1 + month}-$dayOfMonth")
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
     )
 
     val datePickerDialogTo = DatePickerDialog(
         mContext,
         { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
-            viewModel.onFlightToDateChange("$year-${1+month}-$dayOfMonth")
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+            viewModel.onFlightToDateChange("$year-${1 + month}-$dayOfMonth")
+        },
+        calendar.get(Calendar.YEAR),
+        calendar.get(Calendar.MONTH),
+        calendar.get(Calendar.DAY_OF_MONTH)
     )
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp),
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
     ) {
         Text(text = "Flight Schedule")
         Spacer(modifier = Modifier.height(5.dp))
@@ -101,11 +110,12 @@ fun GetCutOffTimeList(
                 .fillMaxSize()
                 .background(color = Color.White)
         ) {
-            Row(modifier = Modifier
-                .align(alignment = Alignment.Start)
-                .padding(8.dp),
+            Row(
+                modifier = Modifier
+                    .align(alignment = Alignment.Start)
+                    .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
-            ){
+            ) {
                 OutlinedTextField(
                     value = dateFromValue.value,
                     enabled = false,
@@ -113,7 +123,10 @@ fun GetCutOffTimeList(
                     label = {
                         Text(
                             text = "Select Date From",
-                            style = MaterialTheme.typography.body2.copy(color = Gray1, fontSize = 10.sp)
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Gray1,
+                                fontSize = 10.sp
+                            )
                         )
                     },
                     keyboardOptions = KeyboardOptions(
@@ -123,7 +136,10 @@ fun GetCutOffTimeList(
                     placeholder = {
                         Text(
                             text = "Select Date From",
-                            style = MaterialTheme.typography.body2.copy(color = Gray1, fontSize = 10.sp)
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Gray1,
+                                fontSize = 10.sp
+                            )
                         )
                     },
                     singleLine = true,
@@ -154,7 +170,10 @@ fun GetCutOffTimeList(
                     label = {
                         Text(
                             text = "Select Date To",
-                            style = MaterialTheme.typography.body2.copy(color = Gray1, fontSize = 10.sp)
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Gray1,
+                                fontSize = 10.sp
+                            )
                         )
                     },
                     keyboardOptions = KeyboardOptions(
@@ -164,7 +183,10 @@ fun GetCutOffTimeList(
                     placeholder = {
                         Text(
                             text = "Select Date To",
-                            style = MaterialTheme.typography.body2.copy(color = Gray1, fontSize = 10.sp)
+                            style = MaterialTheme.typography.body2.copy(
+                                color = Gray1,
+                                fontSize = 10.sp
+                            )
                         )
                     },
                     singleLine = true,
@@ -189,7 +211,9 @@ fun GetCutOffTimeList(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Button(
-                    modifier = Modifier.focusRequester(focusRequester = filterButton).wrapContentSize(align = Alignment.Center),
+                    modifier = Modifier
+                        .focusRequester(focusRequester = filterButton)
+                        .wrapContentSize(align = Alignment.Center),
                     onClick = {
                         viewModel.getScheduleList()
                         keyboardController?.hide()
@@ -206,7 +230,7 @@ fun GetCutOffTimeList(
                     CircularProgressIndicator()
                 }
             } else {
-                FlightsTable(viewModel= viewModel, navController = navController)
+                FlightsTable(viewModel = viewModel, navController = navController)
             }
         }
     }
@@ -225,7 +249,7 @@ val column9Weight = .125f
 val column10Weight = .09f
 
 @Composable
-fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController) {
+fun FlightsTable(viewModel: FlightScheduleScreenForULD, navController: NavController) {
     val mContext = LocalContext.current
     val flightScheduleList = viewModel.flightScheduleListFlow.collectAsState()
     val headerStyle = MaterialTheme.typography.body2.copy(color = Black)
@@ -255,7 +279,9 @@ fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController
         // header
         item {
             Row(
-                Modifier.fillMaxWidth().background(color = Gray5),
+                Modifier
+                    .fillMaxWidth()
+                    .background(color = Gray5),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Start
             ) {
@@ -268,46 +294,71 @@ fun FlightsTable(viewModel: FlightScheduleViewModel,navController: NavController
                 TableCell(text = "Aircraft Type", weight = column7Weight, style = headerStyle)
                 TableCell(text = "ULD\nPositions", weight = column8Weight, style = headerStyle)
                 TableCell(text = "ULD\nCount", weight = column9Weight, style = headerStyle)
-                TableCell(text = "Add ULD", weight = column10Weight, style = headerStyle)
+                TableCell(text = "Add Positions", weight = column10Weight, style = headerStyle)
             }
         }
         // data
-        items(flightScheduleList.value) { flightScheduleModel->
+        items(flightScheduleList.value) { flightScheduleModel ->
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
-                TableCell(text = "${flightScheduleModel.flightNumber}", weight =  column1Weight)
-                TableCell(text = "${flightScheduleModel.scheduledDepartureDateTime?.split("T")?.first()}", weight =  column2Weight)
-                TableCell(text = "${flightScheduleModel.scheduledDepartureDateTime?.split("T")?.last()}", weight =  column3Weight)
-                TableCell(text = flightScheduleModel.cutoffTime?.split("T")?.last() ?: "-", weight =  column4Weight)
-                TableCell(text = "${flightScheduleModel.originAirportCode}", weight =  column5Weight)
-                TableCell(text = "${flightScheduleModel.destinationAirportCode}", weight =  column6Weight)
-                TableCell(text = getAirCraftType(flightScheduleModel.aircraftType), weight =  column7Weight)
-                TableCell(text = (flightScheduleModel.uldPositionCount.toString()), weight =  column8Weight)
-                TableCell(text = (flightScheduleModel.uldCount.toString()), weight =  column9Weight)
-                IconButton(
-                    onClick = {
-
-                        val moshi = Moshi.Builder()
-                            .add(KotlinJsonAdapterFactory())
-                            .build()
-                        val jsonAdapter = moshi.adapter(FlightScheduleModel::class.java).lenient()
-                        val flightJson = jsonAdapter.toJson(flightScheduleModel)
-                        navController.navigate(Screen.ULDAssignmentScreen.route+"/${flightJson}")
-                    }
+                TableCell(text = "${flightScheduleModel.flightNumber}", weight = column1Weight)
+                TableCell(
+                    text = "${
+                        flightScheduleModel.scheduledDepartureDateTime?.split("T")?.first()
+                    }", weight = column2Weight
+                )
+                TableCell(
+                    text = "${
+                        flightScheduleModel.scheduledDepartureDateTime?.split("T")?.last()
+                    }", weight = column3Weight
+                )
+                TableCell(
+                    text = flightScheduleModel.cutoffTime?.split("T")?.last() ?: "-",
+                    weight = column4Weight
+                )
+                TableCell(text = "${flightScheduleModel.originAirportCode}", weight = column5Weight)
+                TableCell(
+                    text = "${flightScheduleModel.destinationAirportCode}",
+                    weight = column6Weight
+                )
+                TableCell(
+                    text = Constants.AircraftTypes.getAirCraftType(
+                        flightScheduleModel?.aircraftType
+                    ), weight = column7Weight
+                )
+                TableCell(
+                    text = (flightScheduleModel.uldPositionCount.toString()),
+                    weight = column8Weight
+                )
+                TableCell(text = (flightScheduleModel.uldCount.toString()), weight = column9Weight)
+                Row(
+                    modifier = Modifier.weight(column10Weight),
+                    horizontalArrangement = Arrangement.Center
                 ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_add),
-                        contentDescription = "edit",
-                        modifier = Modifier
-                            .size(24.dp)
-                            .padding(3.dp),
-                        tint = BlueLight
-                    )
+                    IconButton(
+                        onClick = {
+                            val moshi = Moshi.Builder()
+                                .add(KotlinJsonAdapterFactory())
+                                .build()
+                            val jsonAdapter =
+                                moshi.adapter(FlightScheduleModel::class.java).lenient()
+                            val flightJson = jsonAdapter.toJson(flightScheduleModel)
+                            navController.navigate(Screen.ULDPositionScreen.route + "/${flightJson}")
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_add),
+                            contentDescription = "edit",
+                            modifier = Modifier
+                                .size(24.dp)
+                                .padding(3.dp),
+                            tint = BlueLight
+                        )
+                    }
                 }
-
             }
         }
     }

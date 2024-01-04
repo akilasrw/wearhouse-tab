@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.common.Constants.AircraftTypes.Companion.getAirCraftType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.presentation.components.top_bar.GetTopBar
 import com.aeroclubcargo.warehouse.presentation.recieved_cargo_details.HeaderTile
@@ -167,7 +168,7 @@ fun AddLirDataMainScreen(
                     ) {
                         HeaderTile(
                             title = "Act Type",
-                            description = flightScheduleValue?.aircraftSubTypeName?: "-",
+                            description =  getAirCraftType(flightScheduleValue?.aircraftType),
                             textColor = Green
                         )
                     }
@@ -277,10 +278,10 @@ fun RowScope.TableCellEditText(
             modifier = Modifier
                 .weight(weight)
                 .padding(8.dp),
-            textStyle = style,
-            colors = TextFieldDefaults.textFieldColors(
-                backgroundColor = LightBlueBorderColor
-            ),
+//            textStyle = style,
+//            colors = TextFieldDefaults.textFieldColors(
+//                backgroundColor = LightBlueBorderColor
+//            ),
             trailingIcon =  @Composable { IconButton(
                 modifier = Modifier.size(25.dp),
                 onClick = {

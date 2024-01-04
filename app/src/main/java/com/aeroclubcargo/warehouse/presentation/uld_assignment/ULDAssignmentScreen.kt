@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.common.Constants.getULDType
 import com.aeroclubcargo.warehouse.domain.model.FlightScheduleModel
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
@@ -169,7 +170,9 @@ fun GetCutOffTimeList(
                     ) {
                         HeaderTile(
                             title = "Act Type",
-                            desctiption = flightScheduleValue.value?.aircraftSubTypeName?: "-"
+                            desctiption = Constants.AircraftTypes.getAirCraftType(
+                                flightScheduleValue.value?.aircraftType
+                            )
                         )
                     }
                     Spacer(modifier = Modifier.width(6.dp))
@@ -313,7 +316,7 @@ fun FlightsTable(viewModel: ULDAssignmentViewModel,navController: NavController,
                     TableCell(text =  "${uldModel.maxWeight} Kg", weight =  column3Weight)
                     TableCell(text = "${uldModel.weight} kg", weight =  column10Weight)
                     TableCell(text = "${uldModel.maxVolume} m3", weight =  column5Weight)
-                    TableCell(text = "${uldModel.width* uldModel.height * uldModel.length} m3", weight =  column6Weight)
+                    TableCell(text = "${uldModel.volume} m3", weight =  column6Weight)
                     Row(Modifier.weight(column9Weight), horizontalArrangement = Arrangement.SpaceBetween) {
                         IconButton(
                             modifier = Modifier.size(24.dp),

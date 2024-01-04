@@ -75,7 +75,7 @@ interface ApiInterface {
     suspend fun getSummaryCargoPositions(@Query ("AircraftLayoutId") aircraftLayoutId : String) : Response<List<FlightScheduleSectorUldPositionVM>>
 
     @GET("api/${Constants.API_VERSION}/ULDCargoBooking/GetPalletsByFlightScheduleId")
-    suspend fun getPalletsByFlightScheduleId(@Query ("FlightScheduleId") flightScheduleId : String,@Query("ULDLocateStatus") uldLocateStatus: Int) : Response<List<ULDPalletVM>>
+    suspend fun getPalletsByFlightScheduleId(@Query ("FlightScheduleId") flightScheduleId : String,@Query ("UldId") uldId : String?, @Query("ULDLocateStatus") uldLocateStatus: Int) : Response<List<ULDPalletVM>>
 
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/CreateRemovePalleteList")
     suspend fun addPalletListToFlight(@Body  flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM) : Response<Any>
@@ -89,9 +89,22 @@ interface ApiInterface {
     @POST("api/${Constants.API_VERSION}/ULDCargoBooking/RemoveBookedAssigment")
     suspend fun removeBookedAssignment(@Body bookingAssignmentRM: BookingAssignmentRM) : Response<Any>
 
-
     @GET("api/${Constants.API_VERSION}/CargoBooking/GetAssignedCargoList")
     suspend fun getAssignedCargoList(@Query("FlightScheduleSectorId") flightScheduleSectorId:String,@Query("UldId") uldId : String) : Response<List<BookingModel>> // Replace the parameter to flightScheduleSectorId
 
+    @GET("api/${Constants.API_VERSION}/CargoPosition/GetSummaryCargoPositionsBySector")
+    suspend fun getSummaryCargoPositionsBySector(@Query("FlightScheduleSectorId") flightScheduleSectorId:String) : Response<List<CargoPositionVM>>
 
+    @POST("api/${Constants.API_VERSION}/ULDCargoPosition/create")
+    suspend fun addULDCargoPosition(@Body uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<ULDCargoPositionResponse>
+
+    @POST("api/${Constants.API_VERSION}/ULDCargoPosition/clear")
+    suspend fun clearCargoPositions(@Body uldCargoPositionList: List<ULDCargoPositionRequest>) : Response<BaseResponse>
+
+    @GET("api/${Constants.API_VERSION}/CargoBookingLookup")
+    suspend fun getCargoLookupDetails(@Query("UserId") userId:String,@Query("AWBNumber") awbNumber:String,
+                                      @Query("IsIncludeFlightDetail") issIncludeFlightDetail:Boolean,
+                                      @Query("IsIncludeAWBDetail") isIncludeAWBDetail:Boolean,
+                                      @Query("IsIncludePackageDetail") isIncludePackageDetail:Boolean,
+                                      ) : Response<PackageDetails>
 }

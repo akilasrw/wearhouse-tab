@@ -63,6 +63,7 @@ import com.aeroclubcargo.warehouse.theme.Gray6
 import com.aeroclubcargo.warehouse.theme.Green
 import com.aeroclubcargo.warehouse.theme.LightBlueBorderColor
 import com.aeroclubcargo.warehouse.theme.backgroundLightBlue
+import com.aeroclubcargo.warehouse.utils.toMultiDecimalString
 import kotlinx.coroutines.launch
 
 
@@ -195,7 +196,7 @@ fun GetCargoList(
                     ) {
                         HeaderTile(
                             title = "Received Volume",
-                            desctiption = "${if(uldPalletVMValue.value != null) (uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height ) else 0 }  ", // TODO apply calculated volume
+                            desctiption = "${if(uldPalletVMValue.value != null) (uldPalletVMValue.value!!.volume/1000000).toMultiDecimalString() else 0 }  ",
                             textColor = Green
                         )
                     }

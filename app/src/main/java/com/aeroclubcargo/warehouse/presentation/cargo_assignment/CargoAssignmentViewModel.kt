@@ -3,8 +3,10 @@ package com.aeroclubcargo.warehouse.presentation.cargo_assignment
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.domain.model.BookingModel
 import com.aeroclubcargo.warehouse.domain.model.BookingAssignmentRM
+import com.aeroclubcargo.warehouse.domain.model.PackageItemModel
 import com.aeroclubcargo.warehouse.domain.model.ULDPalletVM
 import com.aeroclubcargo.warehouse.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,6 +50,17 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
         getCargoBookingAssignedCargoList()
     }
 
+    fun refreshUldPalletData(){
+        viewModelScope.launch {
+            var response = repository.getPalletsByFlightScheduleId(flightScheduleId = _flightSectorId,
+                uldLocateStatus =  Constants.ULDLocateStatus.OnGround.ordinal,
+                uldId = _uldPalletVMValue.value?.id)
+            if(response.isSuccessful){
+                _uldPalletVMValue.value = response.body()?.first()
+            }
+        }
+    }
+
     private val _packageNameValue = MutableStateFlow<String>("")
     val packageNameValue = _packageNameValue.asStateFlow()
 
@@ -78,6 +91,18 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
         }
     }
 
+    fun validatePackageAvailability(packageItem : PackageItemModel, messageCallback: (String) -> Unit) : Boolean {
+        if(_uldPalletVMValue.value?.maxWeight!! <= (packageItem.weight + _uldPalletVMValue.value?.weight!!) ){
+            messageCallback("ULD weight is exceeded!. You cannot add this package to ULD!")
+            return false
+        }
+        if(_uldPalletVMValue.value?.maxVolume!! <= (((packageItem.width * packageItem.length * packageItem.height)/1000000)) ){
+            messageCallback("There is no space to add this item in this ULD!")
+            return false
+        }
+        return true
+    }
+
     fun assignCargoToUld(packageItemId: String){
         if(uldPalletVMValue.value != null) {
             setLoading(true)
@@ -90,6 +115,7 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                 setLoading(false)
             }.invokeOnCompletion {
                 getBookingListForFlightScheduleSector()
+                refreshUldPalletData()
             }
         }
     }
@@ -106,6 +132,7 @@ class CargoAssignmentViewModel @Inject constructor(private var repository: Repos
                 setLoading(false)
             }.invokeOnCompletion {
                 getBookingListForFlightScheduleSector()
+                refreshUldPalletData()
             }
         }
     }

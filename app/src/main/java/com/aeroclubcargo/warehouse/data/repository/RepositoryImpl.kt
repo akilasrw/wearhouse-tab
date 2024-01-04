@@ -109,9 +109,10 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun getPalletsByFlightScheduleId(
         flightScheduleId: String,
+        uldId : String?,
         uldLocateStatus: Int
     ): Response<List<ULDPalletVM>> {
-        return  apiInterface.getPalletsByFlightScheduleId(flightScheduleId, uldLocateStatus)
+        return  apiInterface.getPalletsByFlightScheduleId(flightScheduleId,uldId, uldLocateStatus)
     }
 
     override suspend fun addPalletListToFlight(flightSchedulePalletUpdateListRM: FlightScheduleSectorPalletCreateListRM): Response<Any> {
@@ -135,6 +136,28 @@ class RepositoryImpl @Inject constructor(
         uldId: String
     ): Response<List<BookingModel>> {
         return apiInterface.getAssignedCargoList(flightScheduleSectorId, uldId)
+    }
+
+    override suspend fun getSummaryCargoPositionsBySector(flightScheduleSectorId: String): Response<List<CargoPositionVM>> {
+        return apiInterface.getSummaryCargoPositionsBySector(flightScheduleSectorId)
+    }
+
+    override suspend fun addULDCargoPosition(uldCargoPositionList: List<ULDCargoPositionRequest>): Response<ULDCargoPositionResponse> {
+        return apiInterface.addULDCargoPosition(uldCargoPositionList)
+    }
+
+    override suspend fun clearCargoPositions(uldCargoPositionList: List<ULDCargoPositionRequest>): Response<BaseResponse> {
+        return apiInterface.clearCargoPositions(uldCargoPositionList)
+    }
+
+    override suspend fun getCargoLookupDetails(
+        userId: String,
+        awbNumber: String,
+        issIncludeFlightDetail: Boolean,
+        isIncludeAWBDetail: Boolean,
+        isIncludePackageDetail: Boolean
+    ): Response<PackageDetails> {
+        return  apiInterface.getCargoLookupDetails(userId, awbNumber, issIncludeFlightDetail, isIncludeAWBDetail, isIncludePackageDetail)
     }
 
     override suspend fun saveCredential(credentialDto: CredentialDto) {

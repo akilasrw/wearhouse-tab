@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -26,10 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aeroclubcargo.warehouse.R
 import com.aeroclubcargo.warehouse.theme.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
+import com.aeroclubcargo.warehouse.utils.toMultiDecimalString
 import kotlinx.coroutines.launch
 
 
@@ -140,7 +138,7 @@ fun CheckPackageItemSheet(
                         ) {
                             HeaderTile(
                                 title = "Max Weight",
-                                desctiption =  "${uldPalletVMValue.value?.maxWeight} kg"
+                                desctiption = "${uldPalletVMValue.value?.maxWeight} kg"
                             )
                         }
 
@@ -152,7 +150,7 @@ fun CheckPackageItemSheet(
                         ) {
                             HeaderTile(
                                 title = "Received Weight",
-                                desctiption =  "${uldPalletVMValue.value?.weight} kg",
+                                desctiption = "${uldPalletVMValue.value?.weight} kg",
                                 textColor = Green
                             )
                         }
@@ -164,7 +162,7 @@ fun CheckPackageItemSheet(
                         ) {
                             HeaderTile(
                                 title = "Max Volume",
-                                desctiption = "${uldPalletVMValue.value?.maxVolume } m3"
+                                desctiption = "${uldPalletVMValue.value?.maxVolume} m3"
                             )
                         }
                         Spacer(modifier = Modifier.width(6.dp))
@@ -175,7 +173,7 @@ fun CheckPackageItemSheet(
                         ) {
                             HeaderTile(
                                 title = "Received Volume",
-                                desctiption = "${if(uldPalletVMValue.value != null) (uldPalletVMValue.value!!.length * uldPalletVMValue.value!!.width * uldPalletVMValue.value!!.height ) else 0 }  ", // TODO apply calculated volume
+                                desctiption = "${(if (uldPalletVMValue.value != null) ((uldPalletVMValue.value!!.volume)/1000000).toMultiDecimalString() else 0)}  ",
                                 textColor = Green
                             )
                         }
@@ -187,7 +185,7 @@ fun CheckPackageItemSheet(
                             .padding(16.dp)
                     ) {
                         Divider(color = Gray4)
-                        FlightsTable(viewModel = viewModel,modalSheetState = modalSheetState)
+                        FlightsTable(viewModel = viewModel, modalSheetState = modalSheetState)
                         Spacer(modifier = Modifier.height(1.dp))
                     }
                 }
@@ -200,13 +198,34 @@ fun CheckPackageItemSheet(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBottomSheetState) {
-    val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
+    val showAlert = remember { mutableStateOf(false) }
+    var alertMessage = remember {
+        mutableStateOf("")
+    }
+    if (showAlert.value) {
+        AlertDialog(
+            onDismissRequest = { showAlert.value = false },
+            title = { Text("Warning!") },
+            text = { Text(alertMessage.value) },
+            confirmButton = {
+                Button(
+                    onClick = { showAlert.value = false }
+                ) {
+                    Text(stringResource(R.string.ok), style = TextStyle(color = Color.White))
+                }
+            },
+            modifier = Modifier.padding(16.dp)
+        )
+    }
+
 
     val mContext = LocalContext.current
     val todoListState = viewModel.listOfPackages.collectAsState()
-    val headerStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Light)
-    val subDataStyle = MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
+    val headerStyle =
+        MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Light)
+    val subDataStyle =
+        MaterialTheme.typography.body2.copy(color = Black, fontWeight = FontWeight.Bold)
     val uldPalletVMValue = viewModel.uldPalletVMValue.collectAsState()
 
     LazyColumn(
@@ -318,9 +337,14 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                     .padding(8.dp)
                             ) {
                                 SubTableCell(text = "Package ID", weight = column1Weight)
-                                SubTableCell(text = "Dimensions (LxWxH)", weight = column7Weight)
+                                SubTableCell(text = "Dimensions (LxWxH)", weight = column6Weight)
                                 SubTableCell(text = "Package Weight", weight = column1Weight)
-                                SubTableCell(text = "Add Pallet", weight = column1Weight,align = TextAlign.Center)
+                                SubTableCell(text = "Package Volume", weight = column1Weight)
+                                SubTableCell(
+                                    text = "Add Pallet",
+                                    weight = column1Weight,
+                                    align = TextAlign.Center
+                                )
 
                             }
                             // Sub-table Rows
@@ -333,10 +357,23 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.Start,
                                 ) {
-                                    SubTableCell(text = "${packageItem.packageRefNumber}", weight = column1Weight)
-                                    SubTableCell(text = "${packageItem.length}x${packageItem.width}x${packageItem.height}", weight = column7Weight)
-                                    SubTableCell(text = "${packageItem.weight}kg", weight = column1Weight)
-                                    if((uldPalletVMValue.value != null) && (packageItem.assignedUldId == uldPalletVMValue.value?.id)) {
+                                    SubTableCell(
+                                        text = "${packageItem.packageRefNumber}",
+                                        weight = column1Weight
+                                    )
+                                    SubTableCell(
+                                        text = "${packageItem.length}x${packageItem.width}x${packageItem.height}",
+                                        weight = column6Weight
+                                    )
+                                    SubTableCell(
+                                        text = "${packageItem.weight}kg",
+                                        weight = column1Weight
+                                    )
+                                    SubTableCell(
+                                        text = "${packageItem.length * packageItem.width * packageItem.height}",
+                                        weight = column1Weight
+                                    )
+                                    if ((uldPalletVMValue.value != null) && (packageItem.assignedUldId == uldPalletVMValue.value?.id)) {
                                         Row(
                                             modifier = Modifier
                                                 .padding(0.dp)
@@ -388,10 +425,23 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                         ) {
                                             IconButton(
                                                 onClick = {
-                                                    viewModel.assignCargoToUld(packageItemId = packageItem.id)
                                                     coroutineScope.launch {
-                                                        modalSheetState.hide()
-                                                        modalSheetState.show()
+                                                        if (viewModel.validatePackageAvailability(
+                                                                packageItem = packageItem,
+                                                                messageCallback = { message ->
+                                                                    coroutineScope.launch {
+                                                                        alertMessage.value = message
+                                                                        showAlert.value = true
+                                                                    }
+                                                                })
+                                                        ) {
+                                                            viewModel.assignCargoToUld(packageItemId = packageItem.id)
+                                                            coroutineScope.launch {
+                                                                modalSheetState.hide()
+                                                                modalSheetState.show()
+                                                            }
+                                                        }
+
                                                     }
                                                 },
                                             ) {
@@ -402,7 +452,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                                 )
                                             }
                                         }
-                                    }else if(packageItem.assignedUldId!!.isNotEmpty() && packageItem.assignedUldId != uldPalletVMValue.value?.id) {
+                                    } else if (packageItem.assignedUldId!!.isNotEmpty() && packageItem.assignedUldId != uldPalletVMValue.value?.id) {
                                         Row(
                                             modifier = Modifier
                                                 .padding(0.dp)
@@ -413,7 +463,8 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                             IconButton(
                                                 onClick = {
                                                     coroutineScope.launch {
-                                                        snackbarHostState.showSnackbar("This Item has been assigned to different ULD!")
+                                                        alertMessage.value = "This Item has been assigned to different ULD!"
+                                                        showAlert.value  = true
                                                     }
 
                                                 },
@@ -442,7 +493,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
 fun RowScope.SubTableCell(
     text: String,
     weight: Float,
-    align : TextAlign? = null,
+    align: TextAlign? = null,
 ) {
     Text(
         text = text,
@@ -450,7 +501,7 @@ fun RowScope.SubTableCell(
             .weight(weight)
             .padding(4.dp),
         style = typography.subtitle1.copy(fontSize = 13.sp),
-        textAlign = align ?: TextAlign.Start
+        textAlign = align ?: TextAlign.Center
     )
 }
 
@@ -477,7 +528,7 @@ val column3Weight = .12f
 val column4Weight = .1f
 val column5Weight = .1f
 val column6Weight = .2f
-val column7Weight = .24f
+val column7Weight = .23f
 val column8Weight = .125f
 val column9Weight = .125f
 val column10Weight = .09f
