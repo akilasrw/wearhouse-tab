@@ -164,7 +164,7 @@ fun navigation() {
                 navArgument("flightScheduleSector") { type = NavType.StringType })
         ) { backStack ->
             val flightScheduleSector = backStack.arguments?.getString("flightScheduleSector")
-            val cargoModel = backStack.arguments?.getString("positionMap")
+            val cargoModel = backStack.arguments?.getString("cargoModel")
             val moshi = Moshi.Builder()
                 .add(KotlinJsonAdapterFactory())
                 .build()
