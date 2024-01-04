@@ -386,7 +386,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                           <thead>
                               <th></th>
                               <th>B1</th>
-                              <th>B1B</th>
+                              <th>B1</th>
                               <th>B2</th>
                           </thead>
                           <tbody>
@@ -427,7 +427,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                   <div>
                       <div class="disclaimer">
                           <p style = "border: 1px solid #f2f2f2;padding: 10px;">
-                              Aircraft has been loaded by excetute.  
+                             This aircraft has been loaded according to these instruction including deviation shown on the report.  
                           </p>
                       </div>
                       <div class="disclaimer">
@@ -488,7 +488,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                   <div>
                       <div class="disclaimer">
                           <p style = "border: 1px solid #f2f2f2;padding: 10px;">
-                            Aircraft has been loaded by excetute.  
+                            Name and signature of loading supervisor or person responsible for loading.
                           </p>
                       </div>
                   </div>
