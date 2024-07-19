@@ -60,10 +60,17 @@ object Constants {
 
 
     enum class PackageItemStatus {
-        None,
-        Booked,
-        Accepted,
-        Dispatched
+        Booking_Made,
+        PickedUp,
+        Returned,
+        Cargo_Received,
+        AcceptedForFLight,
+        Offloaded,
+        FlightDispatched,
+        Arrived,
+        IndestinationWarehouse,
+        TruckForDelivery,
+        Deliverd
     }
 
     enum class AircraftConfigType {
