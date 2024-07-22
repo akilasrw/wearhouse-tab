@@ -197,7 +197,7 @@ class VerifyBookingViewModel @Inject constructor(
                 isLoading.value = true
                 val response = repository.updatePackageStatus(
                     UpdatePackageStatus(id = packageDetail.id,
-                        packageItemStatus = Constants.PackageItemStatus.Accepted.ordinal)
+                        packageItemStatus = Constants.PackageItemStatus.Cargo_Received.ordinal)
                 )
                 isLoading.value = false
                 getPackageDetails(bookingId!!)

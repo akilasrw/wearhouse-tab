@@ -322,7 +322,7 @@ fun PackageTable(
                     Spacer(modifier = Modifier.width(2.dp))
                     IconButton(
                         onClick = {
-                            if(lineItem.packageItemStatus != Constants.PackageItemStatus.Accepted.ordinal) {
+                            if(lineItem.packageItemStatus != Constants.PackageItemStatus.Cargo_Received.ordinal) {
                                 viewModel.acceptPackageItem(lineItem)
                             }
                     }) {
@@ -332,7 +332,7 @@ fun PackageTable(
                             modifier = Modifier
                                 .size(24.dp)
                                 .padding(3.dp),
-                            tint = if (lineItem.packageItemStatus != Constants.PackageItemStatus.Accepted.ordinal) BlueLight else Green
+                            tint = if (lineItem.packageItemStatus != Constants.PackageItemStatus.Cargo_Received.ordinal) BlueLight else Green
                         )
                     }
                     Spacer(modifier = Modifier.width(2.dp))
