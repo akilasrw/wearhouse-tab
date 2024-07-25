@@ -98,7 +98,7 @@ fun UpdatePackageBottomSheet(
             }
         }
         Divider(color = Gray4)
-        Column(modifier = Modifier.fillMaxHeight(0.6f)) {
+        Column(modifier = Modifier.fillMaxHeight(0.8f)) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
