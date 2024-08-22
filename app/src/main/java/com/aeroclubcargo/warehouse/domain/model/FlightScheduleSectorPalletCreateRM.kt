@@ -7,7 +7,8 @@ data class FlightScheduleSectorPalletCreateRM  (
         var isAdded : Boolean = false
     )
 
-data class FlightScheduleSectorPalletCreateListRM ( var flightScheduleSectorPalletRMs : List<FlightScheduleSectorPalletCreateRM> )
+data class FlightScheduleSectorPalletCreateListRM (
+    var flightScheduleSectorPalletRMs : List<FlightScheduleSectorPalletCreateRM> )
 
 data class FlightScheduleSectorPalletDeleteRM  (
     var flightScheduleSectorId: String,

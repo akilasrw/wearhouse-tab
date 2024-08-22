@@ -17,17 +17,31 @@ object Constants {
     val PREF_LOGIN_USER = preferencesKey<String>("loginUser")
     val PREF_JWT_TOKEN = preferencesKey<String>("jwtToken")
 
-    @IntDef(None, Pending, Accepted, Loading, Invoiced, Dispatched, Exported)
+    @IntDef(Booking_Made,PickedUp,Returned,Cargo_Received,AcceptedForFLight,Offloaded,FlightDispatched,Arrived,IndestinationWarehouse,TruckForDelivery,Deliverd)
     @Retention(AnnotationRetention.SOURCE)
     annotation class BookingStatus
 
-    const val None = 0
-    const val Pending = 10
-    const val Accepted = 20
-    const val Loading = 30
-    const val Invoiced = 40
-    const val Dispatched = 50
-    const val Exported = 60
+
+
+    const val  Booking_Made = 0
+    const val  PickedUp = 1
+    const val Returned = 2
+    const val Cargo_Received = 3
+    const val AcceptedForFLight = 4
+    const val Offloaded = 5
+    const val FlightDispatched = 6
+    const val Arrived = 7
+    const val IndestinationWarehouse = 8
+    const val TruckForDelivery = 9
+    const val Deliverd = 10
+
+    const val None =0
+    const val Pending =10
+    const val Accepted=20
+    const val Loading =30
+    const val  Invoiced = 40
+    const val Dispatched =50
+    const val Exported =60
 
 
     @IntDef(None, Pending, Accepted, Loading, Invoiced, Dispatched, Exported)
@@ -63,7 +77,7 @@ object Constants {
         Booking_Made,
         PickedUp,
         Returned,
-        Cargo_Received,
+        CargoReceived,      //Cargo_Received,
         AcceptedForFLight,
         Offloaded,
         FlightDispatched,

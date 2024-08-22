@@ -34,6 +34,7 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
         getULDList()
     }
 
+
     private val _assignedULDListFlow = MutableStateFlow<List<ULDPalletVM>?>(null)
     var assignedUldListFlow = _assignedULDListFlow.asStateFlow()
 
@@ -251,8 +252,12 @@ class UldPositionViewModel @Inject constructor(private var repository: Repositor
                 )
             }
         }
+        val sortedUldPositionMap = uldPositionMap.sortedBy {
+            it.cargoPositionName.toIntOrNull() ?: 0
+        }
+        val tableContent = getTableContent(sortedUldPositionMap)
 
-        val tableContent = getTableContent(uldPositionMap)
+       // val tableContent = getTableContent(uldPositionMap)
         return """
           <!DOCTYPE html>
           <html lang="en">
@@ -510,6 +515,7 @@ fun getTableContent(uldPositionMap: List<ULDCargoPositionMap>): String {
 
     // Add table start
     tableContent.append("<table>\n<thead>\n<tr>\n<th></th>\n")
+
 
     // Add position headers
     for (uldPosition in uldPositionMap) {

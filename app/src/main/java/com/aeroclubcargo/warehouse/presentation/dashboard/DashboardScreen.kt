@@ -185,11 +185,15 @@ fun TableScreen(viewModel: DashBoardViewModel) {
                 horizontalArrangement = Arrangement.Start
             ) {
                 TableCell(text = "Package No.", weight = column1Weight, style = headerStyle)
-                TableCell(text = "Flight No.", weight = column2Weight, style = headerStyle)
+
+                TableCell(text = "Flight No.", weight = column1Weight, style = headerStyle)
+
 //                TableCell(text = "Dimensions", weight = column3Weight, style = headerStyle)
-                TableCell(text = "Weight", weight = column4Weight, style = headerStyle)
-                TableCell(text = "Status", weight = column5Weight, style = headerStyle)
-                TableCell(text = "Date and Time", weight = column6Weight, style = headerStyle)
+                TableCell(text = "Weight", weight = column1Weight, style = headerStyle)
+
+                TableCell(text = "Status", weight = column1Weight, style = headerStyle)
+
+                TableCell(text = "Date and Time", weight = column1Weight, style = headerStyle)
             }
         }
         // data
@@ -198,14 +202,18 @@ fun TableScreen(viewModel: DashBoardViewModel) {
                 Row(
                     Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Start
                 ) {
                     TableCell(text = booking.packageRefNumber, weight = column1Weight)
-                    TableCell(text = booking.flightNumber, weight = column2Weight)
+
+                    TableCell(text = booking.flightNumber, weight = column1Weight)
+
 //                    TableCell(text = "N/A", weight = column3Weight)
-                    TableCell(text = (booking.weight).toString(), weight = column4Weight)
-                    TableStatusButton(text = booking.getStatusString(), weight = column5Weight)
-                    TableCell(text = booking.bookingDate.split("T")[0], weight = column6Weight)
+                    TableCell(text = (booking.weight).toString(), weight = column1Weight)
+
+                    TableStatusButton(text = booking.getStatusString(), weight = column1Weight)
+
+                    TableCell(text = booking.bookingDate.split("T")[0], weight = column1Weight)
                 }
             }
     }
@@ -242,6 +250,22 @@ fun RowScope.TableStatusButton(
         border = BorderStroke(width = 1.dp, color = Green),
         color = MaterialTheme.colors.onSecondary
     ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp),
+            contentAlignment = Alignment.Center // Center the text within the button
+        ) {
+            Text(
+                text = text,
+                textAlign = TextAlign.Center,
+                style = style.copy(color = Green)
+            )
+        }
+    }
+}
+
+/*    {
         Text(
             text = text,
             Modifier
@@ -251,7 +275,7 @@ fun RowScope.TableStatusButton(
         )
     }
 
-}
+}*/
 
 @Composable
 fun GetTileButton(@DrawableRes id: Int, text: String, onClick: () -> Unit) {

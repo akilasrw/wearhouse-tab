@@ -284,7 +284,7 @@ fun PackageTable(
         }
         // data
         items(packages) { lineItem ->
-            Row(
+             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
@@ -322,9 +322,25 @@ fun PackageTable(
                     Spacer(modifier = Modifier.width(2.dp))
                     IconButton(
                         onClick = {
-                            if(lineItem.packageItemStatus != Constants.PackageItemStatus.Cargo_Received.ordinal) {
-                                viewModel.acceptPackageItem(lineItem)
+                           // if(lineItem.packageItemStatus != Constants.PackageItemStatus.CargoReceived.ordinal) {
+                           //     viewModel.acceptPackageItem(lineItem)
+
+                            when (lineItem.packageItemStatus) {
+                                Constants.PackageItemStatus.PickedUp.ordinal -> {
+                                    viewModel.acceptPackageItem(lineItem)
+
+                                }
+                                Constants.PackageItemStatus.Booking_Made.ordinal -> {
+
+                                    viewModel.acceptPackageItem(lineItem)
+                                }
+
+                                else -> {
+                                    // Handle other statuses if needed or do nothing
+
+                                }
                             }
+
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.ic_ok),
@@ -332,7 +348,11 @@ fun PackageTable(
                             modifier = Modifier
                                 .size(24.dp)
                                 .padding(3.dp),
-                            tint = if (lineItem.packageItemStatus != Constants.PackageItemStatus.Cargo_Received.ordinal) BlueLight else Green
+
+                            tint = if(lineItem.packageItemStatus == Constants.PackageItemStatus.Booking_Made.ordinal) BlueLight
+                                else if(lineItem.packageItemStatus == Constants.PackageItemStatus.PickedUp.ordinal) BlueLight else Green
+
+
                         )
                     }
                     Spacer(modifier = Modifier.width(2.dp))

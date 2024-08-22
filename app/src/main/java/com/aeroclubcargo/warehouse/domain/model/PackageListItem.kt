@@ -9,7 +9,7 @@ data class PackageListItem(
     val flightNumber: String,
     val bookingDate: String,
     @Constants.BookingStatus
-    val bookingStatus: Int= 0,
+    val packageItemStatus: Int,
     val height: Double,
     val width: Double,
     val length: Double,
@@ -17,28 +17,41 @@ data class PackageListItem(
 )
 
 fun PackageListItem.getStatusString(): String {
-    when (bookingStatus) {
-        Constants.None -> {
-            return "None";
+    when (packageItemStatus) {
+        Constants.Booking_Made -> {
+           return "Booked";
         }
-        Constants.Pending -> {
-            return "Pending";
+        Constants.PickedUp -> {
+            return "PickedUp";
         }
-        Constants.Accepted -> {
-            return "Accepted";
+        Constants.Returned -> {
+            return "Returned";
         }
-        Constants.Loading -> {
-            return "Loading";
+        Constants.Cargo_Received -> {
+            return "Cargo_Received";
         }
-        Constants.Invoiced -> {
-            return "Invoiced";
+        Constants.AcceptedForFLight -> {
+            return "AcceptedForFLight";
         }
-        Constants.Dispatched -> {
-            return "Dispatched";
+        Constants.Offloaded -> {
+            return "Offloaded";
         }
-        Constants.Exported -> {
-            return "Exported";
+        Constants.FlightDispatched -> {
+            return "FlightDispatched";
         }
+        Constants.Arrived -> {
+            return "Arrived";
+        }
+        Constants.IndestinationWarehouse -> {
+            return "IndestinationWarehouse";
+        }
+        Constants.TruckForDelivery -> {
+            return "TruckForDelivery";
+        }
+        Constants.Deliverd -> {
+            return "Deliverd";
+        }
+
     }
     return ""
 }
