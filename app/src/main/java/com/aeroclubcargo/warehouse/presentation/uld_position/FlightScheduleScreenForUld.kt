@@ -156,7 +156,7 @@ fun GetCutOffTimeList(
                         onNext = {
                             CoroutineScope(Dispatchers.Default).launch {
                                 keyboardController?.hide()
-                                delay(400)
+                                delay(600)
                                 frFlightToDate.requestFocus()
                             }
                         }
@@ -203,7 +203,7 @@ fun GetCutOffTimeList(
                         onNext = {
                             CoroutineScope(Dispatchers.Default).launch {
                                 keyboardController?.hide()
-                                delay(400)
+                                delay(600)
                                 filterButton.requestFocus()
                             }
                         }

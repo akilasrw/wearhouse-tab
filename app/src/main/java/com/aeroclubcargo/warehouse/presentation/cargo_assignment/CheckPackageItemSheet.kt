@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.aeroclubcargo.warehouse.R
+import com.aeroclubcargo.warehouse.common.Constants
 import com.aeroclubcargo.warehouse.theme.*
 import com.aeroclubcargo.warehouse.utils.toMultiDecimalString
 import kotlinx.coroutines.launch
@@ -347,8 +348,16 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                 )
 
                             }
-                            // Sub-table Rows
-                            uldModel.packageItems?.forEach { packageItem ->
+                            // Sub-table Rows //
+                            uldModel.packageItems
+                                ?.filter { packageItem ->
+                                    packageItem.packageItemStatus == 3 ||
+                                            packageItem.packageItemStatus == 4 ||
+                                            packageItem.packageItemStatus == 5
+                                }
+
+
+                                ?.forEach { packageItem ->
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -357,7 +366,7 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                     verticalAlignment = Alignment.CenterVertically,
                                     horizontalArrangement = Arrangement.Start,
                                 ) {
-                                    SubTableCell(
+                                    TableCell(
                                         text = "${packageItem.packageRefNumber}",
                                         weight = column1Weight
                                     )
@@ -383,35 +392,61 @@ fun FlightsTable(viewModel: CargoAssignmentViewModel, modalSheetState: ModalBott
                                         ) {
                                             IconButton(
                                                 onClick = {
+
+
+
+
+
+
+
                                                     // Do
                                                 },
                                             ) {
                                                 Icon(
                                                     painter = painterResource(R.drawable.ic_accepted),
                                                     contentDescription = "done status",
-                                                    tint = Green,
+                                                   // tint = Green,
                                                     modifier = Modifier
                                                         .size(24.dp)
                                                         .padding(3.dp),
+
+                                                    tint = if (packageItem.packageItemStatus== Constants.PackageItemStatus.AcceptedForFLight.ordinal) Green else BlueLight
                                                 )
                                             }
 
                                             IconButton(
                                                 onClick = {
-                                                    viewModel.removeCargoFromUld(packageItem.id)
-                                                    coroutineScope.launch {
-                                                        modalSheetState.hide()
-                                                        modalSheetState.show()
+                                                   // viewModel.removeCargoFromUld(packageItem.id)
+
+                                                    when(packageItem.packageItemStatus){
+                                                        Constants.PackageItemStatus.AcceptedForFLight.ordinal -> {
+                                                            viewModel.removeCargoFromUld(packageItemId=packageItem.id)
+
+                                                        }
+                                                        else -> {
+                                                            // Handle other statuses if needed or do nothing
+
+                                                        }
+
+
                                                     }
+                                                   // coroutineScope.launch {
+                                                     //   modalSheetState.hide()
+                                                      //  modalSheetState.show()
+
                                                 },
                                             ) {
                                                 Icon(
                                                     painter = painterResource(R.drawable.outline_remove_check_box_24),
                                                     contentDescription = "delete",
-                                                    tint = BlueLight,
+                                                    //tint = BlueLight,
                                                     modifier = Modifier
                                                         .size(28.dp)
                                                         .padding(3.dp),
+
+                                                    tint = if(packageItem.packageItemStatus == Constants.PackageItemStatus.AcceptedForFLight.ordinal) Green
+                                                    else if(packageItem.packageItemStatus == Constants.PackageItemStatus.Offloaded.ordinal) Green
+                                                    else if(packageItem.packageItemStatus == Constants.PackageItemStatus.CargoReceived.ordinal) BlueLight else BlueLight
                                                 )
                                             }
                                         }

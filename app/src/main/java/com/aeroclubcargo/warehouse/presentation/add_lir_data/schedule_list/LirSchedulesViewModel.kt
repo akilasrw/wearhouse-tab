@@ -54,7 +54,7 @@ class LirSchedulesViewModel  @Inject constructor(private var repository: Reposit
     fun getScheduleList() {
         viewModelScope.launch {
             setLoading(true)
-            delay(timeMillis = 1000)
+            delay(timeMillis = 1500)
             try{
                 val paginatedList = repository.getFlightScheduleWithULDCount( scheduledDepartureStartDateTime = flightDateFromValue.value,scheduledDepartureEndDateTime = flightDateToValue.value, excludeFinalizedSchedules = false)
                 if(paginatedList.isSuccessful &&

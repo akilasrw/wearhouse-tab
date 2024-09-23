@@ -187,6 +187,7 @@ class VerifyBookingViewModel @Inject constructor(
             packageDetail.postValue(response)
             isLoading.value = false
             loadUnits()
+            
         }
     }
 
@@ -197,7 +198,7 @@ class VerifyBookingViewModel @Inject constructor(
                 isLoading.value = true
                 val response = repository.updatePackageStatus(
                     UpdatePackageStatus(id = packageDetail.id,
-                        packageItemStatus = Constants.PackageItemStatus.Cargo_Received.ordinal)
+                        packageItemStatus = Constants.PackageItemStatus.CargoReceived.ordinal)
                 )
                 isLoading.value = false
                 getPackageDetails(bookingId!!)
